@@ -1,0 +1,32 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Install MAUI workload
+      run: dotnet workload install maccatalyst maui-maccatalyst
+    - name: Restore dependencies
+      run: dotnet restore Electrify/Electrify.sln
+    - name: Build
+      run: dotnet build Electrify/Electrify.sln --no-restore
+    - name: UnitTest
+      run: dotnet test Electrify/Electrify.UnitTests/Electrify.UnitTests.csproj --no-build --verbosity normal
+    - name: ComponentTest
+      run: dotnet test Electrify/Electrify.ComponentTests/Electrify.ComponentTests.csproj --no-build --verbosity normal
