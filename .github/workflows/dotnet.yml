@@ -24,5 +24,7 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: UnitTest
+      run: dotnet test Electrify.UnitTests/Electrify.UnitTests.csproj --no-build --verbosity normal
+    - name: ComponentTest
+      run: dotnet test Electrify.ComponentTests/Electrify.ComponentTests.csproj --no-build --verbosity normal
