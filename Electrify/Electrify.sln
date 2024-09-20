@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.SmartMeterUi", "Electrify.SmartMeterUi\Electrify.SmartMeterUi.csproj", "{554E12AA-D4F4-4087-B091-7F55A8DD5BCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.AdminUi", "Electrify.AdminUi\Electrify.AdminUi.csproj", "{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,12 @@ Global
 		{554E12AA-D4F4-4087-B091-7F55A8DD5BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{554E12AA-D4F4-4087-B091-7F55A8DD5BCC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{554E12AA-D4F4-4087-B091-7F55A8DD5BCC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
