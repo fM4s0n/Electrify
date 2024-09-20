@@ -21,9 +21,9 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Restore dependencies
-      run: dotnet restore Electrify.sln
+      run: dotnet restore
     - name: Build
-      run: dotnet build Electrify.sln --no-restore
+      run: dotnet build --no-restore
     - name: UnitTest
       run: dotnet test Electrify.UnitTests/Electrify.UnitTests.csproj --no-build --verbosity normal
     - name: ComponentTest
