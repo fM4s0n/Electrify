@@ -7,6 +7,7 @@ namespace Electrify.AdminUi.Models;
 /// </summary>
 public class Admin
 {
+    // TODO: MAKE THIS A FACTORY
     private static readonly PasswordHasher<Admin> hasher = new();
 
     public Admin()
