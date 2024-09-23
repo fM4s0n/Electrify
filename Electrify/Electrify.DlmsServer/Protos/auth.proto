@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Electrify.DlmsServer";
+
+package auth;
+
+service Authentication {
+  rpc Authenticate (AuthenticateRequest) returns (AuthenticateResponse) {
+    option (google.api.http) = {
+      post: "/v1/authenticate"
+    };
+  }
+}
+
+message AuthenticateRequest {
+  string userId = 1;
+  string clientId = 2;
+}
+
+message AuthenticateResponse {
+  bool success = 1;
+}

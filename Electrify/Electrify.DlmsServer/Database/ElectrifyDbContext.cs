@@ -9,6 +9,6 @@ namespace Electrify.DlmsServer.Database;
 public class ElectrifyDbContext(DbContextOptions<ElectrifyDbContext> options) : DbContext(options)
 {
     public DbSet<Admin> Admins { get; set; }
+    public DbSet<Client> Clients { get; set; }
     public DbSet<Reading> Readings { get; set; }
-
 }
