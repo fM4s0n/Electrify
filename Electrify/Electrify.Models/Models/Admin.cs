@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Electrify.AdminUi.Models;
+namespace Electrify.Models.Models;
 
 /// <summary>
 /// Model for the Electrify Admin.
@@ -18,7 +18,7 @@ public class Admin
     {
         Id = Guid.NewGuid();
         Name = name;
-        Email = email;        
+        Email = email;
         PasswordHash = hasher.HashPassword(this, plainTextPassword);
     }
 

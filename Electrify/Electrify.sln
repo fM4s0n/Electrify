@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.SmartMeterUi", "Electrify.SmartMeterUi\Electrify.SmartMeterUi.csproj", "{554E12AA-D4F4-4087-B091-7F55A8DD5BCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.SmartMeterUi", "Electrify.SmartMeterUi\Electrify.SmartMeterUi.csproj", "{554E12AA-D4F4-4087-B091-7F55A8DD5BCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.AdminUi", "Electrify.AdminUi\Electrify.AdminUi.csproj", "{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.AdminUi", "Electrify.AdminUi\Electrify.AdminUi.csproj", "{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.DlmsClient", "Electrify.DlmsClient\Electrify.DlmsClient.csproj", "{85A81A69-CFFE-401E-A834-9E804C47B353}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.DlmsClient", "Electrify.DlmsClient\Electrify.DlmsClient.csproj", "{85A81A69-CFFE-401E-A834-9E804C47B353}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.DlmsServer", "Electrify.DlmsServer\Electrify.DlmsServer.csproj", "{8CC44742-4A31-40C9-90A1-1AC528085896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.DlmsServer", "Electrify.DlmsServer\Electrify.DlmsServer.csproj", "{8CC44742-4A31-40C9-90A1-1AC528085896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.UnitTests", "Electrify.UnitTests\Electrify.UnitTests.csproj", "{5213E304-DEA8-4ABD-8448-F2BA56472DB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.UnitTests", "Electrify.UnitTests\Electrify.UnitTests.csproj", "{5213E304-DEA8-4ABD-8448-F2BA56472DB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.ComponentTests", "Electrify.ComponentTests\Electrify.ComponentTests.csproj", "{580A718B-D025-4282-AB04-376856D79D96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.ComponentTests", "Electrify.ComponentTests\Electrify.ComponentTests.csproj", "{580A718B-D025-4282-AB04-376856D79D96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.Models", "Electrify.Models\Electrify.Models.csproj", "{FF8D5078-29C4-4019-BFEB-976E725A7822}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{580A718B-D025-4282-AB04-376856D79D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{580A718B-D025-4282-AB04-376856D79D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{580A718B-D025-4282-AB04-376856D79D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF8D5078-29C4-4019-BFEB-976E725A7822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF8D5078-29C4-4019-BFEB-976E725A7822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF8D5078-29C4-4019-BFEB-976E725A7822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF8D5078-29C4-4019-BFEB-976E725A7822}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
