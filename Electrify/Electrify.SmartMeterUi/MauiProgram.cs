@@ -19,7 +19,8 @@ public static class MauiProgram
 		LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
             .MinimumLevel.Information()
             .WriteTo.Debug()
-            .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.txt"));
+            .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.log"))
+            .Enrich.FromLogContext().Enrich.WithMachineName().Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId);
 
 		
 #if DEBUG
