@@ -2,12 +2,16 @@
 using Electrify.DlmsServer.Services;
 using Electrify.DlmsServer.Services.Abstraction;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using AuthenticationService = Microsoft.AspNetCore.Authentication.AuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+
 builder.Services.AddDbContext<ElectrifyDbContext>();
-builder.Services.AddSingleton<IClientService, ClientService>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddGrpc().AddJsonTranscoding();
 builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
 {

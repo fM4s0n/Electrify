@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Electrify.AdminUi;
 public static class MauiProgram
@@ -14,12 +15,20 @@ public static class MauiProgram
             });
 
         builder.Services.AddMauiBlazorWebView();
+        
+        LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.Debug()
+            .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-admin-ui.txt"));
 
 #if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
+            
+        loggerConfiguration.MinimumLevel.Debug();
 #endif
-
+        builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
+        
         return builder.Build();
     }
 }

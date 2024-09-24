@@ -1,25 +1,35 @@
 ﻿using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Electrify.SmartMeterUi;
 public static class MauiProgram
 {
-    public static MauiApp CreateMauiApp()
-    {
-        var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<App>()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-            });
+	public static MauiApp CreateMauiApp()
+	{
+		var builder = MauiApp.CreateBuilder();
+		builder
+			.UseMauiApp<App>()
+			.ConfigureFonts(fonts =>
+			{
+				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+			});
 
-        builder.Services.AddMauiBlazorWebView();
+		builder.Services.AddMauiBlazorWebView();
 
+		LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .WriteTo.Debug()
+            .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.txt"));
+
+		
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
-#endif
 
+		loggerConfiguration.MinimumLevel.Debug();
+#endif
+		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
+		
         return builder.Build();
-    }
+	}
 }
