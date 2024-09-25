@@ -1,4 +1,6 @@
-﻿namespace Electrify.SmartMeterUi;
+﻿using Serilog;
+
+namespace Electrify.SmartMeterUi;
 
 public partial class App : Application
 {
@@ -7,5 +9,11 @@ public partial class App : Application
         InitializeComponent();
 
         MainPage = new MainPage();
+    }
+
+    protected override void OnSleep()
+    {
+        Log.CloseAndFlush();
+        base.OnSleep();
     }
 }

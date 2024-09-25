@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.UnitTests", "Elec
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.ComponentTests", "Electrify.ComponentTests\Electrify.ComponentTests.csproj", "{580A718B-D025-4282-AB04-376856D79D96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.Models", "Electrify.Models\Electrify.Models.csproj", "{FF8D5078-29C4-4019-BFEB-976E725A7822}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.Models", "Electrify.Models\Electrify.Models.csproj", "{FF8D5078-29C4-4019-BFEB-976E725A7822}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
