@@ -41,8 +41,11 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
+        <None Remove="Resources\AppIcon\electrify.png" />
+        <MauiIcon Include="Resources\AppIcon\electrify.png">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </MauiIcon>
+        
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
