@@ -26,7 +26,5 @@ jobs:
       run: dotnet restore Electrify/Electrify.sln
     - name: Build
       run: dotnet build Electrify/Electrify.sln --no-restore
-    - name: UnitTest
-      run: dotnet test Electrify/Electrify.UnitTests/Electrify.UnitTests.csproj --no-build --verbosity normal
-    - name: ComponentTest
-      run: dotnet test Electrify/Electrify.ComponentTests/Electrify.ComponentTests.csproj --no-build --verbosity normal
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
