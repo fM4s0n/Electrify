@@ -42,7 +42,7 @@ jobs:
       with:
         label: Test Coverage
         color: brightgreen
-        path: TestResults/coverage.opencover.xml
+        path: Electrify/TestResults/coverage.opencover.xml
         gist-filename: electrify-code-coverage.json
         gist-id: aa76ad223dfcd71c919610990ab72893
         gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}  
