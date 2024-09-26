@@ -33,9 +33,6 @@ jobs:
     - name: Test
       run: dotnet test Electrify/Electrify.sln -p:CollectCoverage=true -p:CoverletOutput=../TestResults/coverage -p:MergeWith=../TestResults/coverage.json -p:CoverletOutputFormat='json%2copencover' --no-build --verbosity normal
       
-    - name: TempTest
-      run: ls -R
-      
     - name: Create Test Coverage Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
