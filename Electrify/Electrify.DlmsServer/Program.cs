@@ -3,7 +3,6 @@ using Electrify.DlmsServer.Services;
 using Electrify.DlmsServer.Services.Abstraction;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using AuthenticationService = Microsoft.AspNetCore.Authentication.AuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
