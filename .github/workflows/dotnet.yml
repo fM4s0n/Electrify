@@ -20,14 +20,19 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+        
     - name: Install MAUI workload
       run: dotnet workload install maccatalyst maui-maccatalyst
+      
     - name: Restore dependencies
       run: dotnet restore Electrify/Electrify.sln
+      
     - name: Build
       run: dotnet build Electrify/Electrify.sln --no-restore
+      
     - name: Test
-      run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover --no-build --verbosity normal
+      run: dotnet test Electrify/Electrify.sln -p:CollectCoverage=true -p:CoverletOutput=TestResults/ -p:CoverletOutputFormat=opencover --no-build --verbosity normal
+      
     - name: Create Test Coverage Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
       id: create_coverage_badge
