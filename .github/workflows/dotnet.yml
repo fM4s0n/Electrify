@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -22,14 +22,14 @@ jobs:
         dotnet-version: 8.0.x
         
     - name: Install MAUI workload
-      run: dotnet workload install maccatalyst maui-maccatalyst
+      run: dotnet workload install maui
       
     - name: Restore dependencies
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore /p:PublishTrimmed=false
-      
+      run: dotnet build --no-restore
+
     - name: Test
       run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../TestResults/coverage -p:MergeWith=../TestResults/coverage.json -p:CoverletOutputFormat='json%2copencover' --no-build --verbosity normal
       
