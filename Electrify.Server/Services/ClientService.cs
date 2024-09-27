@@ -1,8 +1,8 @@
-using Electrify.DlmsServer.Database;
-using Electrify.DlmsServer.Services.Abstraction;
+using Electrify.Server.Database;
+using Electrify.Server.Services.Abstraction;
 using Microsoft.EntityFrameworkCore;
 
-namespace Electrify.DlmsServer.Services;
+namespace Electrify.Server.Services;
 
 public sealed class ClientService(ElectrifyDbContext database) : IClientService
 {

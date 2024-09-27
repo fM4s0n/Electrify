@@ -1,16 +1,16 @@
-using Electrify.DlmsServer.Database;
-using Electrify.DlmsServer.Services;
-using Electrify.DlmsServer.Services.Abstraction;
 using Electrify.Models.Models;
+using Electrify.Server.Database;
+using Electrify.Server.Services;
+using Electrify.Server.Services.Abstraction;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Electrify.UnitTests.DlmsServer.Services;
+namespace Electrify.UnitTests.Server.Services;
 
 public class ClientServiceTests
 {
-    private IClientService _clientService;
-    private ElectrifyDbContext _database;
+    private readonly IClientService _clientService;
+    private readonly ElectrifyDbContext _database;
     
     public ClientServiceTests()
     {
