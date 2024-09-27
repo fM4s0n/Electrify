@@ -28,7 +28,7 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore /p:PublishedTrimmed=false
       
     - name: Test
       run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../TestResults/coverage -p:MergeWith=../TestResults/coverage.json -p:CoverletOutputFormat='json%2copencover' --no-build --verbosity normal
