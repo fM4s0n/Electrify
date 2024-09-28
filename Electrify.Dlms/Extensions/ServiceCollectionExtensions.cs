@@ -2,6 +2,7 @@ using Electrify.Dlms.Client;
 using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
+using Electrify.Dlms.Server.Abstraction;
 using Gurux.DLMS.Objects;
 using Gurux.DLMS.Secure;
 using Gurux.Net;
@@ -17,7 +18,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDlmsClient(
         this IServiceCollection services,
         IConfigurationRoot configuration,
-        LogLevel logLevel)
+        LogLevel logLevel,
+        List<GXDLMSRegister> registers)
     {
         services.Configure<DlmsClientOptions>(configuration.GetSection(nameof(DlmsClientOptions)));
         
@@ -48,7 +50,14 @@ public static class ServiceCollectionExtensions
             return new GXDLMSReader(client, media, logLevel.ToTraceLevel(), options.InvocationCounter);
         });
         
-        services.AddSingleton<IDlmsClient, DlmsClient>();
+        services.AddSingleton<IDlmsClient>( sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<DlmsClient>>();
+            var media = sp.GetRequiredService<GXNet>();
+            var reader = sp.GetRequiredService<GXDLMSReader>();
+
+            return new DlmsClient(logger, media, reader, registers);
+        });
 
         return services;
     }
@@ -65,7 +74,7 @@ public static class ServiceCollectionExtensions
             
         services.AddSingleton<GXDLMSBase, GXDLMSServerLN_47>();
 
-        services.AddSingleton(sp =>
+        services.AddSingleton<IDlmsServer>(sp =>
         {
             var association = sp.GetRequiredService<GXDLMSAssociationLogicalName>();
             var serverBase = sp.GetRequiredService<GXDLMSBase>();

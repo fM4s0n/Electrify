@@ -2,6 +2,7 @@
 using Electrify.Server.Database;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
+using Gurux.DLMS.Objects;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -15,7 +16,10 @@ if (!Enum.TryParse(builder.Configuration["Serilog:MinimumLevel"], out LogLevel l
     Environment.FailFast("Log Level has not been set");
 }
 
-builder.Services.AddDlmsClient(builder.Configuration, logLevel);
+builder.Services.AddDlmsClient(builder.Configuration, logLevel,
+    [
+    new GXDLMSRegister("1.1.1.8.0.255"),
+    ]);
 
 // TODO put this logic in UI
 // builder.Services.AddDlmsServer(builder.Configuration, logLevel, configure =>
