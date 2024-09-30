@@ -44,7 +44,7 @@ public sealed class DlmsServer : IDlmsServer
         _server.Items.Add(register);
     }
 
-    public int GetEnergy()
+    public double GetEnergy()
     {
         foreach (var dlmsObject in _server.Items)
         {

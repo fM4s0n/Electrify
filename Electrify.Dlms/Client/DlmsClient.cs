@@ -1,7 +1,7 @@
 using Electrify.Dlms.Client.Abstraction;
 using Gurux.DLMS.Objects;
 using Gurux.Net;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Lo-gging;
 
 namespace Electrify.Dlms.Client;
 
@@ -28,9 +28,18 @@ public sealed class DlmsClient : IDlmsClient
         _registers = registers;
     }
 
-    public void ReadEnergy()
+    public double ReadEnergy()
     {
-        _reader.Read(_registers.Single(register => register.LogicalName == "1.1.1.8.0.255"), 2);
+        GXDLMSRegister register = _registers.Single(register => register.LogicalName == "1.1.1.8.0.255");
+
+        if (register.Unit == default)
+        {
+            _reader.Read(register, 3);
+        }
+        
+        _reader.Read(register, 2);
+        
+        return (double)register.Value;
     }
 
     private void OnNotification(object data)
