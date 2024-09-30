@@ -1,7 +1,7 @@
 ﻿using Electrify.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Electrify.DlmsServer.Database;
+namespace Electrify.Server.Database;
 
 /// <summary>
 /// DB context for Electrify.

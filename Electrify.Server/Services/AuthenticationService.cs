@@ -1,7 +1,8 @@
-using Electrify.DlmsServer.Services.Abstraction;
+using Electrify.DlmsServer;
+using Electrify.Server.Services.Abstraction;
 using Grpc.Core;
 
-namespace Electrify.DlmsServer.Services;
+namespace Electrify.Server.Services;
 
 public class AuthenticationService(IClientService clientService) : Authentication.AuthenticationBase
 {

@@ -1,6 +1,8 @@
-﻿using Electrify.DlmsServer.Database;
-using Electrify.DlmsServer.Services;
-using Electrify.DlmsServer.Services.Abstraction;
+﻿using Electrify.Dlms.Extensions;
+using Electrify.Server.Database;
+using Electrify.Server.Services;
+using Electrify.Server.Services.Abstraction;
+using Gurux.DLMS.Objects;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -8,6 +10,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
+
+if (!Enum.TryParse(builder.Configuration["Serilog:MinimumLevel"], out LogLevel logLevel))
+{
+    Environment.FailFast("Log Level has not been set");
+}
+
+builder.Services.AddDlmsClient(builder.Configuration, logLevel);
+
+// TODO put this logic in UI
+// builder.Services.AddDlmsServer(builder.Configuration, logLevel, configure =>
+// {
+//     var register = new GXDLMSRegister("1.1.1.8.0.255")
+//     {
+//         Scaler = 1.0,
+//         Unit = Unit.ActiveEnergy,
+//         Value = 2637.35,
+//     };
+//     
+//     configure.AddRegister(register);
+// });
 
 builder.Services.AddDbContext<ElectrifyDbContext>();
 builder.Services.AddScoped<IClientService, ClientService>();

@@ -1,4 +1,4 @@
-namespace Electrify.DlmsServer.Services.Abstraction;
+namespace Electrify.Server.Services.Abstraction;
 
 public interface IClientService
 {
