@@ -37,25 +37,6 @@ public partial class MainPage : ContentPage
                         });
                     });
                 }
-#elif WINDOWS
-                var nativeWindow = handler.PlatformView;
-                if (nativeWindow != null)
-                {
-                    Task.Run(() =>
-                    {
-                        MainThread.BeginInvokeOnMainThread(() =>
-                        {
-                            var windowHandle = nativeWindow.GetWindowHandle();
-                            if (windowHandle != IntPtr.Zero)
-                            {
-                                // Use Windows API to set the size
-                                var mauiWindow = handler.VirtualView;
-                                mauiWindow.Width = width;
-                                mauiWindow.Height = height;
-                            }
-                        });
-                    });
-                }
 #endif
             });
     }
