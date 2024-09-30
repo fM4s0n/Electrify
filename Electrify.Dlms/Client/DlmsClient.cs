@@ -33,12 +33,6 @@ public sealed class DlmsClient : IDlmsClient
         _reader.Read(_registers.Single(register => register.LogicalName == "1.1.1.8.0.255"), 2);
     }
 
-    public void SetEnergy(int energyValue)
-    {
-        _registers.Single(register => register.LogicalName == "1.1.1.8.0.255").Value = energyValue;
-        _reader.Write(_registers.Single(register => register.LogicalName == "1.1.1.8.0.255"), 2);
-    }
-
     private void OnNotification(object data)
     {
         _logger.LogInformation("Received DLMS Reader Notification: {Data}", data);

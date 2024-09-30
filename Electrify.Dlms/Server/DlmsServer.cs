@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
 using Gurux.DLMS.Enums;
+using Gurux.DLMS.ManufacturerSettings;
 using Gurux.DLMS.Objects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -55,6 +56,18 @@ public sealed class DlmsServer : IDlmsServer
         }
 
         return 0;
+    }
+    
+    public void SetEnergy(int energyValue)
+    {
+        foreach (GXDLMSObject? dlmsObject in _server.Items)
+        {
+            // TODO maybe this string should be done via IOptions
+            if (dlmsObject is GXDLMSRegister { LogicalName: "1.1.1.8.0.255" } register)
+            {
+                register.Value = energyValue;
+            }
+        }
     }
 
     private Task RunAsync(CancellationToken cancellationToken)

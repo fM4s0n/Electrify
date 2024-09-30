@@ -7,4 +7,6 @@ public interface IDlmsServer : IDisposable
     void AddRegister(GXDLMSRegister register);
 
     int GetEnergy();
+
+    void SetEnergy(int energyValue);
 }
