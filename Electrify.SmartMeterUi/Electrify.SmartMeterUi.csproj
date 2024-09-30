@@ -22,7 +22,7 @@
         <Nullable>enable</Nullable>
 
         <!-- Display name -->
-        <ApplicationTitle>Electrify.SmartMeterUi</ApplicationTitle>
+        <ApplicationTitle>Electridy Smart Meter</ApplicationTitle>
 
         <!-- App Identifier -->
         <ApplicationId>com.companyname.electrify.smartmeterui</ApplicationId>
