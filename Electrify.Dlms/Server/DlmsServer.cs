@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
 using Gurux.DLMS.Enums;
@@ -49,7 +50,7 @@ public sealed class DlmsServer : IDlmsServer
         foreach (var dlmsObject in _server.Items)
         {
             // TODO maybe this string should be done via IOptions
-            if (dlmsObject is GXDLMSRegister { LogicalName: "1.1.1.8.0.255", Value: int value })
+            if (dlmsObject is GXDLMSRegister { LogicalName: RegisterNames.EnergyUsage, Value: int value })
             {
                 return value;
             }
@@ -63,7 +64,7 @@ public sealed class DlmsServer : IDlmsServer
         foreach (GXDLMSObject? dlmsObject in _server.Items)
         {
             // TODO maybe this string should be done via IOptions
-            if (dlmsObject is GXDLMSRegister { LogicalName: "1.1.1.8.0.255" } register)
+            if (dlmsObject is GXDLMSRegister { LogicalName: RegisterNames.EnergyUsage } register)
             {
                 register.Value = energyValue;
             }
