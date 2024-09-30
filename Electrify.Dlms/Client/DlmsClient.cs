@@ -1,4 +1,5 @@
 using Electrify.Dlms.Client.Abstraction;
+using Electrify.Dlms.Constants;
 using Gurux.DLMS.Objects;
 using Gurux.Net;
 using Microsoft.Extensions.Logging;
@@ -11,9 +12,9 @@ public sealed class DlmsClient : IDlmsClient
     private readonly GXNet _media;
     private readonly GXDLMSReader _reader;
 
-    private List<GXDLMSRegister> _registers = [];
+    private readonly IEnumerable<GXDLMSRegister> _registers;
     
-    public DlmsClient(ILogger<DlmsClient> logger, GXNet media, GXDLMSReader reader, List<GXDLMSRegister> registers)
+    public DlmsClient(ILogger<DlmsClient> logger, GXNet media, GXDLMSReader reader, IEnumerable<GXDLMSRegister> registers)
     {
         _logger = logger;
         _media = media;
@@ -30,7 +31,7 @@ public sealed class DlmsClient : IDlmsClient
 
     public double ReadEnergy()
     {
-        GXDLMSRegister register = _registers.Single(register => register.LogicalName == "1.1.1.8.0.255");
+        GXDLMSRegister register = _registers.Single(register => register.LogicalName == RegisterNames.EnergyUsage);
 
         if (register.Unit == default)
         {

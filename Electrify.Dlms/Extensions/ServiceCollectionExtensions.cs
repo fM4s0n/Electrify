@@ -18,8 +18,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDlmsClient(
         this IServiceCollection services,
         IConfigurationRoot configuration,
-        LogLevel logLevel,
-        List<GXDLMSRegister> registers)
+        LogLevel logLevel)
     {
         services.Configure<DlmsClientOptions>(configuration.GetSection(nameof(DlmsClientOptions)));
         
@@ -52,11 +51,18 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton<IDlmsClient>( sp =>
         {
+            var options = sp.GetRequiredService<DlmsClientOptions>();
             var logger = sp.GetRequiredService<ILogger<DlmsClient>>();
             var media = sp.GetRequiredService<GXNet>();
             var reader = sp.GetRequiredService<GXDLMSReader>();
 
-            return new DlmsClient(logger, media, reader, registers);
+            var registers = options.LogicalNames.Replace(" ", "").Split(",");
+            
+            return new DlmsClient(
+                logger,
+                media,
+                reader,
+                registers.Select(register => new GXDLMSRegister(register)));
         });
 
         return services;

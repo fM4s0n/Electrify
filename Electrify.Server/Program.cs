@@ -16,10 +16,7 @@ if (!Enum.TryParse(builder.Configuration["Serilog:MinimumLevel"], out LogLevel l
     Environment.FailFast("Log Level has not been set");
 }
 
-builder.Services.AddDlmsClient(builder.Configuration, logLevel,
-    [
-    new GXDLMSRegister("1.1.1.8.0.255"),
-    ]);
+builder.Services.AddDlmsClient(builder.Configuration, logLevel);
 
 // TODO put this logic in UI
 // builder.Services.AddDlmsServer(builder.Configuration, logLevel, configure =>
