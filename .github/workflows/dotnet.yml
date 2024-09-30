@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -20,13 +20,26 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+        
     - name: Install MAUI workload
-      run: dotnet workload install maccatalyst maui-maccatalyst
+      run: dotnet workload install maui-windows
+      
     - name: Restore dependencies
-      run: dotnet restore Electrify/Electrify.sln
+      run: dotnet restore
+      
     - name: Build
-      run: dotnet build Electrify/Electrify.sln --no-restore
-    - name: UnitTest
-      run: dotnet test Electrify/Electrify.UnitTests/Electrify.UnitTests.csproj --no-build --verbosity normal
-    - name: ComponentTest
-      run: dotnet test Electrify/Electrify.ComponentTests/Electrify.ComponentTests.csproj --no-build --verbosity normal
+      run: dotnet build --no-restore
+
+    - name: Test
+      run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../TestResults/coverage -p:MergeWith=../TestResults/coverage.json -p:CoverletOutputFormat='json%2copencover' --no-build --verbosity normal
+      
+    - name: Create Test Coverage Badge
+      uses: simon-k/dotnet-code-coverage-badge@v1.0.0
+      id: create_coverage_badge
+      with:
+        label: Test Coverage
+        color: brightgreen
+        path: TestResults/coverage.opencover.xml
+        gist-filename: electrify-code-coverage.json
+        gist-id: aa76ad223dfcd71c919610990ab72893
+        gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}  
