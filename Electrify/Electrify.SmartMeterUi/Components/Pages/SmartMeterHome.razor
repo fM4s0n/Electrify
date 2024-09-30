@@ -1,0 +1,34 @@
+@page "/"
+
+<div class="main-page">
+    <div class="container">
+        <div class="page-left">
+            <div class="dial-container">
+                <div class="dial-main">
+                    <div style="background: @_dialBackground; width: 100%; height: 100%"></div>
+                </div>
+                <div class="dial-inner-mask">
+                    <div class="current-usage">
+                        <img src="imgs/electrify.svg" style="width:50%; opacity: @(_usagePercent / 100)"/>
+                    </div>
+                </div>
+            </div>
+            <div class="dial-title">
+                <span>Your current usage: @(Math.Round(_currentUsage, 2))kw/h</span>
+            </div>
+        </div>
+
+        <div class="usage-info">
+            <div class="usage-divider">
+                <div><i class="fa-solid fa-bolt"></i> Today's usage:</div>
+                <h1>£@(GetUsagePriceDaily())</h1>
+                <div>@(GetUsageDaily())kw/h</div>
+            </div>
+            <div>
+                <div><i class="fa-solid fa-bolt"></i> Total usage this billing period:</div>
+                <h1>£@(GetUsagePricePeriod())</h1>
+                <div>@(GetUsagePeriod())kw/h</div>
+            </div>
+        </div>
+    </div>
+</div>

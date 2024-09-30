@@ -1,6 +1,4 @@
-﻿html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
+﻿/* BLAZOR MAUI DEFAULT CSS *START* */
 
 #blazor-error-ui {
     background: lightyellow;
@@ -49,4 +47,28 @@
     .flex-column, .navbar-brand {
         padding-left: env(safe-area-inset-left);
     }
+}
+
+/* BLAZOR MAUI DEFAULT CSS *END* */
+
+:root {
+    --brand-dark: #172130;
+    --brand-light: #00b5f1;
+}
+
+html, body {
+    font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-page {
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    overflow: hidden;
+    background: #000000;
 }
