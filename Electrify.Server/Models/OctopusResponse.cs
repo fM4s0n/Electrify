@@ -26,10 +26,10 @@ public class Results
     public double ValueIncVat { get; set; }
     
     [JsonPropertyName("valid_from")]
-    public string ValidFrom { get; set; } = string.Empty;
+    public string? ValidFrom { get; set; }
 
     [JsonPropertyName("valid_to")] 
-    public string ValidTo { get; set; } = string.Empty;
+    public string? ValidTo { get; set; }
     
     [JsonPropertyName("payment_method")]
     public object? PaymentMethod { get; set; }

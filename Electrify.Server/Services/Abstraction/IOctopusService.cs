@@ -4,5 +4,5 @@ public interface IOctopusService
 {
     Task<double?> GetPrice(DateTimeOffset readingTime);
 
-    Task<Dictionary<int, double>> GetDailyPrices(DateTimeOffset date);
+    Task<Dictionary<int, double>?> GetDailyPrices(DateTimeOffset date);
 }
