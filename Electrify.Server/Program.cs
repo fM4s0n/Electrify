@@ -16,6 +16,13 @@ if (!Enum.TryParse(builder.Configuration["Serilog:MinimumLevel"], out LogLevel l
     Environment.FailFast("Log Level has not been set");
 }
 
+builder.Services.AddHttpClient(
+    "OctopusClient",
+    client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["OctopusApiUrl"]!);
+    });
+
 builder.Services.AddDlmsClient(builder.Configuration, logLevel);
 
 // TODO put this logic in UI
@@ -33,6 +40,7 @@ builder.Services.AddDlmsClient(builder.Configuration, logLevel);
 
 builder.Services.AddDbContext<ElectrifyDbContext>();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddSingleton<IOctopusService, OctopusService>();
 builder.Services.AddGrpc().AddJsonTranscoding();
 builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
 {
