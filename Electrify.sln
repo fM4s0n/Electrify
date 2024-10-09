@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.SmartMeterUi", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.AdminUi", "Electrify.AdminUi\Electrify.AdminUi.csproj", "{C2F46A56-D4D8-4774-BC3A-A10C28F0B18E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.DlmsClient", "Electrify.DlmsClient\Electrify.DlmsClient.csproj", "{85A81A69-CFFE-401E-A834-9E804C47B353}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.Dlms", "Electrify.Dlms\Electrify.Dlms.csproj", "{85A81A69-CFFE-401E-A834-9E804C47B353}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.DlmsServer", "Electrify.DlmsServer\Electrify.DlmsServer.csproj", "{8CC44742-4A31-40C9-90A1-1AC528085896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.Server", "Electrify.Server\Electrify.Server.csproj", "{8CC44742-4A31-40C9-90A1-1AC528085896}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.UnitTests", "Electrify.UnitTests\Electrify.UnitTests.csproj", "{5213E304-DEA8-4ABD-8448-F2BA56472DB5}"
 EndProject
