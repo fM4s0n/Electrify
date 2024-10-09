@@ -1,8 +1,9 @@
-﻿using Electrify.Dlms.Extensions;
+using Electrify.Dlms.Extensions;
 using Electrify.Server.Database;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
 using Gurux.DLMS.Objects;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -50,6 +51,9 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
         Version = "v1",
     });
 });
+
+builder.Services.AddDbContext<ElectrifyDbContext>(options => 
+    options.UseInMemoryDatabase("ElectrifyDB"));
 
 var app = builder.Build();
 
