@@ -1,6 +1,6 @@
 ﻿using Electrify.Models.Models;
 
-namespace Electrify.DlmsServer.Services.Abstraction;
+namespace Electrify.Server.Services.Abstraction;
 public interface IAdminService
 {
     Admin CreateAdmin(string name, string email, string plainTextPassword);

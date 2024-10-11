@@ -1,5 +1,5 @@
-﻿using Electrify.DlmsServer.Services.Abstraction;
-using Electrify.Models.Models;
+﻿using Electrify.Models.Models;
+using Electrify.Server.Services.Abstraction;
 using Microsoft.AspNetCore.Identity;
 
 namespace Electrify.DlmsServer.Services
