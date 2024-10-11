@@ -1,1 +1,23 @@
 ﻿@page "/"
+
+<div class="login-page">
+    <div class="login-container">
+        <div class="login-logo">
+            <img src="/Images/electrify.svg"/>
+        </div>
+        <div>
+            <InputText placeholder="Email" @bind-Value="LoginDetails.Email" class="input-text" />
+        </div>
+        <div>
+            <InputText type="password" placeholder="Password" @bind-Value="LoginDetails.Password" class="input-text"/>
+        </div>
+        <div style="visibility: @(InvalidLogin ? "visible" : "hidden")" class="login-error">
+            Invalid Login Details
+        </div>
+        <div>
+            <a class="login-button" @onclick=HandleLogin>
+                Login
+            </a>
+        </div>
+    </div>
+</div>

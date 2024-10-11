@@ -3,12 +3,11 @@
 /// <summary>
 /// Model for the Electrify Admin.
 /// </summary>
-public class Admin
+public sealed record Admin
 {
-    public Admin() { }
-
     public required Guid Id { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
     public required string PasswordHash { get; set; }
+    public Guid? AccessToken { get; set; }
 }

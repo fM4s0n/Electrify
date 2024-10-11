@@ -2,7 +2,7 @@
 using Electrify.Server.Services.Abstraction;
 using Microsoft.AspNetCore.Identity;
 
-namespace Electrify.DlmsServer.Services
+namespace Electrify.Server.Services
 {
     public class AdminService(PasswordHasher<Admin> passwordHasher) : IAdminService
     {
@@ -25,6 +25,11 @@ namespace Electrify.DlmsServer.Services
         public bool VerifyPassword(Admin admin, string plainTextPassword)
         {
             return passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, plainTextPassword) != PasswordVerificationResult.Failed;
+        }
+
+        public Guid GenerateAccessToken()
+        {
+            return Guid.NewGuid();
         }
     }
 }
