@@ -7,41 +7,41 @@ namespace Electrify.UnitTests.DlmsServer.Services;
 
 public class AdminServiceTests
 {
-    private readonly AdminService _adminService;
-    private readonly Admin _admin;
-
-    private readonly string _name = "John Doe";
-    private readonly string _email = "test@test.com";
-    private readonly string _plainTextPassword = "password";
-
-    public AdminServiceTests()
-    {
-        _adminService = new AdminService();
-        _admin = _adminService.CreateAdmin(_name, _email, _plainTextPassword);
-    }
-
     [Fact]
     public void CreateAdmin_Should_Create_Valid_Admin()
     {
+        // Arrange
+        var adminService = new AdminService();
+        string name = "John Doe";
+        string email = "test@test.com";
+        string plainTextPassword = "password";
+
         // Act
-        Admin admin = _adminService.CreateAdmin(_name, _email, _plainTextPassword);
+        Admin admin = adminService.CreateAdmin(name, email, plainTextPassword);
 
         // Assert
         using (new AssertionScope())
         {
             admin.Should().NotBeNull();
-            admin.Name.Should().Be(_name);
-            admin.Email.Should().Be(_email);
+            admin.Name.Should().Be(name);
+            admin.Email.Should().Be(email);
             admin.PasswordHash.Should().NotBeNullOrEmpty();
-            admin.PasswordHash.Should().NotBe(_plainTextPassword);
+            admin.PasswordHash.Should().NotBe(plainTextPassword);
         } 
     }
 
     [Fact]
     public void VerifyPassword_Should_Return_True()
     {
+        // Arrange
+        var adminService = new AdminService();
+        string name = "Lewis Hamilton";
+        string email = "test1@mercedes.com";
+        string plainTextPassword = "password1";
+        var admin = adminService.CreateAdmin(name, email, plainTextPassword);
+
         // Act
-        bool result = _adminService.VerifyPassword(_admin, _plainTextPassword);
+        bool result = adminService.VerifyPassword(admin, plainTextPassword);
 
         // Assert
         result.Should().BeTrue();
@@ -50,8 +50,15 @@ public class AdminServiceTests
     [Fact]
     public void VerifyPassword_Should_Return_False()
     {
+        // Arrange
+        var adminService = new AdminService();
+        string name = "Charles Leclerc";
+        string email = "test@ferrari.com";
+        string plainTextPassword = "password2";
+        var admin = adminService.CreateAdmin(name, email, plainTextPassword);
+
         // Act
-        bool result = _adminService.VerifyPassword(_admin, "WrongPassword");
+        bool result = adminService.VerifyPassword(admin, "WrongPassword");
 
         // Assert
         result.Should().BeFalse();

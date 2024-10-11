@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Electrify.DlmsServer.Services
 {
-    public class AdminService : IAdminService
+    public class AdminService(PasswordHasher<Admin> passwordHasher) : IAdminService
     {
-        private readonly PasswordHasher<Admin> _passwordHasher = new();
-
         public Admin CreateAdmin(string name, string email, string plainTextPassword)
         {
             Admin admin = new()
@@ -15,17 +13,18 @@ namespace Electrify.DlmsServer.Services
                 Id = Guid.NewGuid(),
                 Name = name,
                 Email = email,
+                PasswordHash = string.Empty,
             };
 
             // Hash the password
-            admin.PasswordHash = _passwordHasher.HashPassword(admin, plainTextPassword);
+            admin.PasswordHash = passwordHasher.HashPassword(admin, plainTextPassword);
 
             return admin;
         }
 
         public bool VerifyPassword(Admin admin, string plainTextPassword)
         {
-            return _passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, plainTextPassword) != PasswordVerificationResult.Failed;
+            return passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, plainTextPassword) != PasswordVerificationResult.Failed;
         }
     }
 }
