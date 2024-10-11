@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Electrify.DlmsServer";
+
+package availability;
+
+service MeterAvailability {
+  rpc Register (AvailabilityRequest) returns (AvailabilityResponse) {
+    option (google.api.http) = {
+      post: "/v1/available"
+    };
+  }
+}
+
+message AvailabilityRequest {
+  int32 port = 1;
+}
+
+message AvailabilityResponse {
+  bool success = 1;
+}

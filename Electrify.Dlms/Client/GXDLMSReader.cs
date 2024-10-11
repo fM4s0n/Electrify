@@ -1,3 +1,4 @@
+#pragma warning disable
 //
 // --------------------------------------------------------------------------
 //  Gurux Ltd
@@ -1753,3 +1754,4 @@ public class GXDLMSReader
         }
     }
 }
+#pragma warning restore

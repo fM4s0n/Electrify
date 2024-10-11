@@ -1,8 +1,10 @@
-﻿using Electrify.Dlms.Extensions;
+﻿using System.Diagnostics;
+using Electrify.Dlms.Extensions;
 using Electrify.Server.Database;
+using Electrify.Server.Options;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
-using Gurux.DLMS.Objects;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -15,6 +17,12 @@ if (!Enum.TryParse(builder.Configuration["Serilog:MinimumLevel"], out LogLevel l
 {
     Environment.FailFast("Log Level has not been set");
 }
+
+builder.Services.AddSingleton(Options.Create(new ObservabilityOptions
+{
+    LogLevel = logLevel,
+    TraceLevel = logLevel.ToTraceLevel(),
+}));
 
 builder.Services.AddHttpClient(
     "OctopusClient",
@@ -46,7 +54,7 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Electrify Authentication",
+        Title = "Electrify",
         Version = "v1",
     });
 });
@@ -55,10 +63,11 @@ var app = builder.Build();
 
 app.UseSwagger().UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Electrify Authentication v1");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Electrify v1");
 });
 
 app.MapGrpcService<AuthenticationService>();
+app.MapGrpcService<MeterAvailabilityService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();
