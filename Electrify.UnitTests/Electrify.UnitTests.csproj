@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Electrify.DlmsServer\Electrify.DlmsServer.csproj" />
+    <ProjectReference Include="..\Electrify.Server\Electrify.Server.csproj" />
   </ItemGroup>
 
 </Project>
