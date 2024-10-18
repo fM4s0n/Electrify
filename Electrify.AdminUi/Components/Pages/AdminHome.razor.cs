@@ -14,6 +14,8 @@ public partial class AdminHome : ComponentBase
 
     private Admin? _admin;
 
+    private Client? CurrentClient;
+
     protected override void OnInitialized()
     {
         if (AdminService == null || AdminService.GetCurrentAdmin() == null)
@@ -28,7 +30,13 @@ public partial class AdminHome : ComponentBase
 
     public void HandleSetupMeter()
     {
+        CurrentClient = new()
+        {
+            UserId = Guid.NewGuid(),
+            ClientId = Guid.NewGuid(),
+        };
 
+        // TODO: insert into DB
     }
 
     public void HandleLogout()
@@ -49,6 +57,16 @@ public partial class AdminHome : ComponentBase
         };
 
         return $"{timeOfDayGreeting}, {name}";
+    }
+
+    private static async Task CopyToClipboard(string stringToCopy)
+    {
+        await Clipboard.SetTextAsync(stringToCopy);
+    }
+
+    private void HandleNextMeter()
+    {
+        CurrentClient = null;
     }
 }
 

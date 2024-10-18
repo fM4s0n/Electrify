@@ -5,8 +5,8 @@
         <div class="home-left-content">
             <h1>@GetGreeting()</h1>
 
-            <a class="button" @onclick=HandleSetupMeter>
-                Setup new Meter
+            <a style="display:@(CurrentClient == null ? "block" : "none")" class="button" @onclick=HandleSetupMeter>
+                Setup New Meter
             </a>
 
             <a class="button" @onclick=HandleLogout>
@@ -16,6 +16,38 @@
     </div>
 
     <div class="home-right">
+        <div class="home-right-content">
+            @if (CurrentClient == null)
+            {
+                <h1 class="home-no-client">Nothing to display</h1>
+            }
+            else
+            {
+                <div class="home-account-ids">
+                    <h1 class="home-right-label">User ID</h1>
+                    <a @onclick=@(() => CopyToClipboard(CurrentClient.UserId.ToString()))>
+                        <h3>
+                            @CurrentClient.UserId
+                            <i class="fa-regular fa-copy" />
+                        </h3>
+                    </a>
 
+                    <h1 class="home-right-label">Client ID</h1>
+
+                    <a @onclick=@(() => CopyToClipboard(CurrentClient.ClientId.ToString()))>
+                        <h3>
+                            @CurrentClient.ClientId
+                            <i class="fa-regular fa-copy" />
+                        </h3>                            
+                    </a>
+
+                    <hr/>
+                </div>
+
+                <a class="button" @onclick=HandleNextMeter>
+                    Setup Next Meter
+                </a>
+            }
+        </div>
     </div>
 </div>

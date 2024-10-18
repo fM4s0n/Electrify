@@ -31,3 +31,15 @@
     margin: 0 auto 1em 0;
     font-size: 1.25em;
 }
+
+.home-no-client {
+    color: #324767;
+}
+
+.home-right-label{
+    color: var(--brand-light);
+}
+
+.home-account-ids{
+    padding: 1em 0;
+}

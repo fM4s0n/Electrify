@@ -95,3 +95,16 @@ html, body {
     color: var(--brand-dark);
     cursor: pointer;
 }
+
+a {
+    transition: ease-in-out 0.2s;
+}
+
+a:hover {
+    color: var(--brand-light);
+    cursor: pointer;
+}
+
+hr{
+    opacity: 0.5;
+}
