@@ -29,7 +29,7 @@ public class MeterAvailabilityService(ILogger<MeterAvailabilityService> logger, 
             options.ClientAddress,
             options.ServerAddress,
             options.Authentication,
-            options.Password,
+            request.Secret,
             options.InterfaceType);
 
 
