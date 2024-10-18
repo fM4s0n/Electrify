@@ -1,0 +1,21 @@
+﻿@page "/home"
+
+<div class="admin-home">
+    <div class="home-left">
+        <div class="home-left-content">
+            <h1>@GetGreeting()</h1>
+
+            <a class="button" @onclick=HandleSetupMeter>
+                Setup new Meter
+            </a>
+
+            <a class="button" @onclick=HandleLogout>
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <div class="home-right">
+
+    </div>
+</div>

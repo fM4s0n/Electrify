@@ -8,7 +8,8 @@ public partial class Login : ComponentBase
     [Inject]
     private NavigationManager NavigationManager { get; set; }
 
-    [Inject] ILoginService LoginService { get; set; }
+    [Inject] 
+    private IAdminService AdminService { get; set; }
 
     private LoginDetails LoginDetails = new();
 
@@ -16,9 +17,9 @@ public partial class Login : ComponentBase
 
     private async Task HandleLogin()
     {
-        bool result = await LoginService.ValidateLogin(LoginDetails.Email, LoginDetails.Password);
+        bool validLogin = await AdminService.ValidateLogin(LoginDetails.Email, LoginDetails.Password);
 
-        if (result)
+        if (validLogin)
         {
             NavigationManager.NavigateTo("/home");
         }

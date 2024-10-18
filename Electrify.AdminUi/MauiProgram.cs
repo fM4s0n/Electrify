@@ -31,7 +31,7 @@ public static class MauiProgram
         loggerConfiguration.MinimumLevel.Debug();
 #endif
         builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
-        builder.Services.AddScoped<ILoginService, LoginService>();
+        builder.Services.AddScoped<IAdminService, AdminService>();
 
         return builder.Build();
     }

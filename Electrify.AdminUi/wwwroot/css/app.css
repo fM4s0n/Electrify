@@ -77,3 +77,21 @@ html, body {
 ::-ms-reveal {
     filter: invert(100%);
 }
+
+.button {
+    border-radius: 5px;
+    border: 2px solid var(--brand-light);
+    color: var(--brand-light);
+    padding: 0.5em;
+    box-sizing: border-box;
+    transition: ease-in-out 0.2s;
+    width: fit-content;
+    margin: 1em auto;
+    margin: 0 auto;
+}
+
+.button:hover {
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    cursor: pointer;
+}
