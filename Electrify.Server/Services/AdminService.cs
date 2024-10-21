@@ -1,12 +1,16 @@
 ﻿using Electrify.Models.Models;
+using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.AspNetCore.Identity;
 
 namespace Electrify.Server.Services
 {
-    public class AdminService(PasswordHasher<Admin> passwordHasher) : IAdminService
+    public class AdminService(ElectrifyDbContext dbContext) : IAdminService
     {
-        public Admin CreateAdmin(string name, string email, string plainTextPassword)
+        private readonly ElectrifyDbContext _dbContext = dbContext;
+        private static readonly PasswordHasher<Admin> _passwordHasher = new();
+
+        public void CreateAdmin(string name, string email, string plainTextPassword)
         {
             Admin admin = new()
             {
@@ -17,19 +21,25 @@ namespace Electrify.Server.Services
             };
 
             // Hash the password
-            admin.PasswordHash = passwordHasher.HashPassword(admin, plainTextPassword);
+            admin.PasswordHash = _passwordHasher.HashPassword(admin, plainTextPassword);
 
-            return admin;
+            InsertAdmin(admin);
         }
 
         public bool VerifyPassword(Admin admin, string plainTextPassword)
         {
-            return passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, plainTextPassword) != PasswordVerificationResult.Failed;
+            return _passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, plainTextPassword) != PasswordVerificationResult.Failed;
         }
 
         public Guid GenerateAccessToken()
         {
             return Guid.NewGuid();
+        }
+
+        private void InsertAdmin(Admin admin)
+        {
+            _dbContext.Admins.Add(admin);
+            _dbContext.SaveChanges();
         }
     }
 }
