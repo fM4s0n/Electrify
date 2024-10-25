@@ -8,4 +8,8 @@ public interface IAdminService
     bool VerifyPassword(Admin admin, string plainTextPassword);
 
     Guid GenerateAccessToken();
+
+    void UpdateAccessToken(Admin admin, Guid? token);
+
+    Admin? GetAdminByEmail(string email);
 }

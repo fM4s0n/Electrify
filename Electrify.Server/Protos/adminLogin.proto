@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Electrify.Server.Protos";
+
+package adminLogin;
+
+service AdminLogin {
+  rpc AdminLogin (AdminLoginDetailsRequest) returns (AdminLoginResponse) {
+    option (google.api.http) = {
+      post: "/v1/adminLogin"
+    };
+  }
+}
+
+message AdminLoginDetailsRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AdminLoginResponse {
+  bool success = 1;
+  string id = 2;
+  string name = 3;
+  string email = 4;
+  string passwordHash = 5;
+  string token = 6;
+}
