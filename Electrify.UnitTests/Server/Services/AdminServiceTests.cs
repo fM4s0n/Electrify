@@ -24,20 +24,20 @@ public class AdminServiceTests
     public void CreateAdmin_Should_Create_Valid_Admin()
     {
         // Arrange
-        var adminService = new AdminService(_database);
         string name = "John Doe";
         string email = "test@test.com";
         string plainTextPassword = "password";
 
         // Act
-        adminService.CreateAdmin(name, email, plainTextPassword);
+        _adminService.CreateAdmin(name, email, plainTextPassword);
 
         var admin = _database.Admins.FirstOrDefault(a => a.Email == email);
 
         // Assert
+        admin.Should().NotBeNull();
+
         using (new AssertionScope())
-        {
-            admin.Should().NotBeNull();
+        {           
             admin!.Name.Should().Be(name);
             admin.Email.Should().Be(email);
             admin.PasswordHash.Should().NotBeNullOrEmpty();
@@ -49,15 +49,14 @@ public class AdminServiceTests
     public void VerifyPassword_Should_Return_True()
     {
         // Arrange
-        var adminService = new AdminService(_database);
         string name = "Lewis Hamilton";
         string email = "test1@mercedes.com";
         string plainTextPassword = "password1";
-        adminService.CreateAdmin(name, email, plainTextPassword);
+        _adminService.CreateAdmin(name, email, plainTextPassword);
 
         // Act
         var admin = _database.Admins.FirstOrDefault(a => a.Email == email);
-        bool result = adminService.VerifyPassword(admin!, plainTextPassword);
+        bool result = _adminService.VerifyPassword(admin!, plainTextPassword);
 
         // Assert
         result.Should().BeTrue();
@@ -67,15 +66,14 @@ public class AdminServiceTests
     public void VerifyPassword_Should_Return_False()
     {
         // Arrange
-        var adminService = new AdminService(_database);
         string name = "Charles Leclerc";
         string email = "test@ferrari.com";
         string plainTextPassword = "password2";
-        adminService.CreateAdmin(name, email, plainTextPassword);
+        _adminService.CreateAdmin(name, email, plainTextPassword);
 
         // Act
         var admin = _database.Admins.FirstOrDefault(a => a.Email == email);
-        bool result = adminService.VerifyPassword(admin!, "WrongPassword");
+        bool result = _adminService.VerifyPassword(admin!, "WrongPassword");
 
         // Assert
         result.Should().BeFalse();

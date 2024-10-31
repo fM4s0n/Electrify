@@ -6,12 +6,12 @@ namespace Electrify.AdminUi.Components.Pages;
 public partial class Login : ComponentBase
 {
     [Inject]
-    private NavigationManager NavigationManager { get; set; }
+    private NavigationManager NavigationManager { get; set; } = default!;
 
     [Inject] 
-    private IAdminService AdminService { get; set; }
+    private IAdminService AdminService { get; set; } = default!;
 
-    private LoginDetails LoginDetails = new();
+    private readonly LoginDetails LoginDetails = new();
 
     private bool InvalidLogin = false;
 
