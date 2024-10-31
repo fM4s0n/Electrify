@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Electrify.Server.Services
 {
-    public class AdminService(ElectrifyDbContext dbContext) : IAdminService 
+    public class AdminService(ElectrifyDbContext dbContext, PasswordHasher<Admin> passwordHasher) : IAdminService 
     {
         private readonly ElectrifyDbContext _dbContext = dbContext;
-        private static readonly PasswordHasher<Admin> _passwordHasher = new();              
+        private readonly PasswordHasher<Admin> _passwordHasher = passwordHasher;              
 
         public void CreateAdmin(string name, string email, string plainTextPassword)
         {

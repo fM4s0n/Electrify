@@ -1,20 +1,12 @@
 {
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "http": {
+    "Electrify.AdminUI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:5263",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": false,
-      "applicationUrl": "https://localhost:7268;http://localhost:5263",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

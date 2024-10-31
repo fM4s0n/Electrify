@@ -1,31 +1,37 @@
 ﻿using Electrify.AdminUi.Services.Abstractions;
 using Electrify.Models.Models;
+using Electrify.Server.Protos;
 
 namespace Electrify.AdminUi.Services;
 
-public class AdminService : IAdminService
+public class AdminService(AdminLogin.AdminLoginClient adminLoginClient) : IAdminService
 {
+    private readonly AdminLogin.AdminLoginClient _adminLoginClient = adminLoginClient;
     private static Admin? CurrentAdmin;
 
     public Admin? GetCurrentAdmin() => CurrentAdmin;
 
     public async Task<bool> ValidateLogin(string email, string password)
     {
-        bool valid = true;
+        var reply = await _adminLoginClient.AdminLoginAsync(new AdminLoginDetailsRequest
+        {
+            Email = email,
+            Password = password,
+        });
 
-        if (valid)
+        if (reply.Success)
         {
             CurrentAdmin = new Admin()
             {
                 Id = Guid.NewGuid(),
-                Name = "Freddie",
-                Email = "freddie@freddie.com",
-                PasswordHash = "password",
-                AccessToken = Guid.NewGuid(),
+                Name = reply.Name,
+                Email = reply.Email,
+                PasswordHash = reply.PasswordHash,
+                AccessToken = Guid.Parse(reply.Token)
             };
         }
 
-        return valid;
+        return reply.Success;
     }
 
     public void LogoutCurrentAdmin()
