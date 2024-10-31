@@ -17,13 +17,19 @@ public partial class MainPage : ContentPage
     /// </summary>
     private void SetMainWindowSize()
     {
+    #if IOS || MACCATALYST
         const float width = 1024f;
         const float height = 600f;
+        SetMacWindowSize(width, height);
+    #endif
+    }
 
+    private void SetMacWindowSize(float width, float height)
+    {
         Microsoft.Maui.Handlers.WindowHandler.Mapper.AppendToMapping(
             nameof(IWindow), (handler, _) =>
             {
-#if IOS || MACCATALYST
+            #if IOS || MACCATALYST
                 if (handler.PlatformView.WindowScene is { SizeRestrictions: not null })
                 {
                     Task.Run(() =>
@@ -37,7 +43,7 @@ public partial class MainPage : ContentPage
                         });
                     });
                 }
-#endif
+            #endif
             });
     }
 }

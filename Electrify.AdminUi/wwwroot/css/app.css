@@ -1,8 +1,4 @@
-﻿html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-#blazor-error-ui {
+﻿#blazor-error-ui {
     background: lightyellow;
     bottom: 0;
     box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
@@ -49,4 +45,66 @@
     .flex-column, .navbar-brand {
         padding-left: env(safe-area-inset-left);
     }
+}
+
+:root {
+    --brand-dark: #172130;
+    --brand-light: #00b5f1;
+}
+
+html, body {
+    font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.input-text {
+    padding: 0.5em;
+    color: var(--brand-light);
+    border: none;
+    border-bottom: 2px solid #aaaaaa;
+    background: none;
+    transition: ease-in-out 0.2s;
+    margin: 0 auto;
+    width: 80%;
+}
+
+.input-text:focus {
+    border-bottom: 2px solid var(--brand-light);
+    outline: none;
+}
+
+::-ms-reveal {
+    filter: invert(100%);
+}
+
+.button {
+    border-radius: 5px;
+    border: 2px solid var(--brand-light);
+    color: var(--brand-light);
+    padding: 0.5em;
+    box-sizing: border-box;
+    transition: ease-in-out 0.2s;
+    width: fit-content;
+    margin: 1em auto;
+    margin: 0 auto;
+}
+
+.button:hover {
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    cursor: pointer;
+}
+
+a {
+    transition: ease-in-out 0.2s;
+}
+
+a:hover {
+    color: var(--brand-light);
+    cursor: pointer;
+}
+
+hr{
+    opacity: 0.5;
 }
