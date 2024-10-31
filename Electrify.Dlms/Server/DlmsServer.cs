@@ -22,8 +22,6 @@ public sealed class DlmsServer : IDlmsServer
         GXDLMSAssociationLogicalName association,
         GXDLMSBase server,
         Action<DlmsServer> configure,
-        IOptions<DlmsServerOptions> options,
-        TraceLevel traceLevel,
         ILogger<DlmsServer> logger)
     {
         _association = association;
@@ -31,10 +29,6 @@ public sealed class DlmsServer : IDlmsServer
         _logger = logger;
 
         configure.Invoke(this);
-        
-        _server.Initialize(options.Value.Port, traceLevel);
-
-        _ = RunAsync(_cts.Token);
     }
 
     public void AddRegister(GXDLMSRegister register)
@@ -84,6 +78,13 @@ public sealed class DlmsServer : IDlmsServer
 
         return Task.CompletedTask;
     }
+
+    public void Initialise(IOptions<DlmsServerOptions> options, TraceLevel traceLevel)
+    {
+        _server.Initialize(options.Value.Port, traceLevel);
+        _ = RunAsync(_cts.Token);
+    }
+
     public void Dispose()
     {
         _cts.Cancel();

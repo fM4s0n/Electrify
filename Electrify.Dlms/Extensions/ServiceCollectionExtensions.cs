@@ -84,12 +84,11 @@ public static class ServiceCollectionExtensions
         {
             var association = sp.GetRequiredService<GXDLMSAssociationLogicalName>();
             var serverBase = sp.GetRequiredService<GXDLMSBase>();
-            var options = sp.GetRequiredService<IOptions<DlmsServerOptions>>();
             var logger = sp.GetRequiredService<ILogger<DlmsServer>>();
 
-            return new DlmsServer(association, serverBase, configure, options, logLevel.ToTraceLevel(), logger);
+            return new DlmsServer(association, serverBase, configure, logger);
         });
-        
+
         return services;
     }
 }

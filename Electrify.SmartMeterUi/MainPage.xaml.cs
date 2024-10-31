@@ -1,13 +1,19 @@
-﻿using Microsoft.Maui.Controls.Platform;
-using Microsoft.Maui.Platform;  // For PlatformView
+﻿using Electrify.Dlms.Options;
+using Electrify.Dlms.Server.Abstraction;
+using Microsoft.Extensions.Options;
+using Microsoft.Maui.Controls.Platform;
+using Microsoft.Maui.Platform;
+using System.Diagnostics;  // For PlatformView
 
 namespace Electrify.SmartMeterUi;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage()
+    public MainPage(IDlmsServer dlmsServer, IOptions<DlmsServerOptions> options, TraceLevel traceLevel)
     {
         InitializeComponent();
+
+        dlmsServer.Initialise(options, traceLevel);
 
         SetMainWindowSize();
     }
