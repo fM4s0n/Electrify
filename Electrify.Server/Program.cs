@@ -41,6 +41,7 @@ builder.Services.AddDlmsClient(builder.Configuration, logLevel);
 //     configure.AddRegister(register);
 // });
 
+builder.Services.AddScoped(typeof(PasswordHasher<>));
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
@@ -72,6 +73,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGrpcService<AuthenticationService>();
+app.MapGrpcService<AdminLoginService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();

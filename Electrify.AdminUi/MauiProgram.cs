@@ -2,6 +2,7 @@
 using Electrify.AdminUi.Services.Abstractions;
 using Serilog;
 using Electrify.AdminUi.Services;
+using Electrify.Server.Protos;
 
 namespace Electrify.AdminUi;
 public static class MauiProgram
@@ -32,6 +33,10 @@ public static class MauiProgram
 #endif
         builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
         builder.Services.AddScoped<IAdminService, AdminService>();
+        builder.Services.AddGrpcClient<AdminLogin.AdminLoginClient>(options =>
+        {
+            options.Address = new Uri("http://localhost:5001");
+        });
 
         return builder.Build();
     }

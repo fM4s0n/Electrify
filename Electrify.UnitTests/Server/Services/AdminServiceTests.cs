@@ -4,20 +4,24 @@ using FluentAssertions.Execution;
 using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Electrify.Models.Models;
 
 namespace Electrify.UnitTests.Server.Services;
 
 public class AdminServiceTests
 {
     private readonly IAdminService _adminService;
+    private PasswordHasher<Admin> _passwordHasher;
     private readonly ElectrifyDbContext _database;
 
     public AdminServiceTests()
     {
         var builder = new DbContextOptionsBuilder<ElectrifyDbContext>();
         builder.UseInMemoryDatabase("UnitTestDb");
+        _passwordHasher = new PasswordHasher<Admin>();
         _database = new ElectrifyDbContext(builder.Options);
-        _adminService = new AdminService(_database);
+        _adminService = new AdminService(_database, _passwordHasher);
     }
 
     [Fact]
