@@ -34,6 +34,7 @@
 //---------------------------------------------------------------------------
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
@@ -50,6 +51,7 @@ namespace Electrify.Dlms.Server;
 /// <summary>
 /// All example servers are using same objects.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class GXDLMSBase : GXDLMSSecureServer
 {
     /// <summary>
