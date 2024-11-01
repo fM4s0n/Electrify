@@ -33,6 +33,7 @@
 //---------------------------------------------------------------------------
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Ports;
 using System.Text;
 using Gurux.Common;
@@ -49,9 +50,7 @@ using Gurux.Serial;
 
 namespace Electrify.Dlms.Client;
 
-/// <summary>
-/// 
-/// </summary>
+[ExcludeFromCodeCoverage]
 public class GXDLMSReader
 {
     /// <summary>
