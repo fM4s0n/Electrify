@@ -7,7 +7,7 @@ namespace Electrify.AdminUi.Services;
 public class AdminService(AdminLogin.AdminLoginClient adminLoginClient) : IAdminService
 {
     private readonly AdminLogin.AdminLoginClient _adminLoginClient = adminLoginClient;
-    private static Admin? CurrentAdmin;
+    private Admin? CurrentAdmin;
 
     public Admin? GetCurrentAdmin() => CurrentAdmin;
 
