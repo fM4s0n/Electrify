@@ -5,6 +5,7 @@ using Electrify.Dlms.Server.Abstraction;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.ManufacturerSettings;
 using Gurux.DLMS.Objects;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Task = System.Threading.Tasks.Task;
@@ -18,31 +19,21 @@ public sealed class DlmsServer : IDlmsServer
     private readonly ILogger<DlmsServer> _logger;
     private readonly CancellationTokenSource _cts = new();
     
-    public DlmsServer(
-        GXDLMSAssociationLogicalName association,
-        GXDLMSBase server,
-        Action<DlmsServer> configure,
-        IOptions<DlmsServerOptions> options,
-        TraceLevel traceLevel,
-        ILogger<DlmsServer> logger)
+    public DlmsServer(Action<DlmsServer, IServiceProvider> configure, IServiceProvider serviceProvider)
     {
-        _association = association;
-        _server = server;
-        _logger = logger;
+        _association = serviceProvider.GetRequiredService<GXDLMSAssociationLogicalName>();
+        _server = serviceProvider.GetRequiredService<GXDLMSBase>();
+        _logger = serviceProvider.GetRequiredService<ILogger<DlmsServer>>();
 
-        configure.Invoke(this);
-        
-        _server.Initialize(options.Value.Port, traceLevel);
-
-        _ = RunAsync(_cts.Token);
+        configure.Invoke(this, serviceProvider);
     }
 
-    public void AddRegister(GXDLMSRegister register)
+    public void AddObject(GXDLMSObject dlmsObject)
     {
-        _association.SetAccess3(register, 3, AccessMode3.Read);
-        _association.SetAccess3(register, 2, AccessMode3.Read);
+        _association.SetAccess3(dlmsObject, 3, AccessMode3.Read);
+        _association.SetAccess3(dlmsObject, 2, AccessMode3.Read);
         
-        _server.Items.Add(register);
+        _server.Items.Add(dlmsObject);
     }
 
     public double GetEnergy()
@@ -69,6 +60,13 @@ public sealed class DlmsServer : IDlmsServer
                 register.Value = energyValue;
             }
         }
+    }
+
+    public void Initialise(IOptions<DlmsServerOptions> options, TraceLevel traceLevel)
+    {
+        _server.Initialize(options.Value.Port, traceLevel);
+
+        _ = RunAsync(_cts.Token);
     }
 
     private Task RunAsync(CancellationToken cancellationToken)

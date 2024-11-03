@@ -46,7 +46,8 @@ namespace Electrify.Dlms.Server;
 /// </remarks>    
 public class GXDLMSServerLN_47 : GXDLMSBase
 {
-    public GXDLMSServerLN_47(GXDLMSAssociationLogicalName association) : base(association, new GXDLMSTcpUdpSetup())
+    public GXDLMSServerLN_47(GXDLMSAssociationLogicalName association, GXDLMSClock clock)
+        : base(association, clock, new GXDLMSTcpUdpSetup())
     {
     }
 }
