@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Electrify.Dlms.Client;
 using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
@@ -15,7 +14,7 @@ namespace Electrify.Server.Services;
 public class MeterAvailabilityService(ILogger<MeterAvailabilityService> logger, IServiceProvider serviceProvider) : MeterAvailability.MeterAvailabilityBase, IDisposable
 {
     private readonly Dictionary<int, IDlmsClient> _clients = [];
-    private readonly List<CoolTimer> _timers = [];
+    private readonly List<RandomTaskTimer> _timers = [];
     
     public override Task<AvailabilityResponse> Register(AvailabilityRequest request, ServerCallContext context)
     {
@@ -32,7 +31,6 @@ public class MeterAvailabilityService(ILogger<MeterAvailabilityService> logger, 
             request.Secret,
             options.InterfaceType);
 
-
         var reader = new GXDLMSReader(secureClient, media, traceLevel, options.InvocationCounter);
 
         var registers = options.LogicalNames
@@ -44,7 +42,7 @@ public class MeterAvailabilityService(ILogger<MeterAvailabilityService> logger, 
 
         _clients[request.Port] = client;
         
-        var timer = new CoolTimer(delegate
+        var timer = new RandomTaskTimer(delegate
         {
             logger.LogInformation("Energy Reading: {kWh}", _clients[request.Port].ReadEnergy());
         }, 15_000, 60_000);
@@ -74,14 +72,18 @@ public class MeterAvailabilityService(ILogger<MeterAvailabilityService> logger, 
     }
 }
 
-class CoolTimer : IDisposable, IAsyncDisposable
+/// <summary>
+/// After executing the callback the timer changes its period to a value between
+/// the StartRange and EndRange it was initialised with.
+/// </summary>
+class RandomTaskTimer : IDisposable, IAsyncDisposable
 {
     private readonly Timer _timer;
     private readonly Random _random = new();
     private readonly int _startRange;
     private readonly int _endRange;
 
-    public CoolTimer(Action callback, int startRange, int endRange)
+    public RandomTaskTimer(Action callback, int startRange, int endRange)
     {
         _startRange = startRange;
         _endRange = endRange;
