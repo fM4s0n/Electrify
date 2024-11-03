@@ -1,10 +1,14 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Electrify.Dlms.Extensions;
+using Electrify.Models.Models;
 using Electrify.Server.Database;
 using Electrify.Server.Options;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.Extensions.Options;
+using Gurux.DLMS.Objects;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -47,7 +51,10 @@ builder.Services.AddDlmsClient(builder.Configuration, logLevel);
 // });
 
 builder.Services.AddDbContext<ElectrifyDbContext>();
+builder.Services.AddScoped(typeof(PasswordHasher<>));
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
 builder.Services.AddSingleton<IOctopusService, OctopusService>();
 builder.Services.AddGrpc().AddJsonTranscoding();
 builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
@@ -59,6 +66,9 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddDbContext<ElectrifyDbContext>(options => 
+    options.UseInMemoryDatabase("ElectrifyDB"));
+
 var app = builder.Build();
 
 app.UseSwagger().UseSwaggerUI(options =>
@@ -66,8 +76,15 @@ app.UseSwagger().UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "Electrify v1");
 });
 
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<IDatabaseSeeder>();
+    seeder.SeedDefaultAdmin();
+}
+
 app.MapGrpcService<AuthenticationService>();
 app.MapGrpcService<MeterAvailabilityService>();
+app.MapGrpcService<AdminLoginService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();

@@ -1,5 +1,4 @@
-#pragma warning disable
-//
+ #pragma warning disable 
 // --------------------------------------------------------------------------
 //  Gurux Ltd
 //
@@ -34,6 +33,7 @@
 //---------------------------------------------------------------------------
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Ports;
 using System.Text;
 using Gurux.Common;
@@ -50,6 +50,7 @@ using Gurux.Serial;
 
 namespace Electrify.Dlms.Client;
 
+[ExcludeFromCodeCoverage]
 public class GXDLMSReader
 {
     /// <summary>
