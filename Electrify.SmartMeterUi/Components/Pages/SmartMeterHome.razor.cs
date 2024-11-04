@@ -66,17 +66,16 @@ public partial class SmartMeterHome
 
     private string GetUsagePriceDaily()
     {
-        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay), 2).ToString();
+        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay), 2).ToString("C");
     }
 
     private string GetUsagePeriod()
     {
-
         return Math.Round((_currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString();
     }
 
     private string GetUsagePricePeriod()
     {
-        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString();
+        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString("C");
     }
 }
