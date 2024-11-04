@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Electrify.SmartMeterUi.Services;
+using Electrify.SmartMeterUi.Services.Abstractions;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace Electrify.SmartMeterUi;
@@ -30,7 +33,8 @@ public static class MauiProgram
 		loggerConfiguration.MinimumLevel.Debug();
 #endif
 		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
-		
+        builder.Services.AddSingleton<IUsageService, UsageService>();
+
         return builder.Build();
 	}
 }
