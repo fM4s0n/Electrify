@@ -69,7 +69,6 @@ public partial class SmartMeterHome
         StateHasChanged();
     }
 
-
     #region UI Display Methods
     private string GetUsageDaily()
     {

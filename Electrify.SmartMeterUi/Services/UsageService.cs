@@ -45,12 +45,7 @@ internal class UsageService : IUsageService
 
     internal static float GenerateRandomUsage()
     {
-        //Random random = new();
-        //float randomUsage = (float)(random.NextDouble() * 5);
-        //return randomUsage;
-
-        Random random = new();
-        float randomFloat = (float)(random.NextDouble() * (0.00999 - 0.00100) + 0.00100);
+        float randomFloat = (float)(_random.NextDouble() * (0.00999 - 0.00100) + 0.00100);
         return randomFloat;
     }
 
@@ -73,7 +68,6 @@ internal class UsageService : IUsageService
     /// <returns></returns>
     private double GetRandomTimerInterval()
     {
-        //return _random.Next(15000, 60001);
-        return 2000;
+        return _random.Next(15000, 60001);
     }
 }
