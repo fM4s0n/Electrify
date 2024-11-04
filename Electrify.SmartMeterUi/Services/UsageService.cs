@@ -66,7 +66,7 @@ internal class UsageService : IUsageService
     /// Gets a new random timer ineterval between 15 and 60 seconds
     /// </summary>
     /// <returns></returns>
-    private double GetRandomTimerInterval()
+    private static double GetRandomTimerInterval()
     {
         return _random.Next(15000, 60001);
     }
