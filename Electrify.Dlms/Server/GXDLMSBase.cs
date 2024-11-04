@@ -329,8 +329,6 @@ public class GXDLMSBase : GXDLMSSecureServer
         MaxReceivePDUSize = 1024;
         ln.XDLMSContextInfo.Conformance = Conformance.Get;
         ln.XDLMSContextInfo.MaxReceivePduSize = ln.XDLMSContextInfo.MaxSendPduSize = 1024;
-        //Default secret.
-        ln.Secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
         //Add other objects.
         AddObjects();
         //Update access modes so user can only read objects as default.

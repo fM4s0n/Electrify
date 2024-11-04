@@ -1,9 +1,9 @@
 using Electrify.Dlms.Extensions;
-using Electrify.Models.Models;
 using Electrify.Server.Database;
+using Electrify.Server.Options;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
-using Gurux.DLMS.Objects;
+using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -18,6 +18,12 @@ if (!Enum.TryParse(builder.Configuration["Serilog:MinimumLevel"], out LogLevel l
 {
     Environment.FailFast("Log Level has not been set");
 }
+
+builder.Services.AddSingleton(Options.Create(new ObservabilityOptions
+{
+    LogLevel = logLevel,
+    TraceLevel = logLevel.ToTraceLevel(),
+}));
 
 builder.Services.AddHttpClient(
     "OctopusClient",
@@ -41,6 +47,7 @@ builder.Services.AddDlmsClient(builder.Configuration, logLevel);
 //     configure.AddRegister(register);
 // });
 
+builder.Services.AddDbContext<ElectrifyDbContext>();
 builder.Services.AddScoped(typeof(PasswordHasher<>));
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
@@ -51,7 +58,7 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Electrify Authentication",
+        Title = "Electrify",
         Version = "v1",
     });
 });
@@ -63,7 +70,7 @@ var app = builder.Build();
 
 app.UseSwagger().UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Electrify Authentication v1");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Electrify v1");
 });
 
 using (var scope = app.Services.CreateScope())
@@ -73,6 +80,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapGrpcService<AuthenticationService>();
+app.MapGrpcService<MeterAvailabilityService>();
 app.MapGrpcService<AdminLoginService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

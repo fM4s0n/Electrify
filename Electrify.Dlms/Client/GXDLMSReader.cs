@@ -1755,4 +1755,4 @@ public class GXDLMSReader
         }
     }
 }
-#pragma warning restore 
+#pragma warning restore
