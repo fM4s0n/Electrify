@@ -3,7 +3,6 @@ using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
 using Gurux.DLMS.Enums;
-using Gurux.DLMS.ManufacturerSettings;
 using Gurux.DLMS.Objects;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
