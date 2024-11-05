@@ -6,14 +6,11 @@ namespace Electrify.AdminUi.Services;
 
 public class AdminService(AdminLogin.AdminLoginClient adminLoginClient) : IAdminService
 {
-    private readonly AdminLogin.AdminLoginClient _adminLoginClient = adminLoginClient;
-    private static Admin? CurrentAdmin;
-
-    public Admin? GetCurrentAdmin() => CurrentAdmin;
-
+    public Admin? CurrentAdmin { get; private set; }
+    
     public async Task<bool> ValidateLogin(string email, string password)
     {
-        var reply = await _adminLoginClient.AdminLoginAsync(new AdminLoginDetailsRequest
+        var reply = await adminLoginClient.AdminLoginAsync(new AdminLoginRequest
         {
             Email = email,
             Password = password,
@@ -21,7 +18,7 @@ public class AdminService(AdminLogin.AdminLoginClient adminLoginClient) : IAdmin
 
         if (reply.Success)
         {
-            CurrentAdmin = new Admin()
+            CurrentAdmin = new Admin
             {
                 Id = Guid.NewGuid(),
                 Name = reply.Name,

@@ -2,8 +2,8 @@
 
     <PropertyGroup>
 		<!-- Set the TargetFrameworks conditionally based on the OS -->
-		<TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('windows'))">net8.0-windows10.0.19041.0</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOsPlatform('maccastalyst'))">net8.0-maccatalyst</TargetFrameworks>
+		<TargetFramework Condition="$([MSBuild]::IsOsPlatform('windows'))">net8.0-windows10.0.19041.0</TargetFramework>
+		<TargetFramework Condition="$([MSBuild]::IsOsPlatform('osx'))">net8.0-maccatalyst</TargetFramework>
 	
 
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
@@ -60,8 +60,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Grpc.AspNetCore" Version="2.57.0" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.8" />
+        <PackageReference Include="Grpc.Core.Api" Version="2.66.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="8.0.92" />
