@@ -2,6 +2,8 @@
 using Electrify.AdminUi.Services.Abstractions;
 using Serilog;
 using Electrify.AdminUi.Services;
+using Electrify.Server.ApiClient;
+using Electrify.Server.ApiClient.Abstraction;
 
 namespace Electrify.AdminUi;
 public static class MauiProgram
@@ -32,7 +34,14 @@ public static class MauiProgram
 #endif
         builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
         builder.Services.AddSingleton<IAdminService, AdminService>();
-
+        builder.Services.AddSingleton<IElectrifyApiClient>(sp =>
+        {
+            return new ElectrifyApiClient(new HttpClient
+            {
+                BaseAddress = new Uri("http://localhost:5000")
+            });
+        });
+        
         return builder.Build();
     }
 }
