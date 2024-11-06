@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace Electrify.SmartMeterUi;
+
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
@@ -24,7 +25,6 @@ public static class MauiProgram
             .WriteTo.Debug()
             .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.log"))
             .Enrich.FromLogContext().Enrich.WithMachineName().Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId);
-
 		
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

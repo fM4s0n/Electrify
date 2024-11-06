@@ -3,33 +3,17 @@ using Electrify.SmartMeterUi.Services.Abstractions;
 
 namespace Electrify.SmartMeterUi.Services;
 
-internal class UsageService : IUsageService
+internal partial class UsageService : IUsageService, IDisposable
 {
     public List<UsageInstance> UsageHistory = [];
-    private System.Timers.Timer? _randomTimer;
+    private readonly Timer? _randomTimer;
     private readonly static Random _random = new();
 
-    public void Start()
+    public UsageService()
     {
         UsageHistory.Clear();
-
         AddNewReading();
-
-        SetUpTimer();
-    }
-
-    public void Stop()
-    {
-        _randomTimer?.Stop();
-        _randomTimer?.Dispose();
-    }
-
-    private void SetUpTimer()
-    {
-        _randomTimer = new(GetRandomTimerInterval());
-        _randomTimer.Elapsed += OnTimerElapsed;
-        _randomTimer.AutoReset = false;
-        _randomTimer.Start();
+        _randomTimer = new(OnTimerElapsed, null, GetRandomTimerInterval(), Timeout.Infinite);
     }
 
     internal void AddNewReading()
@@ -43,18 +27,16 @@ internal class UsageService : IUsageService
         UsageHistory.Add(newReading);
     }
 
-    internal static float GenerateRandomUsage()
+    private static float GenerateRandomUsage()
     {
         float randomFloat = (float)(_random.NextDouble() * (0.00999 - 0.00100) + 0.00100);
         return randomFloat;
     }
 
-    private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    private void OnTimerElapsed(object? sender)
     {
         AddNewReading();
-
-        _randomTimer!.Interval = GetRandomTimerInterval();
-        _randomTimer.Start();
+        _randomTimer?.Change(GetRandomTimerInterval(), Timeout.Infinite);
     }
 
     public UsageInstance GetCurrentUsage()
@@ -66,8 +48,13 @@ internal class UsageService : IUsageService
     /// Gets a new random timer ineterval between 15 and 60 seconds
     /// </summary>
     /// <returns></returns>
-    private static double GetRandomTimerInterval()
+    private static int GetRandomTimerInterval()
     {
         return _random.Next(15000, 60001);
+    }
+
+    public void Dispose()
+    {
+        _randomTimer?.Dispose();
     }
 }
