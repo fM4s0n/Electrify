@@ -14,7 +14,7 @@ public partial class SmartMeterHome
     private readonly int _daysSincePeriodStart = 14;
     private readonly System.Timers.Timer _timer = new(2000);
 
-    [Inject] private IUsageService? UsageService { get; set; }
+    [Inject] private IUsageService UsageService { get; set; } = default!;
 
     protected override void OnInitialized()
     {
@@ -37,7 +37,7 @@ public partial class SmartMeterHome
 
     private void GetCurrentUsage()
     {
-        _currentUsage = UsageService!.GetCurrentUsage().Usage;
+        _currentUsage = UsageService.GetCurrentUsage().Usage;
         _usagePercent = (float)Math.Round(_currentUsage * 10000, 6);
     }
 
