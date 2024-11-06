@@ -38,7 +38,7 @@ public partial class SmartMeterHome
 
     private void GetCurrentUsage()
     {
-        _currentUsage = UsageService!.GetCurrentUsage().Usage;
+        _currentUsage = UsageService.GetCurrentUsage().Usage;
         _usagePercent = (float)Math.Round(_currentUsage * 10000, 6);
     }
 
