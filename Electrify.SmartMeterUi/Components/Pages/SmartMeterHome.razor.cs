@@ -18,7 +18,7 @@ public partial class SmartMeterHome
 
     protected override void OnInitialized()
     {
-        UsageService!.Start();
+        UsageService.Start();
         GetPrice();
         SetUpTimer();
         UpdateDial();
