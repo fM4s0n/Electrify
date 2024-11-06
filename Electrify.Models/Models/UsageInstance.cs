@@ -1,6 +1,6 @@
 ﻿namespace Electrify.Models.Models;
 
-public sealed record class UsageInstance
+public sealed record UsageInstance
 {
     /// <summary>
     /// The time the meter was read
