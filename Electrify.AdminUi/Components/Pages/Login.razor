@@ -6,12 +6,12 @@
             <img src="/Images/electrify.svg"/>
         </div>
         <div>
-            <InputText placeholder="Email" @bind-Value="LoginDetails.Email" class="input-text" />
+            <InputText placeholder="Email" @bind-Value="_loginDetails.Email" class="input-text" />
         </div>
         <div>
-            <InputText type="password" placeholder="Password" @bind-Value="LoginDetails.Password" class="input-text"/>
+            <InputText type="password" placeholder="Password" @bind-Value="_loginDetails.Password" class="input-text"/>
         </div>
-        <div style="visibility: @(InvalidLogin ? "visible" : "hidden")" class="login-error">
+        <div style="visibility: @(_invalidLogin ? "visible" : "hidden")" class="login-error">
             Invalid Login Details
         </div>
         <div>

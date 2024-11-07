@@ -47,7 +47,9 @@ builder.Services.AddDlmsClient(builder.Configuration, logLevel);
 //     configure.AddRegister(register);
 // });
 
-builder.Services.AddDbContext<ElectrifyDbContext>();
+builder.Services.AddDbContext<ElectrifyDbContext>(options => 
+    options.UseInMemoryDatabase("ElectrifyDB"));
+
 builder.Services.AddScoped(typeof(PasswordHasher<>));
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
@@ -62,9 +64,6 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
         Version = "v1",
     });
 });
-
-builder.Services.AddDbContext<ElectrifyDbContext>(options => 
-    options.UseInMemoryDatabase("ElectrifyDB"));
 
 var app = builder.Build();
 

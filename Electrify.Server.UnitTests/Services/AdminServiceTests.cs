@@ -1,13 +1,13 @@
-﻿using Electrify.Server.Services;
+﻿using Electrify.Models.Models;
+using Electrify.Server.Database;
+using Electrify.Server.Services;
+using Electrify.Server.Services.Abstraction;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Electrify.Server.Database;
-using Electrify.Server.Services.Abstraction;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Electrify.Models.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Electrify.Server.UnitTests.Server.Services;
+namespace Electrify.Server.UnitTests.Services;
 
 public class AdminServiceTests
 {
@@ -28,9 +28,9 @@ public class AdminServiceTests
     public void CreateAdmin_Should_Create_Valid_Admin()
     {
         // Arrange
-        string name = "John Doe";
-        string email = "test@test.com";
-        string plainTextPassword = "password";
+        const string name = "John Doe";
+        const string email = "test@test.com";
+        const string plainTextPassword = "password";
 
         // Act
         _adminService.CreateAdmin(name, email, plainTextPassword);
@@ -53,9 +53,9 @@ public class AdminServiceTests
     public void VerifyPassword_Should_Return_True()
     {
         // Arrange
-        string name = "Lewis Hamilton";
-        string email = "test1@mercedes.com";
-        string plainTextPassword = "password1";
+        const string name = "Lewis Hamilton";
+        const string email = "test1@mercedes.com";
+        const string plainTextPassword = "password1";
         _adminService.CreateAdmin(name, email, plainTextPassword);
 
         // Act
@@ -70,9 +70,9 @@ public class AdminServiceTests
     public void VerifyPassword_Should_Return_False()
     {
         // Arrange
-        string name = "Charles Leclerc";
-        string email = "test@ferrari.com";
-        string plainTextPassword = "password2";
+        const string name = "Charles Leclerc";
+        const string email = "test@ferrari.com";
+        const string plainTextPassword = "password2";
         _adminService.CreateAdmin(name, email, plainTextPassword);
 
         // Act

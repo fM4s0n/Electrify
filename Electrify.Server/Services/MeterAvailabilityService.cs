@@ -76,7 +76,7 @@ public class MeterAvailabilityService(ILogger<MeterAvailabilityService> logger, 
 /// After executing the callback the timer changes its period to a value between
 /// the StartRange and EndRange it was initialised with.
 /// </summary>
-class RandomTaskTimer : IDisposable, IAsyncDisposable
+internal class RandomTaskTimer : IDisposable, IAsyncDisposable
 {
     private readonly Timer _timer;
     private readonly Random _random = new();

@@ -5,7 +5,7 @@
         <div class="home-left-content">
             <h1>@GetGreeting()</h1>
 
-            <a style="display:@(CurrentClient == null ? "block" : "none")" class="button" @onclick=HandleSetupMeter>
+            <a style="display:@(_currentClient == null ? "block" : "none")" class="button" @onclick=HandleSetupMeter>
                 Setup New Meter
             </a>
 
@@ -17,7 +17,7 @@
 
     <div class="home-right">
         <div class="home-right-content">
-            @if (CurrentClient == null)
+            @if (_currentClient == null)
             {
                 <h1 class="home-no-client">Nothing to display</h1>
             }
@@ -25,18 +25,18 @@
             {
                 <div class="home-account-ids">
                     <h1 class="home-right-label">User ID</h1>
-                    <a @onclick=@(() => CopyToClipboard(CurrentClient.UserId.ToString()))>
+                    <a @onclick=@(() => CopyToClipboard(_currentClient.UserId.ToString()))>
                         <h3>
-                            @CurrentClient.UserId
+                            @_currentClient.UserId
                             <i class="fa-regular fa-copy" />
                         </h3>
                     </a>
 
                     <h1 class="home-right-label">Client ID</h1>
 
-                    <a @onclick=@(() => CopyToClipboard(CurrentClient.ClientId.ToString()))>
+                    <a @onclick=@(() => CopyToClipboard(_currentClient.ClientId.ToString()))>
                         <h3>
-                            @CurrentClient.ClientId
+                            @_currentClient.ClientId
                             <i class="fa-regular fa-copy" />
                         </h3>                            
                     </a>

@@ -7,30 +7,30 @@ namespace Electrify.AdminUi.Components.Pages;
 public partial class AdminHome : ComponentBase
 {
     [Inject]
-    private NavigationManager? NavigationManager { get; set; }
+    private NavigationManager NavigationManager { get; set; } = default!;
 
     [Inject]
-    private IAdminService? AdminService { get; set; }
+    private IAdminService AdminService { get; set; } = default!;
 
     private Admin? _admin;
 
-    private Client? CurrentClient;
+    private Client? _currentClient;
 
     protected override void OnInitialized()
     {
-        if (AdminService == null || AdminService.GetCurrentAdmin() == null)
+        if (AdminService.CurrentAdmin == null)
         {
-            NavigationManager!.NavigateTo("/");
+            NavigationManager.NavigateTo("/");
         }
 
-        _admin = AdminService!.GetCurrentAdmin();
+        _admin = AdminService.CurrentAdmin;
 
         base.OnInitialized();
     }
 
     public void HandleSetupMeter()
     {
-        CurrentClient = new()
+        _currentClient = new Client
         {
             UserId = Guid.NewGuid(),
             ClientId = Guid.NewGuid(),
@@ -41,8 +41,8 @@ public partial class AdminHome : ComponentBase
 
     public void HandleLogout()
     {
-        AdminService!.LogoutCurrentAdmin();
-        NavigationManager!.NavigateTo("/");
+        AdminService.LogoutCurrentAdmin();
+        NavigationManager.NavigateTo("/");
     }
 
     private string GetGreeting()
@@ -66,7 +66,7 @@ public partial class AdminHome : ComponentBase
 
     private void HandleNextMeter()
     {
-        CurrentClient = null;
+        _currentClient = null;
     }
 }
 
