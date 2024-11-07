@@ -1,9 +1,12 @@
+using Electrify.SmartMeterUi.Services.Abstractions;
+using Microsoft.AspNetCore.Components;
+
 namespace Electrify.SmartMeterUi.Components.Pages;
 
 public partial class SmartMeterHome
 {
     private float _currentUsage = 3.45f;
-    private readonly float _pricePerKw = 0.2122f;
+    private float _pricePerKw = 0f;
     private float _usagePercent = 0;
     private string _barColour = "#00b5f1";
     private string _dialBackground = "";
@@ -11,8 +14,11 @@ public partial class SmartMeterHome
     private readonly int _daysSincePeriodStart = 14;
     private readonly System.Timers.Timer _timer = new(2000);
 
+    [Inject] private IUsageService UsageService { get; set; } = default!;
+
     protected override void OnInitialized()
     {
+        GetPrice();
         SetUpTimer();
         UpdateDial();
     }
@@ -24,15 +30,25 @@ public partial class SmartMeterHome
         _timer.Start();
     }
 
+    private void GetPrice()
+    {
+        _pricePerKw = 0.2122f;
+    }
+
+    private void GetCurrentUsage()
+    {
+        _currentUsage = UsageService.GetCurrentUsage().Usage;
+        _usagePercent = (float)Math.Round(_currentUsage * 10000, 6);
+    }
+
     private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
+        GetCurrentUsage();
         InvokeAsync(UpdateDial);
     }
 
     private void UpdateDial()
     {
-        RandomiseUsage();
-
         double adjustedPercentage = (_usagePercent / 100.0) * 270 + 45;
 
         if (_usagePercent <= 70)
@@ -52,13 +68,7 @@ public partial class SmartMeterHome
         StateHasChanged();
     }
 
-    private void RandomiseUsage()
-    {
-        Random random = new();
-        _currentUsage = (float)(random.NextDouble() * 5);
-        _usagePercent = (float)Math.Round(_currentUsage * 20, 2);
-    }
-
+    #region UI Display Methods
     private string GetUsageDaily()
     {
         return Math.Round((_currentUsage * _hourOfDay), 2).ToString();
@@ -66,17 +76,17 @@ public partial class SmartMeterHome
 
     private string GetUsagePriceDaily()
     {
-        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay), 2).ToString();
+        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay), 2).ToString("C");
     }
 
     private string GetUsagePeriod()
     {
-
         return Math.Round((_currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString();
     }
 
     private string GetUsagePricePeriod()
     {
-        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString();
+        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString("C");
     }
+    #endregion
 }

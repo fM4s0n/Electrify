@@ -35,7 +35,7 @@ public class OctopusService(IHttpClientFactory clientFactory) : IOctopusService
         return octopusResponse == null || octopusResponse.Results.Any() == false ? null : octopusResponse;
     }
 
-    private double GetFinalPrice(double price, int hour)
+    private static double GetFinalPrice(double price, int hour)
     {
         // Add 12p if reading time is between 4am and 7am
         if (hour is >= 4 and <= 7)
@@ -44,7 +44,7 @@ public class OctopusService(IHttpClientFactory clientFactory) : IOctopusService
         }
 
         // Add VAT
-        price = price * 1.05;
+        price *= 1.05;
         
         // Take into account price cap
         return price >= 33.33 ? 33.33 : Math.Round(price, 2);

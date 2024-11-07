@@ -7,7 +7,7 @@ namespace Electrify.Server.Services;
 
 public class AdminLoginService(IAdminService adminService) : AdminLogin.AdminLoginBase
 {
-    public override Task<AdminLoginResponse> AdminLogin(AdminLoginDetailsRequest request, ServerCallContext context)
+    public override Task<AdminLoginResponse> AdminLogin(AdminLoginRequest request, ServerCallContext context)
     {
         Admin? admin = adminService.GetAdminByEmail(request.Email);
 

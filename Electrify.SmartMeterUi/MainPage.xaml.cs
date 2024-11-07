@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Controls.Platform;
-using Microsoft.Maui.Platform;  // For PlatformView
+﻿// For PlatformView
 
 namespace Electrify.SmartMeterUi;
 

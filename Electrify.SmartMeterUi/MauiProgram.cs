@@ -1,13 +1,8 @@
-﻿using Electrify.Dlms.Constants;
-using Electrify.Dlms.Extensions;
-using Gurux.DLMS;
-using Gurux.DLMS.Enums;
-using Gurux.DLMS.Objects;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Serilog;
 
 namespace Electrify.SmartMeterUi;
+
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
@@ -31,13 +26,14 @@ public static class MauiProgram
 		builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 		
 #if DEBUG
-		builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
         builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 
 		loggerConfiguration.MinimumLevel.Debug();
 #endif
 		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
+        builder.Services.AddSingleton<IUsageService, UsageService>();
+
 
 		builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
 		{
