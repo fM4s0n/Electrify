@@ -1,12 +1,14 @@
-﻿using Electrify.Dlms.Constants;
+﻿using System.Diagnostics;
+using Electrify.Dlms.Constants;
 using Electrify.Dlms.Extensions;
+using Electrify.Dlms.Options;
 using Electrify.SmartMeterUi.Services;
 using Electrify.SmartMeterUi.Services.Abstractions;
 using Gurux.DLMS;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Electrify.SmartMeterUi;
@@ -30,9 +32,14 @@ public static class MauiProgram
             .WriteTo.Debug()
             .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.log"))
             .Enrich.FromLogContext().Enrich.WithMachineName().Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId);
-		
-		builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-		
+
+		builder.Services.AddSingleton(Options.Create(new DlmsServerOptions
+		{
+			Port = 4059,
+			Password = "YourSuperSecureSecretKey1234567890",
+			Authentication = Authentication.HighSHA256,
+			TraceLevel = TraceLevel.Verbose,
+		}));
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
