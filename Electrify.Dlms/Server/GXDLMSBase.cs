@@ -54,6 +54,8 @@ namespace Electrify.Dlms.Server;
 [ExcludeFromCodeCoverage]
 public class GXDLMSBase : GXDLMSSecureServer
 {
+    private readonly GXDLMSClock _clock;
+    
     /// <summary>
     /// Serial number of the meter.
     /// </summary>
@@ -319,9 +321,10 @@ public class GXDLMSBase : GXDLMSSecureServer
     /// </summary>
     /// <param name="ln">Logical name settings.</param>
     /// <param name="wrapper">Wrapper settings.</param>
-    public GXDLMSBase(GXDLMSAssociationLogicalName ln, GXDLMSTcpUdpSetup wrapper)
+    public GXDLMSBase(GXDLMSAssociationLogicalName ln, GXDLMSClock clock, GXDLMSTcpUdpSetup wrapper)
         : base(ln, wrapper, "GRX", 12345678)
     {
+        _clock = clock;
         Conformance = Conformance.None;
         ln.LogicalName = "0.0.40.0.1.255";
         ln.ClientSAP = 16;
@@ -440,12 +443,11 @@ public class GXDLMSBase : GXDLMSSecureServer
         //Set access right. Client can't change average value.
         Items.Add(r);
         //Add default clock. Clock's Logical Name is 0.0.1.0.0.255.
-        GXDLMSClock clock = new GXDLMSClock();
-        clock.Begin = new GXDateTime(-1, 9, 1, -1, -1, -1, -1);
-        clock.End = new GXDateTime(-1, 3, 1, -1, -1, -1, -1);
-        clock.TimeZone = -(int)TimeZoneInfo.Local.BaseUtcOffset.TotalMinutes;
-        clock.Deviation = 60;
-        Items.Add(clock);
+        _clock.Begin = new GXDateTime(-1, 9, 1, -1, -1, -1, -1);
+        _clock.End = new GXDateTime(-1, 3, 1, -1, -1, -1, -1);
+        _clock.TimeZone = -(int)TimeZoneInfo.Local.BaseUtcOffset.TotalMinutes;
+        _clock.Deviation = 60;
+        Items.Add(_clock);
         ///////////////////////////////////////////////////////////////////////
         //Add Load profile.
         GXDLMSProfileGeneric pg = new GXDLMSProfileGeneric("1.0.99.1.0.255");
@@ -454,10 +456,10 @@ public class GXDLMSBase : GXDLMSSecureServer
         //Maximum row count.
         pg.ProfileEntries = 100000;
         pg.SortMethod = SortMethod.FiFo;
-        pg.SortObject = clock;
+        pg.SortObject = _clock;
         //Add columns.
         //Set saved attribute index.
-        pg.CaptureObjects.Add(new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(clock, new GXDLMSCaptureObject(2, 0)));
+        pg.CaptureObjects.Add(new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(_clock, new GXDLMSCaptureObject(2, 0)));
         //Set saved attribute index.
         pg.CaptureObjects.Add(new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(r, new GXDLMSCaptureObject(2, 0)));
         Items.Add(pg);

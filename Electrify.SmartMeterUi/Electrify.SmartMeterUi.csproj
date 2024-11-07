@@ -73,7 +73,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Electrify.Models\Electrify.Models.csproj" />
+        <ProjectReference Include="..\Electrify.Dlms\Electrify.Dlms.csproj" />
+        <ProjectReference Include="..\Electrify.Models\Electrify.Models.csproj" />
     </ItemGroup>
 
 </Project>
