@@ -3,55 +3,51 @@ using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.AspNetCore.Identity;
 
-namespace Electrify.Server.Services
+namespace Electrify.Server.Services;
+
+public class AdminService(ElectrifyDbContext dbContext, PasswordHasher<Admin> passwordHasher) : IAdminService 
 {
-    public class AdminService(ElectrifyDbContext dbContext, PasswordHasher<Admin> passwordHasher) : IAdminService 
+    public void CreateAdmin(string name, string email, string plainTextPassword)
     {
-        private readonly ElectrifyDbContext _dbContext = dbContext;
-        private readonly PasswordHasher<Admin> _passwordHasher = passwordHasher;              
-
-        public void CreateAdmin(string name, string email, string plainTextPassword)
+        Admin admin = new()
         {
-            Admin admin = new()
-            {
-                Id = Guid.NewGuid(),
-                Name = name,
-                Email = email,
-                PasswordHash = string.Empty,
-            };
+            Id = Guid.NewGuid(),
+            Name = name,
+            Email = email,
+            PasswordHash = string.Empty,
+        };
 
-            // Hash the password
-            admin.PasswordHash = _passwordHasher.HashPassword(admin, plainTextPassword);
+        // Hash the password
+        admin.PasswordHash = passwordHasher.HashPassword(admin, plainTextPassword);
 
-            InsertAdmin(admin);
-        }
+        InsertAdmin(admin);
+    }
 
-        public bool VerifyPassword(Admin admin, string plainTextPassword)
-        {
-            return _passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, plainTextPassword) != PasswordVerificationResult.Failed;
-        }
+    public bool VerifyPassword(Admin admin, string plainTextPassword)
+    {
+        return passwordHasher.VerifyHashedPassword(admin, admin.PasswordHash, plainTextPassword) != PasswordVerificationResult.Failed;
+    }
 
-        public Guid GenerateAccessToken()
-        {
-            return Guid.NewGuid();
-        }
+    public Guid GenerateAccessToken()
+    {
+        return Guid.NewGuid();
+    }
 
-        private void InsertAdmin(Admin admin)
-        {
-            _dbContext.Admins.Add(admin);
-            _dbContext.SaveChanges();
-        }
+    private void InsertAdmin(Admin admin)
+    {
+        dbContext.Admins.Add(admin);
+        dbContext.SaveChanges();
+    }
 
-        public void UpdateAccessToken(Admin admin, Guid? token)
-        {
-            admin.AccessToken = token;
-            _dbContext.Admins.Update(admin);
-            _dbContext.SaveChanges();
-        }
+    public void UpdateAccessToken(Admin admin, Guid? token)
+    {
+        admin.AccessToken = token;
+        dbContext.Admins.Update(admin);
+        dbContext.SaveChanges();
+    }
 
-        public Admin? GetAdminByEmail(string email)
-        {
-            return _dbContext.Admins.FirstOrDefault(a => a.Email == email);
-        }
+    public Admin? GetAdminByEmail(string email)
+    {
+        return dbContext.Admins.FirstOrDefault(a => a.Email == email);
     }
 }

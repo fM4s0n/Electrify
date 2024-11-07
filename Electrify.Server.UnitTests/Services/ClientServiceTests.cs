@@ -5,7 +5,7 @@ using Electrify.Server.Services.Abstraction;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Electrify.Server.UnitTests.Server.Services;
+namespace Electrify.Server.UnitTests.Services;
 
 public class ClientServiceTests
 {

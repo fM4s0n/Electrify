@@ -7,14 +7,15 @@ option csharp_namespace = "Electrify.Server.Protos";
 package adminLogin;
 
 service AdminLogin {
-  rpc AdminLogin (AdminLoginDetailsRequest) returns (AdminLoginResponse) {
+  rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {
     option (google.api.http) = {
-      post: "/v1/adminLogin"
+      post: "/v1/adminLogin",
+      body: "*"
     };
   }
 }
 
-message AdminLoginDetailsRequest {
+message AdminLoginRequest {
   string email = 1;
   string password = 2;
 }
