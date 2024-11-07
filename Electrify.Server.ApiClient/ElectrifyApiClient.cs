@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using Electrify.DlmsServer;
 using Electrify.Server.ApiClient.Abstraction;
+using Electrify.Server.ApiClient.Contracts;
 using Electrify.Server.Protos;
 
 namespace Electrify.Server.ApiClient;
@@ -30,9 +31,9 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
         return availabilityResponse;
     }
 
-    public async Task<AdminLoginResponse> AdminLogin(string email, string password)
+    public async Task<HttpAdminLoginResponse> AdminLogin(string email, string password)
     {
-        var response = await httpClient.PostAsJsonAsync("/v1/adminLogin", new AdminLoginRequest
+        var response = await httpClient.PostAsJsonAsync("/v1/adminLogin", new HttpAdminLoginRequest
         {
             Email = email,
             Password = password,
@@ -43,11 +44,11 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
             throw new Exception(await response.Content.ReadAsStringAsync());
         }
 
-        var adminLoginResponse = await response.Content.ReadFromJsonAsync<AdminLoginResponse>();
+        var adminLoginResponse = await response.Content.ReadFromJsonAsync<HttpAdminLoginResponse>();
 
         if (adminLoginResponse is null)
         {
-            throw new Exception($"An error occured parsing the {nameof(AdminLoginResponse)}");
+            throw new Exception($"An error occured parsing the {nameof(HttpAdminLoginResponse)}");
         }
         
         return adminLoginResponse;

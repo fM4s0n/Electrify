@@ -9,7 +9,8 @@ package adminLogin;
 service AdminLogin {
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {
     option (google.api.http) = {
-      post: "/v1/adminLogin"
+      post: "/v1/adminLogin",
+      body: "*"
     };
   }
 }
