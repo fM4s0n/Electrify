@@ -45,6 +45,7 @@ using Gurux.DLMS.Objects;
 using Gurux.DLMS.Objects.Enums;
 using Gurux.DLMS.Secure;
 using Gurux.Net;
+using Microsoft.Maui.Storage;
 
 namespace Electrify.Dlms.Server;
 
@@ -75,7 +76,11 @@ public class GXDLMSBase : GXDLMSSecureServer
     static readonly object FileLock = new object();
     static string GetdataFile()
     {
-        return Path.Combine(Path.GetDirectoryName(typeof(GXDLMSBase).Assembly.Location), "data.csv");
+        // Get writeable directory
+        string dataDirectory = FileSystem.AppDataDirectory;
+    
+        // Define path to data.csv
+        return Path.Combine(dataDirectory, "data.csv");
     }
     TraceLevel Trace = TraceLevel.Error;
 
