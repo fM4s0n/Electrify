@@ -27,8 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Electrify.AdminUi.Services\Electrify.AdminUi.Services.csproj" />
-    <ProjectReference Include="..\Electrify.Models\Electrify.Models.csproj" />
-    <ProjectReference Include="..\Electrify.Server\Electrify.Server.csproj" />
   </ItemGroup>
 
   <ItemGroup>
