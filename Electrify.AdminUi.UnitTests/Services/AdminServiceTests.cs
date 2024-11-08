@@ -2,19 +2,21 @@
 using FluentAssertions;
 using Electrify.AdminUi.Services;
 using Electrify.Models.Models;
-using Grpc.Core;
+using Electrify.Server.ApiClient.Abstraction;
 using Microsoft.AspNetCore.Identity;
+using Electrify.Server.ApiClient.Contracts;
 
 namespace Electrify.AdminUI.UnitTests.Services;
 
 public class AdminServiceTests
 {
     private readonly AdminService _adminService;
+    private readonly IElectrifyApiClient _adminLoginClient;
 
     public AdminServiceTests()
     {
-        var adminLoginClient = Substitute.For<Server.Protos.AdminLogin.AdminLoginClient>();
-        _adminService = new AdminService(adminLoginClient);
+        _adminLoginClient = Substitute.For<IElectrifyApiClient>();
+        _adminService = new AdminService(_adminLoginClient);
     }
 
     [Fact]
@@ -22,7 +24,7 @@ public class AdminServiceTests
     {
         // Arrange
         // Act
-        var currentAdmin = _adminService.GetCurrentAdmin();
+        var currentAdmin = _adminService.CurrentAdmin;
 
         // Assert
         currentAdmin.Should().BeNull();
@@ -53,31 +55,22 @@ public class AdminServiceTests
         passwordHash = passwordHasher.HashPassword(expected, plainPassword);
         expected.PasswordHash = passwordHash;
 
-        var adminLoginClient = Substitute.For<Server.Protos.AdminLogin.AdminLoginClient>();
-
-        // Mock an AsyncUnaryCall
-        var adminLoginResponse = new Server.Protos.AdminLoginResponse
+        var response = new HttpAdminLoginResponse
         {
             Success = true,
             Name = name,
             Email = email,
             PasswordHash = passwordHash,
-            Token = token.ToString(), 
+            Token = token.ToString(),
             Id = id.ToString()
         };
 
-        expected.Id = Guid.Parse(adminLoginResponse.Id);
+        _adminLoginClient.AdminLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(response);
 
-        var mockAsyncUnaryCall = new AsyncUnaryCall<Server.Protos.AdminLoginResponse>(Task.FromResult(adminLoginResponse), null, null, null, null);
-
-        adminLoginClient.AdminLoginAsync(Arg.Any<Server.Protos.AdminLoginDetailsRequest>()).Returns(mockAsyncUnaryCall);
-
-        var adminService = new AdminService(adminLoginClient);
-
-        await adminService.ValidateLogin("email@email.com", "password");
+        await _adminService.ValidateLogin(email, plainPassword);
 
         // Act
-        var actual = adminService.GetCurrentAdmin();
+        var actual = _adminService.CurrentAdmin;
 
         // Assert
         actual.Should().BeEquivalentTo(expected);
