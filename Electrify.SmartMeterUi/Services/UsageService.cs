@@ -3,20 +3,20 @@ using Electrify.SmartMeterUi.Services.Abstractions;
 
 namespace Electrify.SmartMeterUi.Services;
 
-internal partial class UsageService : IUsageService, IDisposable
+internal class UsageService : IUsageService, IDisposable
 {
-    public List<UsageInstance> UsageHistory = [];
-    private readonly Timer? _randomTimer;
-    private readonly static Random _random = new();
+    private readonly List<UsageInstance> _usageHistory = [];
+    private readonly Timer? _timer;
+    private static readonly Random Random = new();
 
     public UsageService()
     {
-        UsageHistory.Clear();
+        _usageHistory.Clear();
         AddNewReading();
-        _randomTimer = new(OnTimerElapsed, null, GetRandomTimerInterval(), Timeout.Infinite);
+        _timer = new Timer(OnTimerElapsed, null, 500, Timeout.Infinite);
     }
 
-    internal void AddNewReading()
+    private void AddNewReading()
     {
         UsageInstance newReading = new()
         {
@@ -24,37 +24,28 @@ internal partial class UsageService : IUsageService, IDisposable
             Usage = GenerateRandomUsage()
         };
 
-        UsageHistory.Add(newReading);
+        _usageHistory.Add(newReading);
     }
 
     private static float GenerateRandomUsage()
     {
-        float randomFloat = (float)(_random.NextDouble() * (0.00999 - 0.00100) + 0.00100);
+        float randomFloat = (float)(Random.NextDouble() * (0.00999 - 0.00100) + 0.00100);
         return randomFloat;
     }
 
     private void OnTimerElapsed(object? sender)
     {
         AddNewReading();
-        _randomTimer?.Change(GetRandomTimerInterval(), Timeout.Infinite);
+        _timer?.Change(1000, Timeout.Infinite);
     }
 
     public UsageInstance GetCurrentUsage()
     {
-        return UsageHistory.Last();
-    }
-
-    /// <summary>
-    /// Gets a new random timer ineterval between 15 and 60 seconds
-    /// </summary>
-    /// <returns></returns>
-    private static int GetRandomTimerInterval()
-    {
-        return _random.Next(15000, 60001);
+        return _usageHistory.Last();
     }
 
     public void Dispose()
     {
-        _randomTimer?.Dispose();
+        _timer?.Dispose();
     }
 }
