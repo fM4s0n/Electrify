@@ -7,6 +7,7 @@ internal class UsageService : IUsageService, IDisposable
 {
     private readonly List<UsageInstance> _usageHistory = [];
     private readonly Timer? _timer;
+    private readonly Random _random = new();
 
     public UsageService()
     {
@@ -26,9 +27,9 @@ internal class UsageService : IUsageService, IDisposable
         _usageHistory.Add(newReading);
     }
 
-    private static float GenerateRandomUsage()
+    private float GenerateRandomUsage()
     {
-        float randomFloat = (float)(new Random().NextDouble() * (0.00999 - 0.00100) + 0.00100);
+        float randomFloat = (float)(_random.NextDouble() * (0.00999 - 0.00100) + 0.00100);
         return randomFloat;
     }
 
