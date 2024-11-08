@@ -3,7 +3,7 @@ using Electrify.SmartMeterUi.Services.Abstractions;
 
 namespace Electrify.SmartMeterUi.Services;
 
-internal class UsageService : IUsageService, IDisposable
+public class UsageService : IUsageService, IDisposable
 {
     private readonly List<UsageInstance> _usageHistory = [];
     private readonly Timer? _timer;
