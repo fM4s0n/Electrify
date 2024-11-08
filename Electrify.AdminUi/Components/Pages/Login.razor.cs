@@ -11,13 +11,13 @@ public partial class Login : ComponentBase
     [Inject] 
     private IAdminService AdminService { get; set; } = default!;
 
-    private readonly LoginDetails LoginDetails = new();
+    private readonly LoginDetails _loginDetails = new();
 
-    private bool InvalidLogin = false;
+    private bool _invalidLogin = false;
 
     private async Task HandleLogin()
     {
-        bool validLogin = await AdminService.ValidateLogin(LoginDetails.Email, LoginDetails.Password);
+        bool validLogin = await AdminService.ValidateLogin(_loginDetails.Email, _loginDetails.Password);
 
         if (validLogin)
         {
@@ -26,7 +26,7 @@ public partial class Login : ComponentBase
         else
         {
             // Show error message
-            InvalidLogin = true;
+            _invalidLogin = true;
         }
     }
 }

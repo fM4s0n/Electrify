@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-		<TargetFrameworks>net8.0-maccatalyst;net8.0-windows10.0.19041.0</TargetFrameworks>
+        <TargetFramework Condition="$([MSBuild]::IsOsPlatform('windows'))">net8.0-windows10.0.19041.0</TargetFramework>
+        <TargetFramework Condition="$([MSBuild]::IsOsPlatform('osx'))">net8.0-maccatalyst</TargetFramework>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -69,6 +70,11 @@
         <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.2" />
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
         <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Electrify.Dlms\Electrify.Dlms.csproj" />
+        <ProjectReference Include="..\Electrify.Models\Electrify.Models.csproj" />
     </ItemGroup>
 
 </Project>

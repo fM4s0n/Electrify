@@ -1,7 +1,18 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics;
+using Electrify.Dlms.Constants;
+using Electrify.Dlms.Extensions;
+using Electrify.Dlms.Options;
+using Electrify.SmartMeterUi.Services;
+using Electrify.SmartMeterUi.Services.Abstractions;
+using Gurux.DLMS;
+using Gurux.DLMS.Enums;
+using Gurux.DLMS.Objects;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace Electrify.SmartMeterUi;
+
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
@@ -22,7 +33,13 @@ public static class MauiProgram
             .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.log"))
             .Enrich.FromLogContext().Enrich.WithMachineName().Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId);
 
-		
+		builder.Services.AddSingleton(Options.Create(new DlmsServerOptions
+		{
+			Port = 4059,
+			Password = "YourSuperSecureSecretKey1234567890",
+			Authentication = Authentication.HighSHA256,
+			TraceLevel = TraceLevel.Verbose,
+		}));
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
@@ -30,6 +47,34 @@ public static class MauiProgram
 		loggerConfiguration.MinimumLevel.Debug();
 #endif
 		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
+        builder.Services.AddSingleton<IUsageService, UsageService>();
+
+
+		builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
+		{
+			var clock = sp.GetRequiredService<GXDLMSClock>();
+			
+			var energyRegister = new GXDLMSRegister(RegisterNames.EnergyUsage)
+			{
+				Scaler = 1.0,
+				Unit = Unit.ActiveEnergy,
+				Value = 123.45,
+			};
+
+			var energyProfile = new GXDLMSProfileGeneric(RegisterNames.EnergyProfile)
+			{
+				CapturePeriod = 1,  // TODO this every second use config instead
+				SortObject = clock,
+				CaptureObjects =
+				[
+					new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(clock, new GXDLMSCaptureObject(2, 0)),
+					new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(energyRegister, new GXDLMSCaptureObject(2, 0))
+				]
+			};
+			
+			server.AddObject(energyRegister);
+			server.AddObject(energyProfile);
+		});
 		
         return builder.Build();
 	}

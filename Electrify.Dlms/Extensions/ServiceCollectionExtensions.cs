@@ -1,8 +1,11 @@
+using System.Text;
+using System.Text.Unicode;
 using Electrify.Dlms.Client;
 using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
 using Electrify.Dlms.Server.Abstraction;
+using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
 using Gurux.DLMS.Secure;
 using Gurux.Net;
@@ -71,24 +74,29 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDlmsServer(
         this IServiceCollection services,
         IConfigurationRoot configuration,
-        Action<DlmsServer> configure,
-        LogLevel logLevel)
+        Action<DlmsServer, IServiceProvider> configure)
     {
         services.Configure<DlmsServerOptions>(configuration.GetSection(nameof(DlmsServerOptions)));
 
-        services.AddSingleton(new GXDLMSAssociationLogicalName());
+        services.AddSingleton(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<DlmsServerOptions>>().Value;
+            
+            return new GXDLMSAssociationLogicalName
+            {
+                AuthenticationMechanismName = new GXAuthenticationMechanismName
+                {
+                    MechanismId = options.Authentication
+                },
+                Secret = Encoding.UTF8.GetBytes(options.Password),
+            };
+        });
+
+        services.AddSingleton<GXDLMSClock>();
             
         services.AddSingleton<GXDLMSBase, GXDLMSServerLN_47>();
 
-        services.AddSingleton<IDlmsServer>(sp =>
-        {
-            var association = sp.GetRequiredService<GXDLMSAssociationLogicalName>();
-            var serverBase = sp.GetRequiredService<GXDLMSBase>();
-            var options = sp.GetRequiredService<IOptions<DlmsServerOptions>>();
-            var logger = sp.GetRequiredService<ILogger<DlmsServer>>();
-
-            return new DlmsServer(association, serverBase, configure, options, logLevel.ToTraceLevel(), logger);
-        });
+        services.AddSingleton<IDlmsServer>(sp => new DlmsServer(configure, sp));
         
         return services;
     }
