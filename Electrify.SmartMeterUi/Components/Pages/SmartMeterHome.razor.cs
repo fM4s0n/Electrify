@@ -1,6 +1,5 @@
 using Electrify.SmartMeterUi.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
-
 namespace Electrify.SmartMeterUi.Components.Pages;
 
 public partial class SmartMeterHome

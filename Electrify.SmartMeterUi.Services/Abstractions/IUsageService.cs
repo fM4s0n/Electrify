@@ -2,7 +2,7 @@
 
 namespace Electrify.SmartMeterUi.Services.Abstractions;
 
-internal interface IUsageService
+public interface IUsageService
 {
     UsageInstance GetCurrentUsage();
 }
