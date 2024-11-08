@@ -6,6 +6,7 @@ using Electrify.Server.ApiClient;
 using Electrify.Server.ApiClient.Abstraction;
 
 namespace Electrify.AdminUi;
+
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()

@@ -1,7 +1,6 @@
 ﻿using Electrify.AdminUi.Services.Abstractions;
 using Electrify.Models.Models;
 using Electrify.Server.ApiClient.Abstraction;
-using Electrify.Server.Protos;
 
 namespace Electrify.AdminUi.Services;
 
@@ -17,7 +16,7 @@ public class AdminService(IElectrifyApiClient electrifyApiClient) : IAdminServic
         {
             CurrentAdmin = new Admin
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse(response.Id),
                 Name = response.Name,
                 Email = response.Email,
                 PasswordHash = response.PasswordHash,
@@ -28,8 +27,5 @@ public class AdminService(IElectrifyApiClient electrifyApiClient) : IAdminServic
         return response.Success;
     }
 
-    public void LogoutCurrentAdmin()
-    {
-        CurrentAdmin = null;
-    }
+    public void LogoutCurrentAdmin() => CurrentAdmin = null;
 }
