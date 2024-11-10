@@ -27,26 +27,12 @@ public sealed class DlmsServer : IDlmsServer
         configure.Invoke(this, serviceProvider);
     }
 
-    public void AddObject(GXDLMSObject dlmsObject)
+    public void AddObject(GXDLMSObject dlmsObject, AccessMode3 valueAccessMode = AccessMode3.Read)
     {
         _association.SetAccess3(dlmsObject, 3, AccessMode3.Read);
-        _association.SetAccess3(dlmsObject, 2, AccessMode3.Read);
+        _association.SetAccess3(dlmsObject, 2, valueAccessMode);
         
         _server.Items.Add(dlmsObject);
-    }
-
-    public double GetEnergy()
-    {
-        foreach (var dlmsObject in _server.Items)
-        {
-            // TODO maybe this string should be done via IOptions
-            if (dlmsObject is GXDLMSRegister { LogicalName: RegisterNames.EnergyUsage, Value: int value })
-            {
-                return value;
-            }
-        }
-
-        return 0;
     }
     
     public void SetEnergy(int energyValue)

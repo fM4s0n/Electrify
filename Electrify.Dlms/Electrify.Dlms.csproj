@@ -17,4 +17,8 @@
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.93" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Electrify.Models\Electrify.Models.csproj" />
+  </ItemGroup>
 </Project>

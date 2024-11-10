@@ -1,4 +1,5 @@
 using Electrify.Dlms.Extensions;
+using Electrify.Dlms.Options;
 using Electrify.Server.Database;
 using Electrify.Server.Options;
 using Electrify.Server.Services;
@@ -32,20 +33,9 @@ builder.Services.AddHttpClient(
         client.BaseAddress = new Uri(builder.Configuration["OctopusApiUrl"]!);
     });
 
-builder.Services.AddDlmsClient(builder.Configuration, logLevel);
+builder.Services.Configure<DlmsClientOptions>(builder.Configuration.GetSection(nameof(DlmsClientOptions)));
 
-// TODO put this logic in UI
-// builder.Services.AddDlmsServer(builder.Configuration, logLevel, configure =>
-// {
-//     var register = new GXDLMSRegister("1.1.1.8.0.255")
-//     {
-//         Scaler = 1.0,
-//         Unit = Unit.ActiveEnergy,
-//         Value = 2637.35,
-//     };
-//     
-//     configure.AddRegister(register);
-// });
+builder.Services.AddSingleton(TimeProvider.System);
 
 builder.Services.AddDbContext<ElectrifyDbContext>(options => 
     options.UseInMemoryDatabase("ElectrifyDB"));

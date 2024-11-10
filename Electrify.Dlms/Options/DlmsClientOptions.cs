@@ -15,5 +15,5 @@ public sealed class DlmsClientOptions
     public string ServerHostname { get; init; } = string.Empty;
     public int ServerPort { get; init; }
     public string InvocationCounter { get; init; } = string.Empty;
-    public string LogicalNames { get; init; } = string.Empty;
+    public string LogicalNames { get; init; } = string.Empty;  // TODO make this list
 }
