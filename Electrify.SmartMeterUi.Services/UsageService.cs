@@ -5,43 +5,68 @@ namespace Electrify.SmartMeterUi.Services;
 
 public class UsageService : IUsageService, IDisposable
 {
-    private readonly List<UsageInstance> _usageHistory = [];
+    private UsageInstance _lastUsage;
+    private float _currentKwh;
     private readonly Timer? _timer;
     private readonly Random _random = new();
 
     public UsageService()
     {
-        _usageHistory.Clear();
+        _lastUsage = new UsageInstance
+        {
+            TimeStamp = DateTime.Now,
+            Usage = 0f,
+        };
         AddNewReading();
-        _timer = new Timer(OnTimerElapsed, null, 500, Timeout.Infinite);
+        _timer = new Timer(OnTimerElapsed, null, 1000, Timeout.Infinite);
     }
 
+    /// <summary>
+    /// Cumulatively updates the lastUsage property
+    /// </summary>
     private void AddNewReading()
     {
+        _currentKwh = GenerateRandomUsage();
         UsageInstance newReading = new()
         {
             TimeStamp = DateTime.Now,
-            Usage = GenerateRandomUsage()
+            Usage = _lastUsage.Usage + _currentKwh
         };
-
-        _usageHistory.Add(newReading);
+        _lastUsage = newReading;
     }
 
+    /// <summary>
+    /// Generates a random kw/h usage between 0.001 and 0.00999
+    /// </summary>
+    /// <returns></returns>
     private float GenerateRandomUsage()
     {
         float randomFloat = (float)(_random.NextDouble() * (0.00999 - 0.00100) + 0.00100);
         return randomFloat;
     }
 
+    /// <summary>
+    /// Updates the last usage and re-queues the reading timer
+    /// </summary>
+    /// <param name="sender"></param>
     private void OnTimerElapsed(object? sender)
     {
         AddNewReading();
         _timer?.Change(1000, Timeout.Infinite);
     }
 
-    public UsageInstance GetCurrentUsage()
+    /// <summary>
+    /// Returns the most recent usage reading
+    /// </summary>
+    /// <returns></returns>
+    public UsageInstance GetCumulativeUsage()
     {
-        return _usageHistory.Last();
+        return _lastUsage;
+    }
+
+    public float GetCurrentUsage()
+    {
+        return _currentKwh;
     }
 
     public void Dispose()

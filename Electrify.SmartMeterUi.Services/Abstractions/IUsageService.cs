@@ -4,5 +4,7 @@ namespace Electrify.SmartMeterUi.Services.Abstractions;
 
 public interface IUsageService
 {
-    UsageInstance GetCurrentUsage();
+    UsageInstance GetCumulativeUsage();
+
+    float GetCurrentUsage();
 }
