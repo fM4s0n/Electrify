@@ -39,7 +39,7 @@ public sealed class DlmsClient : IDlmsClient
         _reader.Read(energyProfile, 3);
         _reader.Read(energyProfile, 2);
         
-        var readings = _reader.ReadRowsByEntry(energyProfile, 0, 3);
+        var readings = _reader.ReadRowsByRange(energyProfile, sinceTime, _timeProvider.GetLocalNow().DateTime);
         // TODO fix this to actually use the time not the first 3 values
         //var readings = _reader.ReadRowsByRange(energyProfile, sinceTime, _timeProvider.GetUtcNow().DateTime);
         
