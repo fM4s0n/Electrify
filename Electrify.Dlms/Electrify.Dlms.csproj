@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gurux.DLMS" Version="9.0.2409.2401" />
+    <PackageReference Include="Gurux.DLMS" Version="9.0.2410.3101" />
     <PackageReference Include="Gurux.Net" Version="8.4.2404.2501" />
     <PackageReference Include="Gurux.Serial" Version="8.4.2401.401" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
