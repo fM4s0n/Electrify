@@ -55,6 +55,9 @@ namespace Electrify.Dlms.Server;
 [ExcludeFromCodeCoverage]
 public class GXDLMSBase : GXDLMSSecureServer
 {
+    public Action OnConnectedCallback { private get; set; }
+    public Action OnDisconnectedCallback { private get; set; }
+
     private readonly GXDLMSClock _clock;
     
     /// <summary>
@@ -1634,6 +1637,8 @@ public class GXDLMSBase : GXDLMSSecureServer
     /// <param name="e"></param>
     void OnClientDisconnected(object sender, Gurux.Common.ConnectionEventArgs e)
     {
+        OnDisconnectedCallback.Invoke();
+
         if (Trace > TraceLevel.Warning)
         {
             Console.WriteLine("Client Disconnected.");
@@ -1651,6 +1656,8 @@ public class GXDLMSBase : GXDLMSSecureServer
     /// <param name="e"></param>
     void OnClientConnected(object sender, Gurux.Common.ConnectionEventArgs e)
     {
+        OnConnectedCallback.Invoke();
+
         if (connections.ContainsKey(e.Info))
         {
             connections[e.Info].Reset();
