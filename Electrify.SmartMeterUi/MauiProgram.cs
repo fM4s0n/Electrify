@@ -61,6 +61,13 @@ public static class MauiProgram
 				Value = 123.45,
 			};
 
+			var tariffRegister = new GXDLMSRegister(RegisterNames.EnergyTariff)
+			{
+				Scaler = 1.0,
+				Unit = Unit.LocalCurrency,
+				Value = 24.50,
+			};
+
 			var energyProfile = new GXDLMSProfileGeneric(RegisterNames.EnergyProfile)
 			{
 				CapturePeriod = 1,  // TODO this every second use config instead
@@ -68,11 +75,13 @@ public static class MauiProgram
 				CaptureObjects =
 				[
 					new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(clock, new GXDLMSCaptureObject(2, 0)),
-					new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(energyRegister, new GXDLMSCaptureObject(2, 0))
+					new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(energyRegister, new GXDLMSCaptureObject(2, 0)),
+					new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(tariffRegister, new GXDLMSCaptureObject(2, 0)),
 				]
 			};
 			
 			server.AddObject(energyRegister);
+			server.AddObject(tariffRegister, AccessMode3.Write);
 			server.AddObject(energyProfile);
 		});
 		

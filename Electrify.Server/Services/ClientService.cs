@@ -8,6 +8,6 @@ public sealed class ClientService(ElectrifyDbContext database) : IClientService
 {
     public async Task<bool> ClientExists(Guid userId, Guid clientId)
     {
-        return await database.Clients.AnyAsync(c => c.UserId == userId && c.ClientId == clientId);
+        return await database.Clients.AnyAsync(c => c.UserId == userId && c.Id == clientId);
     }
 }

@@ -32,8 +32,8 @@ public partial class AdminHome : ComponentBase
     {
         _currentClient = new Client
         {
+            Id = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
-            ClientId = Guid.NewGuid(),
         };
 
         // TODO: insert into DB

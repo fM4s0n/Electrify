@@ -26,15 +26,15 @@ public class ClientServiceTests
         // Arrange
         var client = new Client
         {
+            Id = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
-            ClientId = Guid.NewGuid(),
         };
 
         _database.Clients.Add(client);
         await _database.SaveChangesAsync();
         
         // Act
-        var result = await _clientService.ClientExists(client.UserId, client.ClientId);
+        var result = await _clientService.ClientExists(client.UserId, client.Id);
         
         // Assert
         result.Should().BeTrue();
@@ -46,12 +46,12 @@ public class ClientServiceTests
         // Arrange
         var client = new Client
         {
+            Id = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
-            ClientId = Guid.NewGuid(),
         };
         
         // Act
-        var result = await _clientService.ClientExists(client.UserId, client.ClientId);
+        var result = await _clientService.ClientExists(client.UserId, client.Id);
         
         // Assert
         result.Should().BeFalse();

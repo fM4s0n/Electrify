@@ -1,12 +1,12 @@
-﻿namespace Electrify.Models.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
+namespace Electrify.Models.Models;
+
+[PrimaryKey(nameof(DateTime), nameof(ClientId))]
 public sealed record Reading
 {
-    public required int Id { get; set; }
-    
-    public required int ClientId { get; set; }
-    
-    public required string MeterReading { get; set; }
-    
-    public required DateTimeOffset ReadingDate { get; set; }
+    public required Guid ClientId { get; init; }
+    public required DateTime DateTime { get; init; }
+    public required double EnergyUsage { get; init; }
+    public required double Tariff { get; init; }
 }

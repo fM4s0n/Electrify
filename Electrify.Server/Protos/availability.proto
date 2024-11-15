@@ -17,6 +17,7 @@ service MeterAvailability {
 message AvailabilityRequest {
   int32 port = 1;
   string secret = 2;
+  string clientId = 3;
 }
 
 message AvailabilityResponse {

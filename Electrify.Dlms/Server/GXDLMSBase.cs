@@ -329,6 +329,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     public GXDLMSBase(GXDLMSAssociationLogicalName ln, GXDLMSClock clock, GXDLMSTcpUdpSetup wrapper)
         : base(ln, wrapper, "GRX", 12345678)
     {
+        AssignedAssociation = ln;
         _clock = clock;
         Conformance = Conformance.None;
         ln.LogicalName = "0.0.40.0.1.255";
@@ -455,19 +456,19 @@ public class GXDLMSBase : GXDLMSSecureServer
         Items.Add(_clock);
         ///////////////////////////////////////////////////////////////////////
         //Add Load profile.
-        GXDLMSProfileGeneric pg = new GXDLMSProfileGeneric("1.0.99.1.0.255");
+        //GXDLMSProfileGeneric pg = new GXDLMSProfileGeneric("1.0.99.1.0.255");
         //Set capture period to 60 second.
-        pg.CapturePeriod = 60;
+        //pg.CapturePeriod = 60;
         //Maximum row count.
-        pg.ProfileEntries = 100000;
-        pg.SortMethod = SortMethod.FiFo;
-        pg.SortObject = _clock;
+        //pg.ProfileEntries = 100000;
+        //pg.SortMethod = SortMethod.FiFo;
+        //pg.SortObject = _clock;
         //Add columns.
         //Set saved attribute index.
-        pg.CaptureObjects.Add(new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(_clock, new GXDLMSCaptureObject(2, 0)));
+        //pg.CaptureObjects.Add(new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(_clock, new GXDLMSCaptureObject(2, 0)));
         //Set saved attribute index.
-        pg.CaptureObjects.Add(new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(r, new GXDLMSCaptureObject(2, 0)));
-        Items.Add(pg);
+        //pg.CaptureObjects.Add(new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(r, new GXDLMSCaptureObject(2, 0)));
+        //Items.Add(pg);
         //Add initial rows.
         //Generate Profile Generic data file
         lock (FileLock)
@@ -475,24 +476,24 @@ public class GXDLMSBase : GXDLMSSecureServer
             //Create 10 000 rows for profile generic file.
             //In example profile generic we have two columns.
             //Date time and integer value.
-            int rowCount = 10000;
-            DateTime dt = DateTime.Now;
-            //Reset minutes and seconds to Zero.
-            dt = dt.AddSeconds(-dt.Second);
-            dt = dt.AddMinutes(-dt.Minute);
-            dt = dt.AddHours(-(rowCount - 1));
-            StringBuilder sb = new StringBuilder();
-            for (int pos = 0; pos != rowCount; ++pos)
-            {
-                sb.Append(dt.ToString(CultureInfo.InvariantCulture));
-                sb.Append(';');
-                sb.AppendLine(Convert.ToString(pos + 1));
-                dt = dt.AddHours(1);
-            }
+            // int rowCount = 10000;
+            // DateTime dt = DateTime.Now;
+            // //Reset minutes and seconds to Zero.
+            // dt = dt.AddSeconds(-dt.Second);
+            // dt = dt.AddMinutes(-dt.Minute);
+            // dt = dt.AddHours(-(rowCount - 1));
+            // StringBuilder sb = new StringBuilder();
+            // for (int pos = 0; pos != rowCount; ++pos)
+            // {
+            //     sb.Append(dt.ToString(CultureInfo.InvariantCulture));
+            //     sb.Append(';');
+            //     sb.AppendLine(Convert.ToString(pos + 1));
+            //     dt = dt.AddHours(1);
+            // }
             using (var writer = File.CreateText(GetdataFile()))
             {
-                sb.Length -= 2;
-                writer.Write(sb.ToString());
+                // sb.Length -= 2;
+                // writer.Write(sb.ToString());
             }
         }
         ///////////////////////////////////////////////////////////////////////
@@ -786,7 +787,7 @@ public class GXDLMSBase : GXDLMSSecureServer
                                 else
                                 {
                                     string[] values = line.Split(';');
-                                    p.Buffer.Add(new object[] { DateTime.Parse(values[0], CultureInfo.InvariantCulture), int.Parse(values[1]) });
+                                    p.Buffer.Add([DateTime.Parse(values[0], CultureInfo.InvariantCulture), double.Parse(values[1]), double.Parse(values[2])]);  // TODO this is super not OOP
                                 }
                                 if (p.Buffer.Count == count)
                                 {
@@ -1322,13 +1323,9 @@ public class GXDLMSBase : GXDLMSSecureServer
         lock (FileLock)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("");
-            foreach (GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject> it in pg.CaptureObjects)
+            for (int i = 0; i < pg.CaptureObjects.Count; i++)
             {
-                if (sb.Length != 2)
-                {
-                    sb.Append(';');
-                }
+                var it = pg.CaptureObjects[i];
                 object value;
                 if (it.Key is GXDLMSClock && it.Value.AttributeIndex == 2)
                 {
@@ -1357,10 +1354,16 @@ public class GXDLMSBase : GXDLMSSecureServer
                 {
                     sb.Append(Convert.ToString(value));
                 }
+
+                if (i != pg.CaptureObjects.Count - 1)
+                {
+                    sb.Append(";");
+                }
             }
+            
             using (var writer = File.AppendText(GetdataFile()))
             {
-                writer.Write(sb.ToString());
+                writer.WriteLine(sb.ToString());
             }
         }
     }

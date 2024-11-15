@@ -34,9 +34,9 @@
 
                     <h1 class="home-right-label">Client ID</h1>
 
-                    <a @onclick=@(() => CopyToClipboard(_currentClient.ClientId.ToString()))>
+                    <a @onclick=@(() => CopyToClipboard(_currentClient.Id.ToString()))>
                         <h3>
-                            @_currentClient.ClientId
+                            @_currentClient.Id
                             <i class="fa-regular fa-copy" />
                         </h3>                            
                     </a>
