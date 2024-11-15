@@ -15,7 +15,7 @@ public partial class SmartMeterHome
     private readonly int _daysSincePeriodStart = 14;
     private readonly System.Timers.Timer _timer = new(2000);
     private float _cumulativeUsage;
-    private const string _disconnectMessage = "The Smart Meter has been disconnected. Attepting to reconnect.";
+    private const string _disconnectMessage = "Smart Meter disconnected. Attepting to reconnect.";
 
     [Inject] private IUsageService UsageService { get; set; } = default!;
 
@@ -49,8 +49,6 @@ public partial class SmartMeterHome
         _currentUsage = UsageService.GetCurrentUsage();
         _usagePercent = (float)Math.Round(_currentUsage * 10000, 6);
         _cumulativeUsage = UsageService.GetCumulativeUsage().Usage;
-
-        //ToastService.ShowSuccess("Welcome to the Smart Meter Home Page!");
     }
 
     private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -83,11 +81,8 @@ public partial class SmartMeterHome
 
     private void CheckForNewToastMessage()
     {
-        //bool connected = ErrorMessageService.IsConnected;
-        //string? errorMessage = ErrorMessageService.ErrorMessage;
-
-        bool connected = true;
-        string? errorMessage = "This is an error message";
+        bool connected = ErrorMessageService.IsConnected;
+        string? errorMessage = ErrorMessageService.ErrorMessage;
 
         static void toastOptions(ToastSettings options)
         {

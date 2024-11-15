@@ -21,11 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.AdminUi.UnitTests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.Server.UnitTests", "Electrify.Server.UnitTests\Electrify.Server.UnitTests.csproj", "{35484928-F17E-4EB3-B084-AB8B09A29214}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.AdminUi.Services", "Electrify.AdminUi.Services\Electrify.AdminUi.Services.csproj", "{BA08E259-2500-4F32-98E0-A26AF7C8A314}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.AdminUi.Services", "Electrify.AdminUi.Services\Electrify.AdminUi.Services.csproj", "{BA08E259-2500-4F32-98E0-A26AF7C8A314}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.SmartMeterUi.Services", "Electrify.SmartMeterUi.Services\Electrify.SmartMeterUi.Services.csproj", "{E85D2EE7-3D7D-44D8-8ABD-212D234BE5B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.SmartMeterUi.Services", "Electrify.SmartMeterUi.Services\Electrify.SmartMeterUi.Services.csproj", "{E85D2EE7-3D7D-44D8-8ABD-212D234BE5B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.SmartMeterUi.UnitTests", "Electrify.SmartMeterUi.UnitTests\Electrify.SmartMeterUi.UnitTests.csproj", "{E89B651E-5CA9-458D-AE81-FCD7F9BFD6C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.SmartMeterUi.UnitTests", "Electrify.SmartMeterUi.UnitTests\Electrify.SmartMeterUi.UnitTests.csproj", "{E89B651E-5CA9-458D-AE81-FCD7F9BFD6C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
