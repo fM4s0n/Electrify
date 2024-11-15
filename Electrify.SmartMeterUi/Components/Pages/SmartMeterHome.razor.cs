@@ -13,7 +13,7 @@ public partial class SmartMeterHome
     private string _barColour = "#00b5f1";
     private string _dialBackground = string.Empty;
     private readonly int _daysSincePeriodStart = 14;
-    private readonly System.Timers.Timer _timer = new(2000);
+    private Timer? _timer;
     private float _cumulativeUsage;
     private const string _disconnectMessage = "Smart Meter disconnected. Attepting to reconnect.";
 
@@ -32,11 +32,7 @@ public partial class SmartMeterHome
 
     private void SetUpTimer()
     {
-        _timer.Elapsed += OnTimerElapsed;
-        _timer.AutoReset = true; // Make sure the timer resets automatically
-        _timer.Start();
-
-        ToastService.ShowError("This is an error message");
+        _timer = new Timer(OnTimerElapsed, null, 0, 2000);
     }
 
     private void GetPrice()
@@ -51,7 +47,7 @@ public partial class SmartMeterHome
         _cumulativeUsage = UsageService.GetCumulativeUsage().Usage;
     }
 
-    private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    private void OnTimerElapsed(object? state)
     {
         GetCurrentUsage();
         InvokeAsync(UpdateDial);
@@ -107,6 +103,11 @@ public partial class SmartMeterHome
         {
             ToastService.ClearWarningToasts();
         }
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
     }
 
     #region UI Display Methods
