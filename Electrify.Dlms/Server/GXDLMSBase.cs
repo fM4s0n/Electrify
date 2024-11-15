@@ -76,7 +76,11 @@ public class GXDLMSBase : GXDLMSSecureServer
     static readonly object FileLock = new object();
     static string GetdataFile()
     {
-        return Path.Combine(Path.GetDirectoryName(typeof(GXDLMSBase).Assembly.Location), "data.csv");
+        // Get writeable directory
+        string dataDirectory = FileSystem.AppDataDirectory;
+    
+        // Define path to data.csv
+        return Path.Combine(dataDirectory, "data.csv");
     }
     TraceLevel Trace = TraceLevel.Error;
 
