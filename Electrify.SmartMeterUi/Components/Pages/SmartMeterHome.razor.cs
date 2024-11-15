@@ -5,13 +5,13 @@ namespace Electrify.SmartMeterUi.Components.Pages;
 public partial class SmartMeterHome
 {
     private float _currentUsage = 3.45f;
-    private float _pricePerKw = 0f;
-    private float _usagePercent = 0;
+    private float _pricePerKw;
+    private float _usagePercent;
     private string _barColour = "#00b5f1";
     private string _dialBackground = "";
-    private readonly int _hourOfDay = 6;
     private readonly int _daysSincePeriodStart = 14;
     private readonly System.Timers.Timer _timer = new(2000);
+    private float _cumulativeUsage;
 
     [Inject] private IUsageService UsageService { get; set; } = default!;
 
@@ -36,8 +36,9 @@ public partial class SmartMeterHome
 
     private void GetCurrentUsage()
     {
-        _currentUsage = UsageService.GetCurrentUsage().Usage;
+        _currentUsage = UsageService.GetCurrentUsage();
         _usagePercent = (float)Math.Round(_currentUsage * 10000, 6);
+        _cumulativeUsage = UsageService.GetCumulativeUsage().Usage;
     }
 
     private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
@@ -70,22 +71,22 @@ public partial class SmartMeterHome
     #region UI Display Methods
     private string GetUsageDaily()
     {
-        return Math.Round((_currentUsage * _hourOfDay), 2).ToString();
+        return Math.Round(_cumulativeUsage, 2).ToString();
     }
 
     private string GetUsagePriceDaily()
     {
-        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay), 2).ToString("C");
+        return Math.Round(_pricePerKw * _cumulativeUsage, 2).ToString("C");
     }
 
     private string GetUsagePeriod()
     {
-        return Math.Round((_currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString();
+        return Math.Round(_cumulativeUsage * _daysSincePeriodStart, 2).ToString();
     }
 
     private string GetUsagePricePeriod()
     {
-        return Math.Round((_pricePerKw * _currentUsage * _hourOfDay * _daysSincePeriodStart), 2).ToString("C");
+        return Math.Round(_pricePerKw * _cumulativeUsage * _daysSincePeriodStart, 2).ToString("C");
     }
     #endregion
 }
