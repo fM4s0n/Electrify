@@ -1,5 +1,5 @@
 using Electrify.Dlms.Client.Abstraction;
-using Electrify.Models.Models;
+using Electrify.Models;
 using Gurux.DLMS;
 using Gurux.DLMS.Objects;
 using Gurux.Net;
@@ -59,18 +59,10 @@ public sealed class DlmsClient : IDlmsClient
         }
     }
 
-    public void WriteValueToRegister(string logicalName, object value)
+    public void WriteTariff(double tariff)
     {
-        var register = _registers.FirstOrDefault(r => r.LogicalName == logicalName);
-
-        if (register is null)
-        {
-            throw new ArgumentException(
-                "Logical name is not included in the registered registers",
-                nameof(logicalName));
-        }
-
-        register.Value = value;
+        var register = _registers.First(r => r.LogicalName == "1.2.3.4.5.7");  // TODO use const or config
+        register.Value = tariff;
         _reader.Write(register, 2);
     }
 

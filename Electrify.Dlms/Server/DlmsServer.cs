@@ -27,10 +27,10 @@ public sealed class DlmsServer : IDlmsServer
         configure.Invoke(this, serviceProvider);
     }
 
-    public void AddObject(GXDLMSObject dlmsObject, AccessMode3 valueAccessMode = AccessMode3.Read)
+    public void AddObject(GXDLMSObject dlmsObject, bool writeAccess = false)
     {
         _association.SetAccess3(dlmsObject, 3, AccessMode3.Read);
-        _association.SetAccess3(dlmsObject, 2, valueAccessMode);
+        _association.SetAccess3(dlmsObject, 2, writeAccess ? AccessMode3.Read | AccessMode3.Write : AccessMode3.Read);
         
         _server.Items.Add(dlmsObject);
     }

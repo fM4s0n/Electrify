@@ -1,4 +1,4 @@
-﻿using Electrify.Models.Models;
+﻿using Electrify.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Electrify.Server.Database;
@@ -11,4 +11,5 @@ public class ElectrifyDbContext(DbContextOptions<ElectrifyDbContext> options) : 
     public DbSet<Admin> Admins { get; set; }    
     public DbSet<Client> Clients { get; set; }    
     public DbSet<Reading> Readings { get; set; }
+    public DbSet<Tariff> Tariffs { get; set; }
 }

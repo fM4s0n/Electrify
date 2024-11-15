@@ -81,7 +81,7 @@ public static class MauiProgram
 			};
 			
 			server.AddObject(energyRegister);
-			server.AddObject(tariffRegister, AccessMode3.Write);
+			server.AddObject(tariffRegister, true);
 			server.AddObject(energyProfile);
 		});
 		

@@ -55,6 +55,9 @@ builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddSingleton<IDlmsClientService, DlmsClientService>();
+builder.Services.AddHostedService<TariffService>();
+
 var app = builder.Build();
 
 app.UseSwagger().UseSwaggerUI(options =>
