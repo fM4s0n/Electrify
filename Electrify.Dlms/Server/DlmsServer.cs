@@ -40,8 +40,6 @@ public sealed class DlmsServer : IDlmsServer
     
     public void SetEnergy(int energyValue)
     {
-        string blah = "";
-
         foreach (GXDLMSObject? dlmsObject in _server.Items)
         {
             // TODO maybe this string should be done via IOptions
