@@ -34,14 +34,49 @@ public class AdminServiceTests
     public async Task GetCurrentAdmin_Returns_Admin_When_Admin_Is_Logged_In()
     {
         // Arrange
-        PasswordHasher<Admin> passwordHasher = new();
-
         Guid id = Guid.NewGuid();
         string name = "Test Admin";
         string plainPassword = "password";
         string email = "email@email.com";
-        string passwordHash;
         Guid token = Guid.NewGuid();
+
+        var expected = ArrangeAdminLogin(email, name, plainPassword, id, token);
+
+        await _adminService.ValidateLogin(email, plainPassword);
+
+        // Act
+        var actual = _adminService.CurrentAdmin;
+
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public async Task LogoutCurrentAdmin_Sets_CurrentAdmin_To_Null()
+    {
+        // Arrange
+        Guid id = Guid.NewGuid();
+        string name = "Test Admin";
+        string plainPassword = "password";
+        string email = "email@email.com";
+        Guid token = Guid.NewGuid();
+
+        ArrangeAdminLogin(email, name, plainPassword, id, token);
+
+        // Act
+        await _adminService.ValidateLogin(email, plainPassword);
+
+        _adminService.LogoutCurrentAdmin();
+
+        var actual = _adminService.CurrentAdmin;
+
+        // Assert
+        actual.Should().BeNull();
+    }
+
+    private Admin ArrangeAdminLogin(string email, string name, string plainPassword, Guid id, Guid token)
+    {
+        PasswordHasher<Admin> passwordHasher = new();
 
         var expected = new Admin
         {
@@ -52,7 +87,7 @@ public class AdminServiceTests
             AccessToken = token,
         };
 
-        passwordHash = passwordHasher.HashPassword(expected, plainPassword);
+        string passwordHash = passwordHasher.HashPassword(expected, plainPassword);
         expected.PasswordHash = passwordHash;
 
         var response = new HttpAdminLoginResponse
@@ -67,12 +102,6 @@ public class AdminServiceTests
 
         _adminLoginClient.AdminLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(response);
 
-        await _adminService.ValidateLogin(email, plainPassword);
-
-        // Act
-        var actual = _adminService.CurrentAdmin;
-
-        // Assert
-        actual.Should().BeEquivalentTo(expected);
+        return expected;
     }
 }
