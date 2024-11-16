@@ -34,6 +34,7 @@ builder.Services.AddHttpClient(
     });
 
 builder.Services.Configure<DlmsClientOptions>(builder.Configuration.GetSection(nameof(DlmsClientOptions)));
+builder.Services.Configure<TariffOptions>(builder.Configuration.GetSection(nameof(TariffOptions)));
 
 builder.Services.AddSingleton(TimeProvider.System);
 

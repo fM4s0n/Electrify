@@ -39,6 +39,7 @@ public static class MauiProgram
 			Password = "YourSuperSecureSecretKey1234567890",
 			Authentication = Authentication.HighSHA256,
 			TraceLevel = TraceLevel.Verbose,
+			GenericProfileCapturePeriod = 5,
 		}));
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
@@ -53,6 +54,7 @@ public static class MauiProgram
 		builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
 		{
 			var clock = sp.GetRequiredService<GXDLMSClock>();
+			var options = sp.GetRequiredService<IOptions<DlmsServerOptions>>().Value;
 			
 			var energyRegister = new GXDLMSRegister(RegisterNames.EnergyUsage)
 			{
@@ -70,7 +72,7 @@ public static class MauiProgram
 
 			var energyProfile = new GXDLMSProfileGeneric(RegisterNames.EnergyProfile)
 			{
-				CapturePeriod = 1,  // TODO this every second use config instead
+				CapturePeriod = options.GenericProfileCapturePeriod,
 				SortObject = clock,
 				CaptureObjects =
 				[

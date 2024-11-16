@@ -1,6 +1,8 @@
 using Electrify.Models;
 using Electrify.Server.Database;
+using Electrify.Server.Options;
 using Electrify.Server.Services.Abstraction;
+using Microsoft.Extensions.Options;
 
 namespace Electrify.Server.Services;
 
@@ -9,26 +11,21 @@ public class TariffService(
     TimeProvider timeProvider,
     IServiceProvider serviceProvider,
     ILogger<TariffService> logger,
+    IOptions<TariffOptions> options,
     IDlmsClientService dlmsClientService)
     : BackgroundService
 {
     private Timer? _timer;
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // TODO make the period configurable
-        
-        
-        
-        // TODO PUT THIS BACK!!!!!!!!!!!!!!
-        
-        // var localTime = timeProvider.GetLocalNow();
-        // var hourAhead = localTime.Date.AddHours(localTime.Hour + 1);
-        // var timeUntilNextHour = hourAhead - localTime;
+        var period = options.Value.TariffUpdateInterval;
+        var localTime = timeProvider.GetLocalNow();
+
+        var remainder = new TimeSpan(localTime.Ticks % period.Ticks);
+        var dueTime = remainder == TimeSpan.Zero ? remainder : period - remainder;
         
         // ReSharper disable once AsyncVoidLambda
-        // TODO _timer = new Timer(async _ => await UpdateTariff(), null, TimeSpan.Zero, TimeSpan.FromHours(1));
-        _timer = new Timer(async _ => await UpdateTariff(), null, TimeSpan.Zero, TimeSpan.FromSeconds(10));
-        
+        _timer = new Timer(async _ => await UpdateTariff(), null, dueTime, period);
         return Task.CompletedTask;
     }
     

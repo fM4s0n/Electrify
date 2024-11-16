@@ -74,7 +74,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     //What is expected image size.
     UInt32 ImageSize = 0;
     static readonly object FileLock = new object();
-    static string GetdataFile()
+    public static string GetdataFile()
     {
         // Get writeable directory
         string dataDirectory = FileSystem.AppDataDirectory;

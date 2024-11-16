@@ -1,5 +1,8 @@
 using System.Diagnostics;
+using System.Globalization;
+using CsvHelper;
 using Electrify.Dlms.Constants;
+using Electrify.Dlms.Models;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
 using Gurux.DLMS.Enums;
@@ -52,6 +55,16 @@ public sealed class DlmsServer : IDlmsServer
         _server.Initialize(options.Value.Port, traceLevel);
 
         _ = RunAsync(_cts.Token);
+    }
+
+    public IEnumerable<GenericProfileRow> GetReadings()
+    {
+        var dataFile = GXDLMSBase.GetdataFile();
+        
+        using var reader = new StreamReader(dataFile);
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+        
+        return csv.GetRecords<GenericProfileRow>();
     }
 
     private Task RunAsync(CancellationToken cancellationToken)
