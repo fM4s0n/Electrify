@@ -86,7 +86,7 @@ public partial class SmartMeterHome
             options.ShowCloseButton = false;
         }
 
-        if (connected)
+        if (!connected)
         {
             ToastService.ShowError(_disconnectMessage, toastOptions);
         }
