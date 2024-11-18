@@ -5,6 +5,8 @@ using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
 using Electrify.Dlms.Server.Abstraction;
+using Electrify.SmartMeterUi.Services;
+using Electrify.SmartMeterUi.Services.Abstractions;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
 using Gurux.DLMS.Secure;
@@ -99,6 +101,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<GXDLMSClock>();
             
         services.AddSingleton<GXDLMSBase, GXDLMSServerLN_47>();
+
+        services.AddSingleton<IErrorMessageService, ErrorMessageService>();
 
         services.AddSingleton<IDlmsServer>(sp => new DlmsServer(configure, sp));
         
