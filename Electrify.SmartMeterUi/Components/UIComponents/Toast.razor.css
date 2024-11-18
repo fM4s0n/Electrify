@@ -1,0 +1,12 @@
+.title {
+    margin-top: 0;
+}
+
+.toast {
+    background: rgba(23, 33, 48, 0.9);
+    border-radius: 15px;
+    color: #FFFFFF;
+    box-sizing: border-box;
+    padding: 1em;
+    border: 1px solid var(--brand-light);
+}
