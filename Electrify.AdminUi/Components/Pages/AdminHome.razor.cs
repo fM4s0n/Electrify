@@ -37,6 +37,7 @@ public partial class AdminHome : ComponentBase
         };
 
         // TODO: insert into DB
+
     }
 
     public void HandleLogout()
