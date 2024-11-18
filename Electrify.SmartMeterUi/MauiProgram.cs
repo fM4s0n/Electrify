@@ -51,6 +51,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IUsageService, UsageService>();
 		builder.Services.AddBlazoredToast();
 
+		builder.Services.AddSingleton<IErrorMessageService, ErrorMessageService>();
+		
         builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
 		{
 			var clock = sp.GetRequiredService<GXDLMSClock>();

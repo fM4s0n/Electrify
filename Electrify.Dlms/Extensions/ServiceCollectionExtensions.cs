@@ -1,13 +1,9 @@
 using System.Text;
-using System.Text.Unicode;
 using Electrify.Dlms.Client;
 using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
 using Electrify.Dlms.Server.Abstraction;
-using Electrify.SmartMeterUi.Services;
-using Electrify.SmartMeterUi.Services.Abstractions;
-using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
 using Gurux.DLMS.Secure;
 using Gurux.Net;
@@ -30,7 +26,7 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton(sp =>
         {
-            var options = sp.GetRequiredService<DlmsClientOptions>();
+            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
             return new GXDLMSSecureClient(
                 options.UseLogicalNameReferencing,
                 options.ClientAddress,
@@ -42,13 +38,13 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton(sp =>
         {
-            var options = sp.GetRequiredService<DlmsClientOptions>();
+            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
             return new GXNet(options.Protocol, options.ServerHostname, options.ServerPort);
         });
 
         services.AddSingleton(sp =>
         {
-            var options = sp.GetRequiredService<DlmsClientOptions>();
+            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
             var client = sp.GetRequiredService<GXDLMSSecureClient>();
             var media = sp.GetRequiredService<GXNet>();
             
@@ -57,7 +53,7 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton<IDlmsClient>( sp =>
         {
-            var options = sp.GetRequiredService<DlmsClientOptions>();
+            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
             var logger = sp.GetRequiredService<ILogger<DlmsClient>>();
             var media = sp.GetRequiredService<GXNet>();
             var reader = sp.GetRequiredService<GXDLMSReader>();
@@ -101,8 +97,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<GXDLMSClock>();
             
         services.AddSingleton<GXDLMSBase, GXDLMSServerLN_47>();
-
-        services.AddSingleton<IErrorMessageService, ErrorMessageService>();
 
         services.AddSingleton<IDlmsServer>(sp => new DlmsServer(configure, sp));
         

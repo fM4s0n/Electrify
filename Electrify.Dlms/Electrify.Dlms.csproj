@@ -20,6 +20,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Electrify.Models\Electrify.Models.csproj" />
-    <ProjectReference Include="..\Electrify.SmartMeterUi.Services\Electrify.SmartMeterUi.Services.csproj" />
   </ItemGroup>
 </Project>
