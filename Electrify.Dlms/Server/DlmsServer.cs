@@ -42,7 +42,6 @@ public sealed class DlmsServer : IDlmsServer
     {
         foreach (GXDLMSObject? dlmsObject in _server.Items)
         {
-            // TODO maybe this string should be done via IOptions
             if (dlmsObject is GXDLMSRegister { LogicalName: RegisterNames.EnergyUsage } register)
             {
                 register.Value = energyValue;

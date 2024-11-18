@@ -60,15 +60,13 @@ public static class ServiceCollectionExtensions
             var media = sp.GetRequiredService<GXNet>();
             var reader = sp.GetRequiredService<GXDLMSReader>();
             var timeProvider = sp.GetRequiredService<TimeProvider>();
-
-            var registers = options.LogicalNames.Replace(" ", "").Split(",");
             
             return new DlmsClient(
                 clientId,
                 logger,
                 media,
                 reader,
-                registers.Select(register => new GXDLMSRegister(register)),
+                options.LogicalNames.Select(register => new GXDLMSRegister(register)),
                 timeProvider);
         });
 

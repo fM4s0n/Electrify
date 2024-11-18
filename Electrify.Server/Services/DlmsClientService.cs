@@ -1,9 +1,14 @@
 using Electrify.Dlms.Client.Abstraction;
+using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 
 namespace Electrify.Server.Services;
 
-public sealed class DlmsClientService(TimeProvider timeProvider, ILogger<DlmsClientService> logger) : IDlmsClientService
+public sealed class DlmsClientService(
+    TimeProvider timeProvider,
+    ILogger<DlmsClientService> logger,
+    ElectrifyDbContext database)
+    : IDlmsClientService
 {
     private readonly Dictionary<int, IDlmsClient> _clients = [];
     private readonly List<RandomTaskTimer> _timers = [];
@@ -20,8 +25,8 @@ public sealed class DlmsClientService(TimeProvider timeProvider, ILogger<DlmsCli
         
         var timer = new RandomTaskTimer(timeProvider, delegate
         {
-            // TODO make it since the last reading not the whole last minute
-            var readings = _clients[port].ReadEnergyProfile(timeProvider.GetLocalNow().AddMinutes(-1).DateTime).ToList();
+            var lastReading = database.GetLastReading(clientId) ?? timeProvider.GetLocalNow().AddMinutes(-1).DateTime;
+            var readings = _clients[port].ReadEnergyProfile(lastReading).ToList();
 
             for (var i = 0; i < readings.Count; i++)
             {

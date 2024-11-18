@@ -1274,8 +1274,7 @@ public class GXDLMSBase : GXDLMSSecureServer
                 }
                 else
                 {
-                    // TODO: Read value here example from the meter if it's not
-                    // updated automatically.
+                    // read value here example from the meter if it's not updated automatically.
                     value = it.Key.GetValues()[it.Value.AttributeIndex - 1];
                     if (value == null)
                     {
@@ -1333,8 +1332,7 @@ public class GXDLMSBase : GXDLMSSecureServer
                 }
                 else
                 {
-                    // TODO: Read value here example from the meter if it's not
-                    // updated automatically.
+                    // read value here example from the meter if it's not updated automatically.
                     value = it.Key.GetValues()[it.Value.AttributeIndex - 1];
                     if (value == null)
                     {

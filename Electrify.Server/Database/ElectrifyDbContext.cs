@@ -12,4 +12,9 @@ public class ElectrifyDbContext(DbContextOptions<ElectrifyDbContext> options) : 
     public DbSet<Client> Clients { get; set; }    
     public DbSet<Reading> Readings { get; set; }
     public DbSet<Tariff> Tariffs { get; set; }
+
+    public DateTime? GetLastReading(Guid clientId)
+    {
+        return Readings.Where(r => r.ClientId == clientId).MaxBy(r => r.DateTime)?.DateTime;
+    }
 }

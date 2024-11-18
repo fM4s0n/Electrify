@@ -25,11 +25,7 @@ public class MeterAvailabilityService(
     {
         if (!Guid.TryParse(request.ClientId, out var clientId))
         {
-            // TODO use bad request instead or something, at least at problem details to response
-            return Task.FromResult(new AvailabilityResponse
-            {
-                Success = false
-            });
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "ClientId should be in GUID format"));
         }
         
         var media = new GXNet(dlmsClientOptions.Value.Protocol, dlmsClientOptions.Value.ServerHostname, request.Port);
@@ -45,8 +41,6 @@ public class MeterAvailabilityService(
         var reader = new GXDLMSReader(secureClient, media, observabilityOptions.Value.TraceLevel, dlmsClientOptions.Value.InvocationCounter);
 
         var registers = dlmsClientOptions.Value.LogicalNames
-            .Replace(" ", "")
-            .Split(",")
             .Select(register => new GXDLMSRegister(register));
 
         var client = new DlmsClient(clientId, dlmsClientLogger, media, reader, registers, timeProvider);
