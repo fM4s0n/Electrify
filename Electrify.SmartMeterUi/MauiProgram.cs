@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Blazored.Toast;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Extensions;
 using Electrify.Dlms.Options;
@@ -49,7 +48,6 @@ public static class MauiProgram
 #endif
 		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
         builder.Services.AddSingleton<IUsageService, UsageService>();
-		builder.Services.AddBlazoredToast();
 
         builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
 		{
