@@ -1,5 +1,5 @@
 ﻿using Electrify.AdminUi.Services.Abstractions;
-using Electrify.Models.Models;
+using Electrify.Models;
 using Electrify.Server.ApiClient.Abstraction;
 
 namespace Electrify.AdminUi.Services;

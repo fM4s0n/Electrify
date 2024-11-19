@@ -1,4 +1,4 @@
-﻿using Electrify.Models.Models;
+﻿using Electrify.Models;
 using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.AspNetCore.Identity;
