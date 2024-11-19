@@ -6,5 +6,5 @@ public interface IClientService
 {
     Task<bool> ClientExists(Guid userId, Guid clientId);
 
-    Task InsertClient(Client newClient);
+    Task<bool> InsertClient(Client client);
 }

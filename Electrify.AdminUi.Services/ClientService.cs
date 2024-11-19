@@ -1,12 +1,14 @@
 ﻿using Electrify.AdminUi.Services.Abstractions;
 using Electrify.Models.Models;
+using Electrify.Server.ApiClient.Abstraction;
 
 namespace Electrify.AdminUi.Services;
 
-public class ClientService : IClientService
+public class ClientService(IElectrifyApiClient electrifyApiClient) : IClientService
 {
-    public void InsertClient(Client newClient)
+    public async Task<bool> InsertClient(Client newClient)
     {
-        throw new NotImplementedException();
+        var response = await electrifyApiClient.InsertClient(newClient.Id, newClient.UserId);
+        return response.Success;
     }
 }

@@ -12,6 +12,11 @@ public partial class AdminHome : ComponentBase
     [Inject]
     private IAdminService AdminService { get; set; } = default!;
 
+    [Inject]
+    private IClientService ClientService { get; set; } = default!;
+
+    [Inject] IGreetingService GreetingService { get; set; } = default!;
+
     private Admin? _admin;
 
     private Client? _currentClient;
@@ -30,14 +35,14 @@ public partial class AdminHome : ComponentBase
 
     public void HandleSetupMeter()
     {
-        _currentClient = new Client
+        var newCleint = new Client
         {
             Id = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
         };
-
-        // TODO: insert into DB
-
+        
+        ClientService.InsertClient(newCleint);
+        _currentClient = newCleint;
     }
 
     public void HandleLogout()
@@ -46,19 +51,7 @@ public partial class AdminHome : ComponentBase
         NavigationManager.NavigateTo("/");
     }
 
-    private string GetGreeting()
-    {
-        string name = _admin?.Name ?? "Admin";
-
-        string timeOfDayGreeting = DateTime.Now.Hour switch
-        {
-            < 12 => "Good Morning",
-            < 17 => "Good Afternoon",
-            _ => "Good Evening"
-        };
-
-        return $"{timeOfDayGreeting}, {name}";
-    }
+    private string GetGreeting() => GreetingService.GetGreeting(_admin?.Name ?? "Admin");
 
     private static async Task CopyToClipboard(string stringToCopy)
     {

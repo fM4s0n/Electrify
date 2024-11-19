@@ -4,12 +4,14 @@ using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Electrify.Server.UnitTests.Services;
 
 public class ClientServiceTests
 {
     private readonly IClientService _clientService;
+    private readonly ILogger<ClientService> _logger;
     private readonly ElectrifyDbContext _database;
     
     public ClientServiceTests()
@@ -17,7 +19,9 @@ public class ClientServiceTests
         var builder = new DbContextOptionsBuilder<ElectrifyDbContext>();
         builder.UseInMemoryDatabase("UnitTestDb");
         _database = new ElectrifyDbContext(builder.Options);
-        _clientService = new ClientService(_database);
+        _logger = NSubstitute.Substitute.For<ILogger<ClientService>>();
+
+        _clientService = new ClientService(_database, _logger);
     }
 
     [Fact]

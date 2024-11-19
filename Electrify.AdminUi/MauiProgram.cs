@@ -34,7 +34,10 @@ public static class MauiProgram
         loggerConfiguration.MinimumLevel.Debug();
 #endif
         builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
+        builder.Services.AddSingleton<IClientService, ClientService>();
         builder.Services.AddSingleton<IAdminService, AdminService>();
+        builder.Services.AddSingleton<IGreetingService, GreetingService>();
+        builder.Services.AddSingleton(TimeProvider.System);
         builder.Services.AddSingleton<IElectrifyApiClient>(sp =>
         {
             return new ElectrifyApiClient(new HttpClient

@@ -4,5 +4,5 @@ namespace Electrify.AdminUi.Services.Abstractions;
 
 public interface IClientService
 {
-    void InsertClient(Client newClient);
+    Task<bool> InsertClient(Client newClient);
 }
