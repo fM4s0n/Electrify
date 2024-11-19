@@ -1,5 +1,6 @@
 using Electrify.Dlms.Client.Abstraction;
-using Electrify.Models.Models;
+using Electrify.Dlms.Constants;
+using Electrify.Models;
 using Gurux.DLMS;
 using Gurux.DLMS.Objects;
 using Gurux.Net;
@@ -34,7 +35,7 @@ public sealed class DlmsClient : IDlmsClient
 
     public IEnumerable<Reading> ReadEnergyProfile(DateTime sinceTime)
     {
-        var energyProfile = new GXDLMSProfileGeneric("1.2.3.4.5.6");  // TODO make this configurable not hardcoded logical name
+        var energyProfile = new GXDLMSProfileGeneric(RegisterNames.EnergyProfile);
         
         _reader.Read(energyProfile, 3);
         _reader.Read(energyProfile, 2);
@@ -59,18 +60,10 @@ public sealed class DlmsClient : IDlmsClient
         }
     }
 
-    public void WriteValueToRegister(string logicalName, object value)
+    public void WriteTariff(double tariff)
     {
-        var register = _registers.FirstOrDefault(r => r.LogicalName == logicalName);
-
-        if (register is null)
-        {
-            throw new ArgumentException(
-                "Logical name is not included in the registered registers",
-                nameof(logicalName));
-        }
-
-        register.Value = value;
+        var register = _registers.First(r => r.LogicalName == RegisterNames.EnergyTariff);
+        register.Value = tariff;
         _reader.Write(register, 2);
     }
 

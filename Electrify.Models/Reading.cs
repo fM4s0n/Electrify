@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Electrify.Models.Models;
+namespace Electrify.Models;
 
 [PrimaryKey(nameof(DateTime), nameof(ClientId))]
 public sealed record Reading

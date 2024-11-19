@@ -1,4 +1,4 @@
-namespace Electrify.Models.Models;
+namespace Electrify.Models;
 
 public sealed record Client
 {

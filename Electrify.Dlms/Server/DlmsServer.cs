@@ -1,3 +1,4 @@
+using System.Globalization;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
@@ -26,10 +27,10 @@ public sealed class DlmsServer : IDlmsServer
         configure.Invoke(this, serviceProvider);
     }
 
-    public void AddObject(GXDLMSObject dlmsObject, AccessMode3 valueAccessMode = AccessMode3.Read)
+    public void AddObject(GXDLMSObject dlmsObject, bool writeAccess = false)
     {
         _association.SetAccess3(dlmsObject, 3, AccessMode3.Read);
-        _association.SetAccess3(dlmsObject, 2, valueAccessMode);
+        _association.SetAccess3(dlmsObject, 2, writeAccess ? AccessMode3.Read | AccessMode3.Write : AccessMode3.Read);
         
         _server.Items.Add(dlmsObject);
     }
@@ -38,7 +39,6 @@ public sealed class DlmsServer : IDlmsServer
     {
         foreach (GXDLMSObject? dlmsObject in _server.Items)
         {
-            // TODO maybe this string should be done via IOptions
             if (dlmsObject is GXDLMSRegister { LogicalName: RegisterNames.EnergyUsage } register)
             {
                 register.Value = energyValue;
@@ -54,6 +54,16 @@ public sealed class DlmsServer : IDlmsServer
         _server.Initialize(options.Value.Port, options.Value.TraceLevel);
 
         _ = RunAsync(_cts.Token);
+    }
+
+    public IEnumerable<GenericProfileRow> GetReadings()
+    {
+        var dataFile = GXDLMSBase.GetdataFile();
+        
+        using var reader = new StreamReader(dataFile);
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+        
+        return csv.GetRecords<GenericProfileRow>();
     }
 
     private Task RunAsync(CancellationToken cancellationToken)

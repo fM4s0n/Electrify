@@ -77,7 +77,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     //What is expected image size.
     UInt32 ImageSize = 0;
     static readonly object FileLock = new object();
-    static string GetdataFile()
+    public static string GetdataFile()
     {
         // Get writeable directory
         string dataDirectory;
@@ -1286,8 +1286,7 @@ public class GXDLMSBase : GXDLMSSecureServer
                 }
                 else
                 {
-                    // TODO: Read value here example from the meter if it's not
-                    // updated automatically.
+                    // read value here example from the meter if it's not updated automatically.
                     value = it.Key.GetValues()[it.Value.AttributeIndex - 1];
                     if (value == null)
                     {
@@ -1345,8 +1344,7 @@ public class GXDLMSBase : GXDLMSSecureServer
                 }
                 else
                 {
-                    // TODO: Read value here example from the meter if it's not
-                    // updated automatically.
+                    // read value here example from the meter if it's not updated automatically.
                     value = it.Key.GetValues()[it.Value.AttributeIndex - 1];
                     if (value == null)
                     {

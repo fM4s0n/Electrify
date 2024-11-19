@@ -1,4 +1,4 @@
-﻿using Electrify.Models.Models;
+﻿using Electrify.Models;
 using Electrify.Server.Protos;
 using Electrify.Server.Services.Abstraction;
 using Grpc.Core;
