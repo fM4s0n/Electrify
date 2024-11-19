@@ -7,19 +7,19 @@ option csharp_namespace = "Electrify.Server.Protos";
 package insertClient;
 
 service InsertClient {
-	rpc InsertClient(InsertClientRequest) returns (InsertClientResponse) {
-		option (google.api.http) = {
-			post: "/v1/insertClient"
-			body: "*"
-		};
-	}
+  rpc InsertClient(InsertClientRequest) returns (InsertClientResponse) {
+    option (google.api.http) = {
+	  post: "/v1/insertClient"
+	  body: "*"
+	};
+  }
 }
 
 message InsertClientRequest{
-	string id = 1;
-	string userId = 2;
+  string id = 1;
+  string userId = 2;
 }
 
 message InsertClientResponse{
-	bool success = 1;
+  bool success = 1;
 }
