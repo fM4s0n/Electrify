@@ -1,4 +1,0 @@
-﻿[*.{cs,vb}]
-
-# IDE0270: Use coalesce expression
-dotnet_style_coalesce_expression = false
