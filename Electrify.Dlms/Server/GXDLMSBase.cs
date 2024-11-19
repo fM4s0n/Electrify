@@ -80,7 +80,16 @@ public class GXDLMSBase : GXDLMSSecureServer
     public static string GetdataFile()
     {
         // Get writeable directory
-        string dataDirectory = FileSystem.AppDataDirectory;
+        string dataDirectory;
+
+        try
+        {
+            dataDirectory = FileSystem.AppDataDirectory;
+        }
+        catch
+        {
+            dataDirectory = Path.GetDirectoryName(typeof(GXDLMSBase).Assembly.Location);
+        }
     
         // Define path to data.csv
         return Path.Combine(dataDirectory, "data.csv");

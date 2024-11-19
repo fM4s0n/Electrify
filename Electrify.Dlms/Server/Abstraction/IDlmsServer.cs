@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Electrify.Dlms.Models;
 using Electrify.Dlms.Options;
 using Gurux.DLMS.Objects;
@@ -12,7 +11,7 @@ public interface IDlmsServer : IDisposable
 
     void SetEnergy(int energyValue);
 
-    void Initialise(IOptions<DlmsServerOptions> options, TraceLevel traceLevel);
+    void Initialise(IOptions<DlmsServerOptions> options, Action onConnectedCallback, Action onDisconnectedCallback);
     
     IEnumerable<GenericProfileRow> GetReadings();
 }

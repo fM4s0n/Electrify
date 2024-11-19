@@ -1,11 +1,9 @@
-using System.Diagnostics;
 using System.Globalization;
 using CsvHelper;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Models;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
-using Electrify.SmartMeterUi.Services.Abstractions;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,14 +19,12 @@ public sealed class DlmsServer : IDlmsServer
     private readonly GXDLMSBase _server;
     private readonly ILogger<DlmsServer> _logger;
     private readonly CancellationTokenSource _cts = new();
-    private readonly IErrorMessageService _errorMessageService;
 
     public DlmsServer(Action<DlmsServer, IServiceProvider> configure, IServiceProvider serviceProvider)
     {
         _association = serviceProvider.GetRequiredService<GXDLMSAssociationLogicalName>();
         _server = serviceProvider.GetRequiredService<GXDLMSBase>();
         _logger = serviceProvider.GetRequiredService<ILogger<DlmsServer>>();
-        _errorMessageService = serviceProvider.GetRequiredService<IErrorMessageService>();
 
         configure.Invoke(this, serviceProvider);
     }
@@ -52,13 +48,12 @@ public sealed class DlmsServer : IDlmsServer
         }
     }
 
-    public void Initialise(IOptions<DlmsServerOptions> options, TraceLevel traceLevel)
+    public void Initialise(IOptions<DlmsServerOptions> options, Action onConnectedCallback, Action onDisconnectedCallback)
     {
-        // set up callabcks for connection status
-        _server.OnConnectedCallback = () => _errorMessageService.IsConnected = true;
-        _server.OnDisconnectedCallback = () => _errorMessageService.IsConnected = false;
+        _server.OnConnectedCallback = onConnectedCallback;
+        _server.OnDisconnectedCallback = onDisconnectedCallback;
 
-        _server.Initialize(options.Value.Port, traceLevel);
+        _server.Initialize(options.Value.Port, options.Value.TraceLevel);
 
         _ = RunAsync(_cts.Token);
     }

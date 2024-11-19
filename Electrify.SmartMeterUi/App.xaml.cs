@@ -7,7 +7,7 @@ namespace Electrify.SmartMeterUi;
 
 public partial class App : Application
 {
-    public App(IDlmsServer dlmsServer, IOptions<DlmsServerOptions> dlmsServerOptions)
+    public App(IDlmsServer dlmsServer, IOptions<DlmsServerOptions> dlmsServerOptions, IErrorMessageService errorMessageService)
     {
         InitializeComponent();
 
@@ -15,7 +15,10 @@ public partial class App : Application
 
         Task.Run(() =>
         {
-            dlmsServer.Initialise(dlmsServerOptions, dlmsServerOptions.Value.TraceLevel);
+            dlmsServer.Initialise(
+                dlmsServerOptions,
+                () => errorMessageService.IsConnected = true,
+                () => errorMessageService.IsConnected = false);
         });
     }
 
