@@ -108,7 +108,7 @@ public class EndToEndTests : IDisposable
             ServerHostname = "127.0.0.1",
             ServerPort = port,
             InvocationCounter = "0.0.43.1.8.255",
-            LogicalNames = "1.0.1.8.0.255,1.2.3.4.5.7",
+            LogicalNames = [RegisterNames.EnergyUsage, RegisterNames.EnergyTariff],
         }));
         
         services.AddSingleton(sp =>
@@ -169,7 +169,7 @@ public class EndToEndTests : IDisposable
             };
 
             server.AddObject(energyRegister);
-            server.AddObject(tariffRegister, AccessMode3.Write);
+            server.AddObject(tariffRegister, true);
             server.AddObject(energyProfile);
 
             _usageTimer = new Timer(_ =>
@@ -210,14 +210,14 @@ public class EndToEndTests : IDisposable
         var reader = serviceProvider.GetRequiredService<GXDLMSReader>();
         var timeProvider = serviceProvider.GetRequiredService<TimeProvider>();
 
-        var registers = options.LogicalNames.Replace(" ", "").Split(",");
+        var registers = options.LogicalNames.Select(register => new GXDLMSRegister(register));
             
         return new DlmsClient(
             Guid.NewGuid(),
             logger,
             media,
             reader,
-            registers.Select(register => new GXDLMSRegister(register)),
+            registers,
             timeProvider);
     }
     
@@ -255,7 +255,7 @@ public class EndToEndTests : IDisposable
         
         await Task.Delay(1_000);
         
-        _dlmsClient.WriteValueToRegister(RegisterNames.EnergyTariff, _random.Next(1, 10) + _random.NextDouble());
+        _dlmsClient.WriteTariff(_random.Next(1, 10) + _random.NextDouble());
 
         await Task.Delay(1_000);
         
