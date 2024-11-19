@@ -1,0 +1,9 @@
+<div class="toast">
+    <h3 class="title">@Title</h3>
+    <div>@Message</div>
+</div>
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string Message { get; set; } = string.Empty;
+}
