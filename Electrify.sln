@@ -27,11 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.SmartMeterUi.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.SmartMeterUi.UnitTests", "Electrify.SmartMeterUi.UnitTests\Electrify.SmartMeterUi.UnitTests.csproj", "{E89B651E-5CA9-458D-AE81-FCD7F9BFD6C6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0E995CED-E463-4DDF-8AE9-0D59A3A66281}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
