@@ -1,4 +1,4 @@
-﻿namespace Electrify.Models.Models;
+﻿namespace Electrify.Models;
 
 /// <summary>
 /// Model for the Electrify Admin.

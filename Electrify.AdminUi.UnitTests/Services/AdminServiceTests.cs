@@ -1,7 +1,7 @@
 ﻿using NSubstitute;
 using FluentAssertions;
 using Electrify.AdminUi.Services;
-using Electrify.Models.Models;
+using Electrify.Models;
 using Electrify.Server.ApiClient.Abstraction;
 using Microsoft.AspNetCore.Identity;
 using Electrify.Server.ApiClient.Contracts;

@@ -1,5 +1,5 @@
 ﻿using Electrify.AdminUi.Services.Abstractions;
-using Electrify.Models.Models;
+using Electrify.Models;
 using Microsoft.AspNetCore.Components;
 
 namespace Electrify.AdminUi.Components.Pages;

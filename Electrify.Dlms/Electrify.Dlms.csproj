@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="Gurux.DLMS" Version="9.0.2410.3101" />
     <PackageReference Include="Gurux.Net" Version="8.4.2404.2501" />
     <PackageReference Include="Gurux.Serial" Version="8.4.2401.401" />
