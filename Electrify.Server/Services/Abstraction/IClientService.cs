@@ -1,4 +1,4 @@
-using Electrify.Models.Models;
+using Electrify.Models;
 
 namespace Electrify.Server.Services.Abstraction;
 

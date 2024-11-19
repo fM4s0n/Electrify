@@ -1,7 +1,7 @@
 using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using Electrify.Models.Models;
+using Electrify.Models;
 
 namespace Electrify.Server.Services;
 

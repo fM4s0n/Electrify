@@ -1,5 +1,5 @@
 ﻿using Electrify.AdminUi.Services;
-using Electrify.Models.Models;
+using Electrify.Models;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Time.Testing;
