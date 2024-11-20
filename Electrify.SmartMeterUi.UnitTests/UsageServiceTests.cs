@@ -1,4 +1,6 @@
+using Electrify.Dlms.Server.Abstraction;
 using Electrify.SmartMeterUi.Services;
+using NSubstitute;
 
 namespace Electrify.SmartMeterUi.UnitTests;
 
@@ -8,6 +10,6 @@ public class UsageServiceTests
 
     public UsageServiceTests()
     {
-        _usageService = new UsageService();
+        _usageService = new UsageService(Substitute.For<IDlmsServer>());
     }
 }

@@ -1,4 +1,5 @@
-﻿using Electrify.Models;
+﻿using Electrify.Dlms.Server.Abstraction;
+using Electrify.Models;
 using Electrify.SmartMeterUi.Services.Abstractions;
 
 namespace Electrify.SmartMeterUi.Services;
@@ -9,9 +10,11 @@ public class UsageService : IUsageService, IDisposable
     private float _currentKwh;
     private readonly Timer? _timer;
     private readonly Random _random = new();
-
-    public UsageService()
+    private readonly IDlmsServer _dlmsServer;
+    
+    public UsageService(IDlmsServer dlmsServer)
     {
+        _dlmsServer = dlmsServer;
         _lastUsage = new UsageInstance
         {
             TimeStamp = DateTime.Now,
@@ -33,6 +36,7 @@ public class UsageService : IUsageService, IDisposable
             Usage = _lastUsage.Usage + _currentKwh
         };
         _lastUsage = newReading;
+        UpdateEnergyUsage(_lastUsage.Usage);
     }
 
     /// <summary>
@@ -67,6 +71,11 @@ public class UsageService : IUsageService, IDisposable
     public float GetCurrentUsage()
     {
         return _currentKwh;
+    }
+
+    private void UpdateEnergyUsage(double usage)
+    {
+        _dlmsServer.SetEnergy(usage);
     }
 
     public void Dispose()

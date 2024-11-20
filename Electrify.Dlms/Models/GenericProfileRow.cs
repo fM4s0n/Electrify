@@ -1,8 +1,13 @@
-﻿namespace Electrify.Dlms.Models;
+﻿using CsvHelper.Configuration.Attributes;
 
-public sealed record GenericProfileRow
+namespace Electrify.Dlms.Models;
+
+public class GenericProfileRow
 {
-    public required DateTime DateTime { get; init; }
-    public required double EnergyUsage { get; init; }
-    public required double Tariff { get; init; }
+    [Index(0)]
+    public required DateTime DateTime { get; set; }
+    [Index(1)]
+    public required double EnergyUsage { get; set; }
+    [Index(2)]
+    public required double Tariff { get; set; }
 }

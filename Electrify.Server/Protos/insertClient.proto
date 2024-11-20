@@ -9,9 +9,9 @@ package insertClient;
 service InsertClient {
   rpc InsertClient(InsertClientRequest) returns (InsertClientResponse) {
     option (google.api.http) = {
-	  post: "/v1/insertClient"
-	  body: "*"
-	};
+      post: "/v1/insertClient"
+      body: "*"
+    };
   }
 }
 

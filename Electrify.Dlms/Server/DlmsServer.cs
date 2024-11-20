@@ -1,5 +1,7 @@
 using System.Globalization;
+using System.Text;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Models;
 using Electrify.Dlms.Options;
@@ -37,7 +39,7 @@ public sealed class DlmsServer : IDlmsServer
         _server.Items.Add(dlmsObject);
     }
     
-    public void SetEnergy(int energyValue)
+    public void SetEnergy(double energyValue)
     {
         foreach (GXDLMSObject? dlmsObject in _server.Items)
         {
@@ -61,11 +63,16 @@ public sealed class DlmsServer : IDlmsServer
     public IEnumerable<GenericProfileRow> GetReadings()
     {
         var dataFile = GXDLMSBase.GetdataFile();
-        
         using var reader = new StreamReader(dataFile);
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        
-        return csv.GetRecords<GenericProfileRow>();
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            MissingFieldFound = null, 
+            HeaderValidated = null, 
+            Delimiter = ";", 
+            Encoding = Encoding.UTF8
+        };
+        using var csv = new CsvReader(reader, config);
+        return csv.GetRecords<GenericProfileRow>().ToList();
     }
 
     private Task RunAsync(CancellationToken cancellationToken)
