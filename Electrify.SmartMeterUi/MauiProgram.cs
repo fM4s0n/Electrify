@@ -35,7 +35,7 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton(Options.Create(new DlmsServerOptions
 		{
-			Port = 4059,
+			Port = 56527,
 			Password = "YourSuperSecureSecretKey1234567890",
 			Authentication = Authentication.HighSHA256,
 			TraceLevel = TraceLevel.Verbose,
@@ -61,14 +61,14 @@ public static class MauiProgram
 			{
 				Scaler = 1.0,
 				Unit = Unit.ActiveEnergy,
-				Value = 123.45,
+				Value = 0,
 			};
 
 			var tariffRegister = new GXDLMSRegister(RegisterNames.EnergyTariff)
 			{
 				Scaler = 1.0,
 				Unit = Unit.LocalCurrency,
-				Value = 24.50,
+				Value = 0.1,
 			};
 
 			var energyProfile = new GXDLMSProfileGeneric(RegisterNames.EnergyProfile)
