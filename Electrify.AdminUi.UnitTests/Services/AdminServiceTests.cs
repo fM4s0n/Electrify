@@ -6,7 +6,7 @@ using Electrify.Server.ApiClient.Abstraction;
 using Microsoft.AspNetCore.Identity;
 using Electrify.Server.ApiClient.Contracts;
 
-namespace Electrify.AdminUI.UnitTests.Services;
+namespace Electrify.AdminUi.UnitTests.Services;
 
 public class AdminServiceTests
 {
