@@ -54,7 +54,7 @@ public sealed class DlmsClient : IDlmsClient
                     ClientId = _clientId,
                     DateTime = gxDateTime,
                     EnergyUsage = energyUsage,
-                    Tariff = energyTariff
+                    Tariff = energyTariff,
                 };
             }
         }

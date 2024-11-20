@@ -50,6 +50,8 @@ public static class MauiProgram
 		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
         builder.Services.AddSingleton<IUsageService, UsageService>();
 
+		builder.Services.AddSingleton<IErrorMessageService, ErrorMessageService>();
+		
         builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
 		{
 			var clock = sp.GetRequiredService<GXDLMSClock>();
