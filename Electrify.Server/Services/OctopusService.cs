@@ -4,7 +4,7 @@ using Results = Electrify.Server.Models.Results;
 
 namespace Electrify.Server.Services;
 
-public class OctopusService(IHttpClientFactory clientFactory) : IOctopusService
+public class OctopusService(IHttpClientFactory clientFactory, ILogger<OctopusService> logger) : IOctopusService
 {
     private readonly HttpClient _client = clientFactory.CreateClient("OctopusClient");
 
@@ -27,12 +27,28 @@ public class OctopusService(IHttpClientFactory clientFactory) : IOctopusService
 
         if (response.IsSuccessStatusCode == false)
         {
+            logger.LogWarning("Octopus energy request failed with response: {Response}", response);
             return null;
         }
 
         OctopusResponse? octopusResponse = await response.Content.ReadFromJsonAsync<OctopusResponse>();
+
+        if (octopusResponse == null)
+        {
+            logger.LogWarning("Failed to deserialize Octopus energy response. Response: {Response}", response);
+            return null;
+        }
+
+        if (octopusResponse.Results.Any() == false)
+        {
+            logger
+                .LogWarning(
+                    "No results found in Octopus energy response. Response: {octopusResponse}",
+                    octopusResponse);
+            return null;
+        }
         
-        return octopusResponse == null || octopusResponse.Results.Any() == false ? null : octopusResponse;
+        return octopusResponse;
     }
 
     private static double GetFinalPrice(double price, int hour)
@@ -62,6 +78,11 @@ public class OctopusService(IHttpClientFactory clientFactory) : IOctopusService
         
         if (octopusResponse == null)
         {
+            logger
+                .LogWarning(
+                    "Failed to get Octopus energy response for date: {Date}, response: {Response}",
+                    date, 
+                    octopusResponse);
             return null;
         }
 
