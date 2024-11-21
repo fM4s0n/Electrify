@@ -37,13 +37,13 @@ public partial class AdminHome : ComponentBase
 
     public async Task HandleSetupMeter()
     {
-        var newCleint = new Client
+        var newClient = new Client
         {
             Id = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
         };
         
-        if (await ClientService.InsertClient(newCleint) == false)
+        if (await ClientService.InsertClient(newClient) == false)
         {
             _toasts.Add(new ToastDefinition
             {
@@ -58,7 +58,7 @@ public partial class AdminHome : ComponentBase
             }
         }
 
-        _currentClient = newCleint;
+        _currentClient = newClient;
     }
 
     public void HandleLogout()
