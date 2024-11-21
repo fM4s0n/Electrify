@@ -1,76 +1,16 @@
 using System.Text;
-using Electrify.Dlms.Client;
-using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
 using Electrify.Dlms.Server.Abstraction;
 using Gurux.DLMS.Objects;
-using Gurux.DLMS.Secure;
-using Gurux.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Electrify.Dlms.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDlmsClient(
-        this IServiceCollection services,
-        IConfigurationRoot configuration,
-        LogLevel logLevel,
-        Guid clientId)
-    {
-        services.Configure<DlmsClientOptions>(configuration.GetSection(nameof(DlmsClientOptions)));
-        
-        services.AddSingleton(sp =>
-        {
-            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
-            return new GXDLMSSecureClient(
-                options.UseLogicalNameReferencing,
-                options.ClientAddress,
-                options.ServerAddress,
-                options.Authentication,
-                options.Password,
-                options.InterfaceType);
-        });
-
-        services.AddSingleton(sp =>
-        {
-            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
-            return new GXNet(options.Protocol, options.ServerHostname, options.ServerPort);
-        });
-
-        services.AddSingleton(sp =>
-        {
-            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
-            var client = sp.GetRequiredService<GXDLMSSecureClient>();
-            var media = sp.GetRequiredService<GXNet>();
-            
-            return new GXDLMSReader(client, media, logLevel.ToTraceLevel(), options.InvocationCounter);
-        });
-        
-        services.AddSingleton<IDlmsClient>( sp =>
-        {
-            var options = sp.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
-            var logger = sp.GetRequiredService<ILogger<DlmsClient>>();
-            var media = sp.GetRequiredService<GXNet>();
-            var reader = sp.GetRequiredService<GXDLMSReader>();
-            var timeProvider = sp.GetRequiredService<TimeProvider>();
-            
-            return new DlmsClient(
-                clientId,
-                logger,
-                media,
-                reader,
-                options.LogicalNames.Select(register => new GXDLMSRegister(register)),
-                timeProvider);
-        });
-
-        return services;
-    }
-    
     public static IServiceCollection AddDlmsServer(
         this IServiceCollection services,
         IConfigurationRoot configuration,
