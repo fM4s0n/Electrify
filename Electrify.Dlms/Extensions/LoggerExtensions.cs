@@ -9,8 +9,10 @@ public static class LoggerExtensions
     {
         foreach(LogLevel logLevel in Enum.GetValues(typeof(LogLevel)))
         {
-            if( logger.IsEnabled(logLevel))
+            if (logger.IsEnabled(logLevel))
+            {
                 return logLevel;
+            }
         }
 
         return LogLevel.None;

@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Electrify.E2ETests", "Elect
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.UiComponents", "Electrify.UiComponents\Electrify.UiComponents.csproj", "{F46FB4E3-5574-4931-BB28-F6CA642240AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Electrify.Dlms.UnitTests", "Electrify.Dlms.UnitTests\Electrify.Dlms.UnitTests.csproj", "{08844B5A-D3BA-4B84-8FED-21155AF88D80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{FD39ED43-6166-407C-BB6E-866AF7A5FFE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD39ED43-6166-407C-BB6E-866AF7A5FFE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD39ED43-6166-407C-BB6E-866AF7A5FFE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08844B5A-D3BA-4B84-8FED-21155AF88D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08844B5A-D3BA-4B84-8FED-21155AF88D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08844B5A-D3BA-4B84-8FED-21155AF88D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08844B5A-D3BA-4B84-8FED-21155AF88D80}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F46FB4E3-5574-4931-BB28-F6CA642240AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F46FB4E3-5574-4931-BB28-F6CA642240AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F46FB4E3-5574-4931-BB28-F6CA642240AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
