@@ -9,7 +9,7 @@ public interface IDlmsServer : IDisposable
 {
     void AddObject(GXDLMSObject dlmsObject, bool writeAccess = false);
 
-    void SetEnergy(int energyValue);
+    void SetEnergy(double energyValue);
 
     void Initialise(IOptions<DlmsServerOptions> options, Action onConnectedCallback, Action onDisconnectedCallback);
     
