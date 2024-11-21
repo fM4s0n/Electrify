@@ -13,7 +13,6 @@ using Microsoft.Extensions.Options;
 namespace Electrify.Server.Services;
 
 public class MeterAvailabilityService(
-    ILogger<MeterAvailabilityService> logger,
     IOptions<DlmsClientOptions> dlmsClientOptions,
     IOptions<ObservabilityOptions> observabilityOptions,
     ILogger<DlmsClient> dlmsClientLogger,

@@ -32,7 +32,9 @@ public class OctopusService(IHttpClientFactory clientFactory) : IOctopusService
 
         OctopusResponse? octopusResponse = await response.Content.ReadFromJsonAsync<OctopusResponse>();
         
-        return octopusResponse == null || octopusResponse.Results.Any() == false ? null : octopusResponse;
+        return octopusResponse == null || octopusResponse.Results.Length == 0
+            ? null 
+            : octopusResponse;
     }
 
     private static double GetFinalPrice(double price, int hour)
@@ -50,10 +52,9 @@ public class OctopusService(IHttpClientFactory clientFactory) : IOctopusService
         return price >= 33.33 ? 33.33 : Math.Round(price, 2);
     }
     
-
     public async Task<Dictionary<int, double>?> GetDailyPrices(DateTimeOffset date)
     {
-        Dictionary<int, double> prices = new();
+        Dictionary<int, double> prices = [];
         
         string periodFrom = date.ToString("yyyy-MM-ddT00:00");
         string periodTo = date.ToString("yyyy-MM-ddT23:59");

@@ -1,7 +1,6 @@
 ﻿using Electrify.Models;
 using Electrify.Server.Database;
 using Electrify.Server.Services;
-using Electrify.Server.Services.Abstraction;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Identity;
@@ -11,8 +10,8 @@ namespace Electrify.Server.UnitTests.Services;
 
 public class AdminServiceTests
 {
-    private readonly IAdminService _adminService;
-    private PasswordHasher<Admin> _passwordHasher;
+    private readonly AdminService _adminService;
+    private readonly PasswordHasher<Admin> _passwordHasher;
     private readonly ElectrifyDbContext _database;
 
     public AdminServiceTests()
@@ -83,4 +82,3 @@ public class AdminServiceTests
         result.Should().BeFalse();
     }
 }
-
