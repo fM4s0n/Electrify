@@ -7,7 +7,7 @@ namespace Electrify.Server.Services;
 public sealed class DlmsClientService(
     TimeProvider timeProvider,
     ILogger<DlmsClientService> logger,
-    ElectrifyDbContext database)
+    IServiceProvider serviceProvider)
     : IDlmsClientService
 {
     private readonly Dictionary<int, IDlmsClient> _clients = [];
@@ -25,6 +25,9 @@ public sealed class DlmsClientService(
         
         var timer = new RandomTaskTimer(timeProvider, delegate
         {
+            using var scope = serviceProvider.CreateScope();
+            var database = scope.ServiceProvider.GetRequiredService<ElectrifyDbContext>();
+
             var lastReading = database.GetLastReading(clientId) ?? timeProvider.GetLocalNow().AddMinutes(-1).DateTime;
             var readings = _clients[port].ReadEnergyProfile(lastReading).ToList();
 

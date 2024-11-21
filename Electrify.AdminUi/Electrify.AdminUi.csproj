@@ -74,6 +74,7 @@
       <ProjectReference Include="..\Electrify.AdminUi.Services\Electrify.AdminUi.Services.csproj" />
       <ProjectReference Include="..\Electrify.Models\Electrify.Models.csproj" />
       <ProjectReference Include="..\Electrify.Server.ApiClient\Electrify.Server.ApiClient.csproj" />
+      <ProjectReference Include="..\Electrify.UiComponents\Electrify.UiComponents.csproj" />
     </ItemGroup>
 
     <ItemGroup>

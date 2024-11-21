@@ -1,6 +1,7 @@
 ﻿using Electrify.AdminUi.Services.Abstractions;
 using Electrify.Models;
 using Microsoft.AspNetCore.Components;
+using Electrify.Models.Enums;
 
 namespace Electrify.AdminUi.Components.Pages;
 
@@ -18,8 +19,9 @@ public partial class AdminHome : ComponentBase
     [Inject] IGreetingService GreetingService { get; set; } = default!;
 
     private Admin? _admin;
-
     private Client? _currentClient;
+    private readonly List<ToastDefinition> _toasts = [];
+    private Timer? _toastTimer;
 
     protected override void OnInitialized()
     {
@@ -33,7 +35,7 @@ public partial class AdminHome : ComponentBase
         base.OnInitialized();
     }
 
-    public void HandleSetupMeter()
+    public async Task HandleSetupMeter()
     {
         var newCleint = new Client
         {
@@ -41,7 +43,21 @@ public partial class AdminHome : ComponentBase
             UserId = Guid.NewGuid(),
         };
         
-        ClientService.InsertClient(newCleint);
+        if (await ClientService.InsertClient(newCleint) == false)
+        {
+            _toasts.Add(new ToastDefinition
+            {
+                Title = "Error",
+                Message = "Failed to setup meter",
+                Type = ToastType.InsertClientError,
+            });
+
+            if (_toastTimer == null)
+            {
+                StartToastTimer();
+            }
+        }
+
         _currentClient = newCleint;
     }
 
@@ -61,6 +77,42 @@ public partial class AdminHome : ComponentBase
     private void HandleNextMeter()
     {
         _currentClient = null;
+    }
+
+    private void StartToastTimer()
+    {
+        if (_toastTimer == null)
+        {
+            _toastTimer = new Timer(ToastTimerCallback, null, 5000, Timeout.Infinite);
+        }
+        else
+        {
+            _toastTimer.Change(5000, Timeout.Infinite);
+        }
+    }
+
+    private void StopToastTimer()
+    {
+        _toastTimer?.Dispose();
+        _toastTimer = null;
+    }
+
+    private async void ToastTimerCallback(object? state)
+    {
+        if (_toasts.Count > 0)
+        {
+            _toasts.RemoveAt(0);
+            await InvokeAsync(StateHasChanged);
+
+            if (_toasts.Count > 0)
+            {
+                // Restart the timer for the next toast
+                _toastTimer?.Change(5000, Timeout.Infinite);
+                return;
+            }
+  
+            StopToastTimer();            
+        }
     }
 }
 

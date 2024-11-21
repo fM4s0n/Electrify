@@ -75,6 +75,11 @@
     <ItemGroup>
         <ProjectReference Include="..\Electrify.Dlms\Electrify.Dlms.csproj" />
         <ProjectReference Include="..\Electrify.SmartMeterUi.Services\Electrify.SmartMeterUi.Services.csproj" />
+        <ProjectReference Include="..\Electrify.UiComponents\Electrify.UiComponents.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Enums\" />
     </ItemGroup>
 
 </Project>
