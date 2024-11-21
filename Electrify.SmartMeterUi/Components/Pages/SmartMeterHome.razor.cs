@@ -1,7 +1,9 @@
 using Electrify.Dlms.Server.Abstraction;
 using Electrify.SmartMeterUi.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
-using Electrify.SmartMeterUi.Enums;
+using Electrify.Models;
+using Electrify.Models.Enums;
+
 
 namespace Electrify.SmartMeterUi.Components.Pages;
 
@@ -14,7 +16,7 @@ public partial class SmartMeterHome
     private string _dialBackground = string.Empty;
     private Timer? _timer;
     private const string DisconnectMessage = "Smart Meter disconnected. Attempting to reconnect.";
-    private readonly List<Toast> _displayToasts = [];
+    private readonly List<ToastDefinition> _displayToasts = [];
 
     [Inject] private IUsageService UsageService { get; set; } = default!;
     [Inject] private IErrorMessageService ErrorMessageService { get; set; } = default!;
@@ -80,36 +82,36 @@ public partial class SmartMeterHome
 
         if (!connected)
         {
-            if (_displayToasts.FirstOrDefault(t => t.Type == ToastEnum.NoConnection) == null)
+            if (_displayToasts.FirstOrDefault(t => t.Type == ToastType.NoConnection) == null)
             {
-                _displayToasts.Add(new Toast
+                _displayToasts.Add(new ToastDefinition
                 {
                     Title = "No Connection",
                     Message = DisconnectMessage,
-                    Type = ToastEnum.NoConnection
+                    Type = ToastType.NoConnection
                 });
             }
         }
         else
         {
-            _displayToasts.Remove(_displayToasts.FirstOrDefault(t => t.Type == ToastEnum.NoConnection)!);
+            _displayToasts.Remove(_displayToasts.FirstOrDefault(t => t.Type == ToastType.NoConnection)!);
         }
 
         if (errorMessage != null)
         {
-            if (_displayToasts.FirstOrDefault(t => t.Type == ToastEnum.ServerUpdate) == null)
+            if (_displayToasts.FirstOrDefault(t => t.Type == ToastType.ServerUpdate) == null)
             {
-                _displayToasts.Add(new Toast
+                _displayToasts.Add(new ToastDefinition
                 {
                     Title = "Server Update",
                     Message = errorMessage,
-                    Type = ToastEnum.ServerUpdate
+                    Type = ToastType.ServerUpdate
                 });
             }
         }
         else
         {
-            _displayToasts.Remove(_displayToasts.FirstOrDefault(t => t.Type == ToastEnum.ServerUpdate)!);
+            _displayToasts.Remove(_displayToasts.FirstOrDefault(t => t.Type == ToastType.ServerUpdate)!);
         }
     }
 
@@ -143,13 +145,6 @@ public partial class SmartMeterHome
         //return Math.Round(_pricePerKw * _cumulativeUsage * _daysSincePeriodStart, 2).ToString("C");
     }
     #endregion
-
-    private class Toast()
-    {
-        public required string Title { get; init; }
-        public required string Message { get; init; }
-        public required ToastEnum Type { get; init; }
-    }
 
     private void GetReadings()
     {
@@ -196,5 +191,4 @@ public partial class SmartMeterHome
 
         return new(totalPrice, totalUsage);
     }
-    
 }
