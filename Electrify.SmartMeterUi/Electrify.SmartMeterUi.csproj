@@ -78,8 +78,4 @@
         <ProjectReference Include="..\Electrify.UiComponents\Electrify.UiComponents.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Enums\" />
-    </ItemGroup>
-
 </Project>
