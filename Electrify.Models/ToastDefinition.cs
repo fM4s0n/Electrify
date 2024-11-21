@@ -2,7 +2,7 @@
 
 namespace Electrify.Models;
 
-public sealed record ToastDefinition()
+public sealed record ToastDefinition
 {
     public required string Title { get; init; }
     public required string Message { get; init; }
