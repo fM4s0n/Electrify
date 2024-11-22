@@ -36,7 +36,7 @@
 
     private async Task RegisterConnectionWithServer()
     {
-        await _apiClient.Register(Options.Value.Port, Options.Value.Password);
+        await _apiClient.Register(Options.Value.Port, Options.Value.Password, Guid.NewGuid());
     }
     
     protected override async Task OnInitializedAsync()
