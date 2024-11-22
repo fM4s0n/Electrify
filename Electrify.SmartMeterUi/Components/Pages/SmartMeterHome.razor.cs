@@ -1,3 +1,4 @@
+using Electrify.Dlms.Models;
 using Electrify.Dlms.Server.Abstraction;
 using Electrify.SmartMeterUi.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
@@ -16,6 +17,8 @@ public partial class SmartMeterHome
     private Timer? _timer;
     private const string DisconnectMessage = "Smart Meter disconnected. Attempting to reconnect.";
     private readonly List<ToastDefinition> _displayToasts = [];
+    private Tuple<double, double> _dailyReadingCost = new(0.00, 0.00);
+    private Tuple<double, double> _monthlyReadingCost = new(0.00, 0.00);
 
     [Inject] private IUsageService UsageService { get; set; } = default!;
     [Inject] private IErrorMessageService ErrorMessageService { get; set; } = default!;
@@ -42,15 +45,15 @@ public partial class SmartMeterHome
     {
         _currentUsage = UsageService.GetCurrentUsage();
         _usagePercent = (float)Math.Round(_currentUsage * 10000, 6);
-        //_cumulativeUsage = UsageService.GetCumulativeUsage().Usage;
     }
 
     private void OnTimerElapsed(object? state)
     {
         GetCurrentUsage();
-        InvokeAsync(UpdateDial);
+        UpdateDial();
         CheckForNewToastMessage();
         GetReadings();
+        InvokeAsync(StateHasChanged);
     }
 
     private void UpdateDial()
@@ -69,9 +72,7 @@ public partial class SmartMeterHome
         {
             _barColour = "#FF0000"; // Red
         }
-
         _dialBackground = $"conic-gradient({_barColour} 45deg, {_barColour} {adjustedPercentage}deg, #72777E {adjustedPercentage}deg, #72777E 360deg)";
-        StateHasChanged();
     }
 
     private void CheckForNewToastMessage()
@@ -119,32 +120,6 @@ public partial class SmartMeterHome
         _timer?.Dispose();
     }
 
-    #region UI Display Methods
-    private string GetUsageDaily()
-    {
-        return "";
-        //return Math.Round(_cumulativeUsage, 2).ToString();
-    }
-
-    private string GetUsagePriceDaily()
-    {
-        return "";
-        //return Math.Round(_pricePerKw * _cumulativeUsage, 2).ToString("C");
-    }
-
-    private string GetUsagePeriod()
-    {
-        return "";
-        //return Math.Round(_cumulativeUsage * _daysSincePeriodStart, 2).ToString();
-    }
-
-    private string GetUsagePricePeriod()
-    {
-        return "";
-        //return Math.Round(_pricePerKw * _cumulativeUsage * _daysSincePeriodStart, 2).ToString("C");
-    }
-    #endregion
-
     private void GetReadings()
     {
         // Create datetime object
@@ -152,42 +127,62 @@ public partial class SmartMeterHome
         
         // Calculate DateTime for day period until now
         DateTime dayStart = new(now.Year, now.Month, now.Day);
-        var dailyTotal = CalculatePeriodReading(dayStart);
+        _dailyReadingCost = CalculatePeriodReading(dayStart);
         
         // Calculate DateTime for month period until now
         DateTime monthStart = new (now.Year, now.Month, 1);
-        var monthlyTotal = CalculatePeriodReading(monthStart);
+        _monthlyReadingCost = CalculatePeriodReading(monthStart);
     }
 
     private Tuple<double, double> CalculatePeriodReading(DateTime periodStart)
     {
-        // Grab the total readings
-        var readings = DlmsServer.GetReadings().ToList();
+        // Get the readings from the server and sort them by datetime
+        var readings = DlmsServer.GetReadings()
+            .OrderBy(r => r.DateTime)
+            .ToList();
 
         if (readings.Count == 0)
-            return new(0.00, 0.00);
-
-        if (!readings.Any(r => r.DateTime > periodStart))
             return new Tuple<double, double>(0.00, 0.00);
 
-        if (readings.Count(r => r.DateTime >= periodStart) == 1)
-            return new Tuple<double, double>(readings[0].EnergyUsage * readings[0].Tariff, readings[0].EnergyUsage);
+        // Find the last reading before the cutoff
+        var lastBeforePeriod = readings.LastOrDefault(r => r.DateTime < periodStart);
+        var startingEnergy = lastBeforePeriod?.EnergyUsage ?? 0.0;
+
+        // Filter readings that are within the period
+        var periodReadings = readings.Where(r => r.DateTime >= periodStart).ToList();
+
+        if (periodReadings.Count == 0)
+            return new Tuple<double, double>(0.00, 0.00);
 
         double totalPrice = 0.0;
         double totalUsage = 0.0;
-        
-        for (var i = 0; i < readings.Count; i++)
-        {
-            var reading = readings[i];
-            if (reading.DateTime < periodStart)
-                continue;
-            
-            var lastReading = readings[i - 1];
 
-            totalPrice += (reading.EnergyUsage - lastReading.EnergyUsage) * reading.Tariff;
-            totalUsage += reading.EnergyUsage - lastReading.EnergyUsage;
+        // Iterate through the readings in the period to calculate the total cost and usage
+        for (int i = 0; i < periodReadings.Count; i++)
+        {
+            GenericProfileRow reading = periodReadings[i];
+
+            double previousEnergy = i == 0 ? startingEnergy : periodReadings[i - 1].EnergyUsage;
+
+            double usageInPeriod = reading.EnergyUsage - previousEnergy;
+            totalUsage += usageInPeriod;
+            totalPrice += usageInPeriod * reading.Tariff;
         }
 
-        return new(totalPrice, totalUsage);
+        return new Tuple<double, double>(totalPrice, totalUsage);
     }
+
+    #region UI Formatting
+
+    private string FormatCurrency(double currency)
+    {
+        return currency.ToString("C");
+    }
+
+    private string FormatKwh(double kwh)
+    {
+        return Math.Round(kwh, 3) + "kw/h";
+    }
+    
+    #endregion
 }
