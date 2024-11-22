@@ -72,10 +72,13 @@ using (var scope = app.Services.CreateScope())
     seeder.SeedDefaultAdmin();
 }
 
-app.MapGrpcService<AuthenticationService>();
 app.MapGrpcService<MeterAvailabilityService>();
 app.MapGrpcService<AdminLoginService>();
 app.MapGrpcService<InsertClientService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();
+
+// TODO should maybe refactor proto files and to make it so they're excludable from test coverage
+
+public partial class Program;

@@ -1,4 +1,5 @@
 ﻿using Electrify.Models;
+using Electrify.Server.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Electrify.Server.Database;
@@ -15,6 +16,9 @@ public class ElectrifyDbContext(DbContextOptions<ElectrifyDbContext> options) : 
 
     public DateTime? GetLastReading(Guid clientId)
     {
-        return Readings.Where(r => r.ClientId == clientId).MaxBy(r => r.DateTime)?.DateTime;
+        return Readings
+            .Where(r => r.ClientId == clientId)
+            .Select(r => r.DateTime)
+            .MaxOrDefault();
     }
 }

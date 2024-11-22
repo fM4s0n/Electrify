@@ -7,12 +7,13 @@ namespace Electrify.Server.ApiClient;
 
 public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiClient
 {
-    public async Task<AvailabilityResponse> Register(int port, string secret)
+    public async Task<AvailabilityResponse> Register(int port, string secret, Guid clientId)
     {
         var response = await httpClient.PostAsJsonAsync("/v1/available", new AvailabilityRequest
         {
             Port = port,
             Secret = secret,
+            ClientId = clientId.ToString(),
         });
 
         if (!response.IsSuccessStatusCode)
@@ -74,5 +75,10 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
         }
 
         return insertClientResponse;
+    }
+    
+    public void Dispose()
+    {
+        httpClient.Dispose();
     }
 }

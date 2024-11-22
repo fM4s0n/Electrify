@@ -9,7 +9,8 @@ package availability;
 service MeterAvailability {
   rpc Register (AvailabilityRequest) returns (AvailabilityResponse) {
     option (google.api.http) = {
-      post: "/v1/available"
+      post: "/v1/available",
+      body: "*"
     };
   }
 }
