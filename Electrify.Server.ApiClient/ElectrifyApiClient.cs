@@ -9,26 +9,36 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
 {
     public async Task<AvailabilityResponse> Register(int port, string secret, Guid clientId)
     {
-        var response = await httpClient.PostAsJsonAsync("/v1/available", new AvailabilityRequest
-        {
-            Port = port,
-            Secret = secret,
-            ClientId = clientId.ToString(),
-        });
+        await Task.Delay(1000);
 
-        if (!response.IsSuccessStatusCode)
+        try
         {
-            throw new Exception(await response.Content.ReadAsStringAsync());
+            var response = await httpClient.PostAsJsonAsync("/v1/available", new AvailabilityRequest
+            {
+                Port = port,
+                Secret = secret,
+                ClientId = clientId.ToString(),
+            });
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            }
+
+            var availabilityResponse = await response.Content.ReadFromJsonAsync<AvailabilityResponse>();
+
+            if (availabilityResponse is null)
+            {
+                throw new Exception($"An error occured parsing the {nameof(AvailabilityResponse)}");
+            }
+
+            return availabilityResponse;
         }
-
-        var availabilityResponse = await response.Content.ReadFromJsonAsync<AvailabilityResponse>();
-
-        if (availabilityResponse is null)
+        catch (Exception exception)
         {
-            throw new Exception($"An error occured parsing the {nameof(AvailabilityResponse)}");
+            Console.WriteLine(exception.Message);
+            throw;
         }
-        
-        return availabilityResponse;
     }
 
     public async Task<HttpAdminLoginResponse> AdminLogin(string email, string password)

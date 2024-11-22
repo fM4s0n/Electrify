@@ -61,6 +61,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.28.3" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.100" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="8.0.100" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.100" />
@@ -75,6 +77,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Electrify.Dlms\Electrify.Dlms.csproj" />
+        <ProjectReference Include="..\Electrify.Server.ApiClient\Electrify.Server.ApiClient.csproj" />
         <ProjectReference Include="..\Electrify.SmartMeterUi.Services\Electrify.SmartMeterUi.Services.csproj" />
         <ProjectReference Include="..\Electrify.UiComponents\Electrify.UiComponents.csproj" />
     </ItemGroup>
