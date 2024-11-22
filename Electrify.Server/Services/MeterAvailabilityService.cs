@@ -15,6 +15,7 @@ public class MeterAvailabilityService(
     IOptions<DlmsClientOptions> dlmsClientOptions,
     IOptions<ObservabilityOptions> observabilityOptions,
     ILogger<DlmsClient> dlmsClientLogger,
+    ILogger<MeterAvailabilityService> logger,
     TimeProvider timeProvider,
     IDlmsClientService dlmsClientService)
     : MeterAvailability.MeterAvailabilityBase
