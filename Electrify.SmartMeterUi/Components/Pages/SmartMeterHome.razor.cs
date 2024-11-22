@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Components;
 using Electrify.Models;
 using Electrify.Models.Enums;
 
-
 namespace Electrify.SmartMeterUi.Components.Pages;
 
 public partial class SmartMeterHome

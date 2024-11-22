@@ -33,10 +33,12 @@ public class RandomTaskTimer : IDisposable, IAsyncDisposable
     public void Dispose()
     {
         _timer.Dispose();
+        GC.SuppressFinalize(this);
     }
     
     public async ValueTask DisposeAsync()
     {
         await _timer.DisposeAsync();
+        GC.SuppressFinalize(this);
     }
 }

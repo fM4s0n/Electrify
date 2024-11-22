@@ -45,7 +45,7 @@ public class EndToEndTests : IDisposable
         _dlmsClient = CreateAndInitialiseClient(clientServiceProvider);
     }
 
-    private IServiceCollection ConfigureServer(int port)
+    private static ServiceCollection ConfigureServer(int port)
     {
         var services = new ServiceCollection();
 
@@ -84,7 +84,7 @@ public class EndToEndTests : IDisposable
         return services;
     }
 
-    private IServiceCollection ConfigureClient(int port)
+    private static ServiceCollection ConfigureClient(int port)
     {
         var services = new ServiceCollection();
 
@@ -202,7 +202,7 @@ public class EndToEndTests : IDisposable
         return server;
     }
 
-    private DlmsClient CreateAndInitialiseClient(IServiceProvider serviceProvider)
+    private static DlmsClient CreateAndInitialiseClient(IServiceProvider serviceProvider)
     {
         var options = serviceProvider.GetRequiredService<IOptions<DlmsClientOptions>>().Value;
         var logger = serviceProvider.GetRequiredService<ILogger<DlmsClient>>();
@@ -276,5 +276,6 @@ public class EndToEndTests : IDisposable
     {
         _dlmsServer.Dispose();
         _usageTimer?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

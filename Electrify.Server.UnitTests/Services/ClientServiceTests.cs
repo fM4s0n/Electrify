@@ -1,7 +1,6 @@
 using Electrify.Models;
 using Electrify.Server.Database;
 using Electrify.Server.Services;
-using Electrify.Server.Services.Abstraction;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -10,7 +9,7 @@ namespace Electrify.Server.UnitTests.Services;
 
 public class ClientServiceTests
 {
-    private readonly IClientService _clientService;
+    private readonly ClientService _clientService;
     private readonly ILogger<ClientService> _logger;
     private readonly ElectrifyDbContext _database;
     
