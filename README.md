@@ -4,4 +4,9 @@
 
 Electrify is a smart meter client/server system for creating meter readings and generating bills.
 
-Authored by Freddie Mason, James Lloyd, Hamzah Sidat, and Josh Cartledge.
+Authored by:
+
+Freddie Mason - https://github.com/fM4s0n
+James Lloyd - https://github.com/RoyalScribblz & https://github.com/james-llo
+Hamzah Sidat - https://github.com/hs2213
+Josh Cartledge - https://github.com/JoshCartledge3
