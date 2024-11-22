@@ -47,6 +47,10 @@ public static class MauiProgram
 
 		loggerConfiguration.MinimumLevel.Debug();
 #endif
+		builder.Services.AddHttpClient("ElectrifyServer", options =>
+		{
+			options.BaseAddress = new Uri("http://localhost:8888");
+		});
 		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
         builder.Services.AddSingleton<IUsageService, UsageService>();
 

@@ -1,7 +1,48 @@
-﻿@inherits LayoutComponentBase
+﻿@using Electrify.Dlms.Options
+@using Electrify.Dlms.Server.Abstraction
+@using Electrify.Server.ApiClient
+@using Electrify.SmartMeterUi.Services.Abstractions
+@using Microsoft.Extensions.Options
+@inherits LayoutComponentBase
 
 <div class="page">
     <main>
         @Body
     </main>
 </div>
+
+
+
+@code {
+
+    
+    [Inject] private IHttpClientFactory ClientFactory { get; set; }
+    [Inject] private IOptions<DlmsServerOptions> Options { get; set; }
+    [Inject] private IDlmsServer DlmsServer { get; set; }
+    [Inject] private IErrorMessageService ErrorMessageService { get; set; }
+
+    private ElectrifyApiClient _apiClient = default!;
+
+    private async Task InitDlmsServer()
+    {
+        Task.Run(() =>
+        {
+            DlmsServer.Initialise(Options, () => ErrorMessageService.IsConnected = true,
+            () => ErrorMessageService.IsConnected =
+            false);
+        });
+
+    }
+
+    private async Task RegisterConnectionWithServer()
+    {
+        await _apiClient.Register(Options.Value.Port, Options.Value.Password);
+    }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _apiClient = new ElectrifyApiClient(ClientFactory.CreateClient("ElectrifyServer"));
+        await Task.WhenAll(InitDlmsServer(), RegisterConnectionWithServer());
+    }
+
+}
