@@ -1,7 +1,6 @@
 using Electrify.Dlms.Client;
-using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
-using Electrify.DlmsServer;
+using Electrify.Protos;
 using Electrify.Server.Options;
 using Electrify.Server.Services.Abstraction;
 using Grpc.Core;

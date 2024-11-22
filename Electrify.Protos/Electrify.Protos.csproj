@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<IncludeHttpRuleProtos>true</IncludeHttpRuleProtos>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Protobuf Include="*.proto" GrpcServices="Both" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Grpc.Tools" Version="2.67.0">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="8.0.10">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-using Electrify.DlmsServer;
+using Electrify.Protos;
 using Electrify.Server.Services.Abstraction;
 using Grpc.Core;
 

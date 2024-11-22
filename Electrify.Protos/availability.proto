@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/api/annotations.proto";
 
-option csharp_namespace = "Electrify.DlmsServer";
+option csharp_namespace = "Electrify.Protos";
 
 package availability;
 

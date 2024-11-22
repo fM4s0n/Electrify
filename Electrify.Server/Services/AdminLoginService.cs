@@ -1,7 +1,7 @@
 ﻿using Electrify.Models;
-using Electrify.Server.Protos;
 using Electrify.Server.Services.Abstraction;
 using Grpc.Core;
+using Electrify.Protos;
 
 namespace Electrify.Server.Services;
 
