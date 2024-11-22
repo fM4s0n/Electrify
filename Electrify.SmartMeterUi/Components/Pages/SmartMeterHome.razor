@@ -22,13 +22,13 @@
         <div class="usage-info">
             <div class="usage-divider">
                 <div><i class="fa-solid fa-bolt"></i> Today's usage:</div>
-                <h1>@(GetUsagePriceDaily())</h1>
-                <div>@(GetUsageDaily())kw/h</div>
+                <h1>@FormatCurrency(_dailyReadingCost.Item1)</h1>
+                <div>@FormatKwh(_dailyReadingCost.Item2)</div>
             </div>
             <div>
                 <div><i class="fa-solid fa-bolt"></i> Total usage this billing period:</div>
-                <h1>@(GetUsagePricePeriod())</h1>
-                <div>@(GetUsagePeriod())kw/h</div>
+                <h1>@FormatCurrency(_monthlyReadingCost.Item1)</h1>
+                <div>@FormatKwh(_monthlyReadingCost.Item2)</div>
             </div>
         </div>
     </div>
