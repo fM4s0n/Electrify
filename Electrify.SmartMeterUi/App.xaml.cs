@@ -3,6 +3,7 @@ using Electrify.Dlms.Server.Abstraction;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Electrify.SmartMeterUi.Services.Abstractions;
+
 namespace Electrify.SmartMeterUi;
 
 public partial class App : Application

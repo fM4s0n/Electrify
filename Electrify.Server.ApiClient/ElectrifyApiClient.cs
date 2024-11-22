@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using Electrify.DlmsServer;
+using Electrify.Protos;
 using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.ApiClient.Contracts;
 
