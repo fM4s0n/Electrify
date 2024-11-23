@@ -5,18 +5,23 @@ using Electrify.Models;
 using Electrify.Server.ApiClient.Abstraction;
 using Microsoft.AspNetCore.Identity;
 using Electrify.Server.ApiClient.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace Electrify.AdminUi.UnitTests.Services;
 
 public class AdminServiceTests
 {
     private readonly AdminService _adminService;
+    private readonly ILogger<AdminService> _logger;
+    
     private readonly IElectrifyApiClient _adminLoginClient;
 
     public AdminServiceTests()
     {
+        _logger = Substitute.For<ILogger<AdminService>>();
         _adminLoginClient = Substitute.For<IElectrifyApiClient>();
-        _adminService = new AdminService(_adminLoginClient);
+        
+        _adminService = new AdminService(_adminLoginClient, _logger);
     }
 
     [Fact]

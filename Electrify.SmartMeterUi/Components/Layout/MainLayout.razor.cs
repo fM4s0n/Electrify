@@ -3,7 +3,9 @@ using Electrify.Dlms.Server.Abstraction;
 using Electrify.Server.ApiClient;
 using Electrify.SmartMeterUi.Services.Abstractions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog.Extensions.Logging;
 
 namespace Electrify.SmartMeterUi.Components.Layout;
 
@@ -13,11 +15,14 @@ public partial class MainLayout
     [Inject] private IOptions<DlmsServerOptions> Options { get; set; } = default!;
     [Inject] private IDlmsServer DlmsServer { get; set; } = default!;
     [Inject] private IErrorMessageService ErrorMessageService { get; set; } = default!;
+    
     private ElectrifyApiClient _apiClient = default!;
     
     protected override async Task OnInitializedAsync()
     {
-        _apiClient = new ElectrifyApiClient(ClientFactory.CreateClient("ElectrifyServer"));
+        ILogger<ElectrifyApiClient> logger = new Logger<ElectrifyApiClient>(new SerilogLoggerFactory());
+        
+        _apiClient = new ElectrifyApiClient(ClientFactory.CreateClient("ElectrifyServer"), logger);
         await Task.WhenAll(InitDlmsServer(), RegisterConnectionWithServer());
     }
     
