@@ -5,6 +5,7 @@ using Electrify.Server.Models;
 using Electrify.Server.Services;
 using Electrify.Server.UnitTests.Substitutes;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 
 namespace Electrify.Server.UnitTests.Services;
@@ -44,7 +45,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var price = await service.GetPrice(readingTime);
@@ -72,7 +73,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var price = await service.GetPrice(readingTime);
@@ -108,7 +109,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var price = await service.GetPrice(readingTime);
@@ -152,7 +153,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var price = await service.GetPrice(readingTime);
@@ -199,7 +200,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var price = await service.GetPrice(readingTime);
@@ -252,7 +253,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var prices = await service.GetDailyPrices(date);
@@ -311,7 +312,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var prices = await service.GetDailyPrices(date);
@@ -347,7 +348,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
         
-        var sut = new OctopusService(clientFactory);
+        var sut = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var prices = await sut.GetDailyPrices(date);
@@ -397,7 +398,7 @@ public class OctopusServiceTests
         var clientFactory = Substitute.For<IHttpClientFactory>();
         clientFactory.CreateClient("OctopusClient").Returns(client);
 
-        var service = new OctopusService(clientFactory);
+        var service = new OctopusService(clientFactory, Substitute.For<ILogger<OctopusService>>());
 
         // Act
         var prices = await service.GetDailyPrices(date);

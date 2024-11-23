@@ -3,6 +3,7 @@ using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
 using FluentAssertions;
 using Grpc.Core;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 
 namespace Electrify.Server.UnitTests.Services;
@@ -15,7 +16,7 @@ public class AuthenticationServiceTests
 
     public AuthenticationServiceTests()
     {
-        _authenticationService = new AuthenticationService(_clientService);
+        _authenticationService = new AuthenticationService(_clientService, Substitute.For<ILogger<AuthenticationService>>());
     }
 
     [Fact]
