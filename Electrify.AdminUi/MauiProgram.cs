@@ -38,13 +38,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAdminService, AdminService>();
         builder.Services.AddSingleton<IGreetingService, GreetingService>();
         builder.Services.AddSingleton(TimeProvider.System);
-        builder.Services.AddSingleton<IElectrifyApiClient>(sp =>
-        {
-            return new ElectrifyApiClient(new HttpClient
+        
+        builder.Services.AddSingleton<IElectrifyApiClient>(sp => new ElectrifyApiClient(
+            new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:8888")
-            });
-        });
+            },
+            sp.GetRequiredService<ILogger<ElectrifyApiClient>>()
+            ));
         
         return builder.Build();
     }

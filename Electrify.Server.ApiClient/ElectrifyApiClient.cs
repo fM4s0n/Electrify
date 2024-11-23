@@ -2,10 +2,11 @@ using System.Net.Http.Json;
 using Electrify.Protos;
 using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.ApiClient.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace Electrify.Server.ApiClient;
 
-public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiClient
+public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyApiClient> _logger) : IElectrifyApiClient
 {
     public async Task<AvailabilityResponse> Register(int port, string secret, Guid clientId)
     {
@@ -20,15 +21,21 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
                 ClientId = clientId.ToString(),
             });
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception(await response.Content.ReadAsStringAsync());
-            }
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger
+                .LogError(
+                    "Failed to register the server with the Electrify API. Response: {Response}",
+                    response);
+            
+            throw new Exception(await response.Content.ReadAsStringAsync());
+        }
 
             var availabilityResponse = await response.Content.ReadFromJsonAsync<AvailabilityResponse>();
 
             if (availabilityResponse is null)
             {
+                _logger.LogError("Failed to parse the {AvailabilityResponse}", availabilityResponse);
                 throw new Exception($"An error occured parsing the {nameof(AvailabilityResponse)}");
             }
 
@@ -51,6 +58,8 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
 
         if (!response.IsSuccessStatusCode)
         {
+            _logger.LogError("Failed to login the admin. Response: {Response}", response);
+            
             throw new Exception(await response.Content.ReadAsStringAsync());
         }
 
@@ -58,6 +67,8 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
 
         if (adminLoginResponse is null)
         {
+            _logger.LogError("Failed to parse the {HttpAdminLoginResponse}", adminLoginResponse);
+            
             throw new Exception($"An error occured parsing the {nameof(HttpAdminLoginResponse)}");
         }
         
@@ -74,6 +85,8 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
 
         if (!response.IsSuccessStatusCode)
         {
+            _logger.LogError("Failed to insert the client. Response: {Response}", response);
+            
             throw new Exception(await response.Content.ReadAsStringAsync());
         }
 
@@ -81,6 +94,8 @@ public sealed class ElectrifyApiClient(HttpClient httpClient) : IElectrifyApiCli
 
         if (insertClientResponse is null)
         {
+            _logger.LogError("Failed to parse the {HttpInsertClientResponse}", insertClientResponse);
+            
             throw new Exception($"An error occured parsing the {nameof(HttpInsertClientResponse)}");
         }
 

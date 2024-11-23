@@ -5,17 +5,19 @@ using Grpc.Core;
 
 namespace Electrify.Server.Services;
 
-public class InsertClientService(IClientService clientService) : InsertClient.InsertClientBase
+public class InsertClientService(IClientService clientService, ILogger<InsertClientService> logger) : InsertClient.InsertClientBase
 {
     public override async Task<InsertClientResponse> InsertClient(InsertClientRequest request, ServerCallContext context)
     {
         if (!Guid.TryParse(request.UserId, out var userId))
         {
+            logger.LogError("UserId was not a valid Guid : {UserId}", request.UserId);
             throw new RpcException(new Status(StatusCode.InvalidArgument, "UserId must be a valid Guid"));
         }
 
         if (!Guid.TryParse(request.Id, out var clientId))
         {
+            logger.LogError("ClientId was not a valid Guid : {ClientId}", request.Id);
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Client Id must be a valid Guid"));
         }
 
