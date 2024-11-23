@@ -47,7 +47,7 @@ public class ErrorMessageServiceTests(TestFixture fixture) : IClassFixture<TestF
         // Act
         await fixture.ApiClient.ErrorMessage();
 
-        await Task.Delay(100);
+        await Task.Delay(50);
         
         // Assert
         errorCallback.Received(1).Invoke();
@@ -76,7 +76,7 @@ public class ErrorMessageServiceTests(TestFixture fixture) : IClassFixture<TestF
         var response = await fixture.ApiClient.Register(port, secret, clientId);
         response.Success.Should().BeTrue();
 
-        await Task.Delay(100);
+        await Task.Delay(50);
         
         // Assert
         errorCallback.Received(0).Invoke();
