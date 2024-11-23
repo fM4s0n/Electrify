@@ -19,7 +19,7 @@ public class AdminService(IElectrifyApiClient electrifyApiClient) : IAdminServic
                 Id = Guid.Parse(response.Id),
                 Name = response.Name,
                 Email = response.Email,
-                PasswordHash = response.PasswordHash,
+                PasswordHash = string.Empty,
                 AccessToken = Guid.Parse(response.Token)
             };
         }

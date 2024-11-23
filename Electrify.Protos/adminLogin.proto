@@ -25,6 +25,5 @@ message AdminLoginResponse {
   string id = 2;
   string name = 3;
   string email = 4;
-  string passwordHash = 5;
-  string token = 6;
+  string token = 5;
 }
