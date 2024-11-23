@@ -5,13 +5,16 @@ using System.Text;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
+using Electrify.Protos;
 using FluentAssertions;
+using Grpc.Core;
 using Gurux.DLMS;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Authentication = Gurux.DLMS.Enums.Authentication;
 using Task = System.Threading.Tasks.Task;
 
 namespace Electrify.ComponentTests.Services;
