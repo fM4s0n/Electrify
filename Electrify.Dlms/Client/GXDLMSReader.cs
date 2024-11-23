@@ -928,7 +928,7 @@ public class GXDLMSReader
         //Read image transfer status.
         ReadDataBlock(Client.Read(target, 6), reply);
         Client.UpdateValue(target, 6, reply.Value);
-        if (target.ImageTransferStatus != Gurux.DLMS.Objects.Enums.ImageTransferStatus.VerificationSuccessful)
+        if (target.ImageTransferStatus != ImageTransferStatus.VerificationSuccessful)
         {
             throw new Exception("Image transfer status is " + target.ImageTransferStatus.ToString());
         }
@@ -1023,7 +1023,7 @@ public class GXDLMSReader
             }
             ReadByAccess(list);
         }
-        else if ((Client.NegotiatedConformance & Gurux.DLMS.Enums.Conformance.MultipleReferences) != 0)
+        else if ((Client.NegotiatedConformance & Conformance.MultipleReferences) != 0)
         {
             List<KeyValuePair<GXDLMSObject, int>> list = new List<KeyValuePair<GXDLMSObject, int>>();
             foreach (GXDLMSObject it in objs)
@@ -1045,11 +1045,11 @@ public class GXDLMSReader
                 }
                 catch (Exception)
                 {
-                    Client.NegotiatedConformance &= ~Gurux.DLMS.Enums.Conformance.MultipleReferences;
+                    Client.NegotiatedConformance &= ~Conformance.MultipleReferences;
                 }
             }
         }
-        if ((Client.NegotiatedConformance & Gurux.DLMS.Enums.Conformance.MultipleReferences) == 0)
+        if ((Client.NegotiatedConformance & Conformance.MultipleReferences) == 0)
         {
             //Read values one by one.
             foreach (GXDLMSObject it in objs)
@@ -1206,7 +1206,7 @@ public class GXDLMSReader
                 continue;
             }
             //All meters are not supporting parameterized read.
-            if ((Client.NegotiatedConformance & (Gurux.DLMS.Enums.Conformance.ParameterizedAccess | Gurux.DLMS.Enums.Conformance.SelectiveAccess)) != 0)
+            if ((Client.NegotiatedConformance & (Conformance.ParameterizedAccess | Conformance.SelectiveAccess)) != 0)
             {
                 try
                 {
@@ -1242,7 +1242,7 @@ public class GXDLMSReader
                 }
             }
             //All meters are not supporting parameterized read.
-            if ((Client.NegotiatedConformance & (Gurux.DLMS.Enums.Conformance.ParameterizedAccess | Gurux.DLMS.Enums.Conformance.SelectiveAccess)) != 0)
+            if ((Client.NegotiatedConformance & (Conformance.ParameterizedAccess | Conformance.SelectiveAccess)) != 0)
             {
                 try
                 {
@@ -1380,7 +1380,7 @@ public class GXDLMSReader
                         p.Count = 1;
                     }
                     //Try to read again...
-                    System.Diagnostics.Debug.WriteLine("Data send failed. Try to resend " + pos.ToString() + "/3");
+                    Debug.WriteLine("Data send failed. Try to resend " + pos.ToString() + "/3");
                 }
             }
             rd = new GXByteBuffer(p.Reply);
@@ -1427,7 +1427,7 @@ public class GXDLMSReader
                         p.Reply = null;
                         Media.Send(data, null);
                         //Try to read again...
-                        System.Diagnostics.Debug.WriteLine("Data send failed. Try to resend " + pos.ToString() + "/3");
+                        Debug.WriteLine("Data send failed. Try to resend " + pos.ToString() + "/3");
                     }
                     rd.Set(p.Reply);
                 }

@@ -111,7 +111,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         GXDLMSAssociationLogicalName obj = new GXDLMSAssociationLogicalName("0.0.40.0.2.255");
         obj.ClientSAP = 17;
         obj.XDLMSContextInfo.MaxSendPduSize = obj.XDLMSContextInfo.MaxReceivePduSize = 1024;
-        byte[] secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        byte[] secret = Encoding.ASCII.GetBytes("Gurux");
         obj.Secret = secret;
         obj.AuthenticationMechanismName.MechanismId = Authentication.Low;
         // Only get, set, multiple references and parameterized access services
@@ -125,7 +125,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         GXDLMSAssociationLogicalName obj = new GXDLMSAssociationLogicalName("0.0.40.0.3.255");
         obj.ClientSAP = 18;
         obj.XDLMSContextInfo.MaxSendPduSize = obj.XDLMSContextInfo.MaxReceivePduSize = 1024;
-        byte[] secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        byte[] secret = Encoding.ASCII.GetBytes("Gurux");
         obj.Secret = secret;
         obj.AuthenticationMechanismName.MechanismId = Authentication.High;
         // Add supported services.
@@ -150,7 +150,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         GXDLMSAssociationLogicalName obj = new GXDLMSAssociationLogicalName("0.0.40.0.4.255");
         obj.ClientSAP = 19;
         obj.XDLMSContextInfo.MaxSendPduSize = obj.XDLMSContextInfo.MaxReceivePduSize = 1024;
-        byte[] secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        byte[] secret = Encoding.ASCII.GetBytes("Gurux");
         obj.Secret = secret;
         obj.AuthenticationMechanismName.MechanismId = Authentication.HighMD5;
         // Add supported services.
@@ -175,7 +175,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         GXDLMSAssociationLogicalName obj = new GXDLMSAssociationLogicalName("0.0.40.0.5.255");
         obj.ClientSAP = 20;
         obj.XDLMSContextInfo.MaxSendPduSize = obj.XDLMSContextInfo.MaxReceivePduSize = 1024;
-        byte[] secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        byte[] secret = Encoding.ASCII.GetBytes("Gurux");
         obj.Secret = secret;
         obj.AuthenticationMechanismName.MechanismId = Authentication.HighSHA1;
         // Add supported services.
@@ -210,7 +210,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     private void AddHighLevelAssociationSha256()
     {
         GXDLMSAssociationLogicalName obj = new GXDLMSAssociationLogicalName("0.0.40.0.7.255");
-        byte[] secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        byte[] secret = Encoding.ASCII.GetBytes("Gurux");
         obj.Secret = secret;
         obj.ClientSAP = 22;
         obj.XDLMSContextInfo.MaxSendPduSize = obj.XDLMSContextInfo.MaxReceivePduSize = 1024;
@@ -246,7 +246,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         GXDLMSAssociationLogicalName obj = new GXDLMSAssociationLogicalName("0.0.40.0.9.255");
         obj.ClientSAP = 24;
         obj.XDLMSContextInfo.MaxSendPduSize = obj.XDLMSContextInfo.MaxReceivePduSize = 1024;
-        byte[] secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        byte[] secret = Encoding.ASCII.GetBytes("Gurux");
         obj.Secret = secret;
         obj.AuthenticationMechanismName.MechanismId = Authentication.High;
         // Add supported services.
@@ -328,7 +328,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         PushClientAddress = 64;
         MaxReceivePDUSize = 1024;
         //Default secret.
-        sn.Secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        sn.Secret = Encoding.ASCII.GetBytes("Gurux");
         //Add security setup object.
         sn.SecuritySetupReference = "0.0.43.0.0.255";
         //Add other objects.
@@ -377,7 +377,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         PushClientAddress = 64;
         MaxReceivePDUSize = 1024;
         //Default secret.
-        sn.Secret = ASCIIEncoding.ASCII.GetBytes("Gurux");
+        sn.Secret = Encoding.ASCII.GetBytes("Gurux");
         //Add other objects.
         AddObjects();
     }
@@ -708,12 +708,12 @@ public class GXDLMSBase : GXDLMSSecureServer
     void Init()
     {
         //KEK is used when authentication keys are updated.
-        Kek = ASCIIEncoding.ASCII.GetBytes("1111111111111111");
+        Kek = Encoding.ASCII.GetBytes("1111111111111111");
 
         //If pre-established connections are used.
-        ClientSystemTitle = ASCIIEncoding.ASCII.GetBytes("ABCDEFGH");
+        ClientSystemTitle = Encoding.ASCII.GetBytes("ABCDEFGH");
         Ciphering.Security = Security.AuthenticationEncryption;
-        this.Conformance |= Conformance.GeneralBlockTransfer;
+        Conformance |= Conformance.GeneralBlockTransfer;
 
         Media.OnReceived += new Gurux.Common.ReceivedEventHandler(OnReceived);
         Media.OnClientConnected += new Gurux.Common.ClientConnectedEventHandler(OnClientConnected);
@@ -730,7 +730,7 @@ public class GXDLMSBase : GXDLMSSecureServer
 
     void OnError(object sender, Exception ex)
     {
-        System.Diagnostics.Debug.WriteLine(ex.Message);
+        Debug.WriteLine(ex.Message);
     }
 
     /// <summary>
@@ -1118,7 +1118,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     {
         foreach (ValueEventArgs it in args)
         {
-            System.Diagnostics.Debug.WriteLine("Writing " + it.Target.LogicalName);
+            Debug.WriteLine("Writing " + it.Target.LogicalName);
         }
     }
 
@@ -1127,7 +1127,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     {
         foreach (ValueEventArgs it in args)
         {
-            System.Diagnostics.Debug.WriteLine("Writing " + it.Target.LogicalName);
+            Debug.WriteLine("Writing " + it.Target.LogicalName);
 
             if (it.Target.LogicalName is RegisterNames.ErrorMessage)
             {
@@ -1147,7 +1147,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         {
             throw new ArgumentException("Invalid destination.");
         }
-        byte[][] data = this.GeneratePushSetupMessages(DateTime.MinValue, target);
+        byte[][] data = GeneratePushSetupMessages(DateTime.MinValue, target);
         string host = target.Destination.Substring(0, pos);
         int port = int.Parse(target.Destination.Substring(pos + 1));
         GXNet net = new GXNet(NetworkType.Tcp, host, port);
@@ -1169,7 +1169,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     {
         foreach (ValueEventArgs it in args)
         {
-            System.Diagnostics.Debug.WriteLine("Action " + it.Target.LogicalName);
+            Debug.WriteLine("Action " + it.Target.LogicalName);
             if (it.Target is GXDLMSPushSetup && it.Index == 1)
             {
                 SendPush(it.Target as GXDLMSPushSetup);
@@ -1183,10 +1183,10 @@ public class GXDLMSBase : GXDLMSSecureServer
                 {
                     i.ImageTransferStatus = ImageTransferStatus.NotInitiated;
                     i.ImageActivateInfo = null;
-                    ImageUpdate = ASCIIEncoding.ASCII.GetString((byte[])(it.Parameters as List<object>)[0]);
+                    ImageUpdate = Encoding.ASCII.GetString((byte[])(it.Parameters as List<object>)[0]);
                     ImageSize = Convert.ToUInt32((it.Parameters as List<object>)[1]);
                     string file = Path.Combine(Path.GetDirectoryName(typeof(GXDLMSBase).Assembly.Location), ImageUpdate + ".exe");
-                    System.Diagnostics.Debug.WriteLine("Updating image" + ImageUpdate + " Size:" + ImageSize);
+                    Debug.WriteLine("Updating image" + ImageUpdate + " Size:" + ImageSize);
                     using (var writer = File.Create(file))
                     {
                     }
@@ -1208,7 +1208,7 @@ public class GXDLMSBase : GXDLMSSecureServer
                             fs.Close();
                         }
                     }
-                    catch (System.IO.IOException)
+                    catch (IOException)
                     {
                         Thread.Sleep(1000);
                         using (FileStream fs = new FileStream(file, FileMode.Append))
@@ -1681,7 +1681,7 @@ public class GXDLMSBase : GXDLMSSecureServer
 
         //Reset server settings when connection is established.
         //This is mandatory if Wrapper is used.
-        this.Reset();
+        Reset();
         if (Trace > TraceLevel.Warning)
         {
             Console.WriteLine("Client Connected.");
