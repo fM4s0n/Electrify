@@ -66,10 +66,9 @@ public class OctopusService(IHttpClientFactory clientFactory, ILogger<OctopusSer
         return price >= 33.33 ? 33.33 : Math.Round(price, 2);
     }
     
-
     public async Task<Dictionary<int, double>?> GetDailyPrices(DateTimeOffset date)
     {
-        Dictionary<int, double> prices = new();
+        Dictionary<int, double> prices = [];
         
         string periodFrom = date.ToString("yyyy-MM-ddT00:00");
         string periodTo = date.ToString("yyyy-MM-ddT23:59");

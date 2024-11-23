@@ -1,4 +1,5 @@
 ﻿@page "/home"
+@using Electrify.UiComponents;
 
 <div class="admin-home">
     <div class="home-left">
@@ -50,4 +51,12 @@
             }
         </div>
     </div>
+
+    <div class="toast-list-container">
+        @foreach (var toast in _toasts)
+        {
+            <Toast Title="@toast.Title" Message="@toast.Message"></Toast>
+        }
+    </div>
+
 </div>

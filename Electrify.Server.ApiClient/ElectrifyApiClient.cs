@@ -1,5 +1,5 @@
 using System.Net.Http.Json;
-using Electrify.DlmsServer;
+using Electrify.Protos;
 using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.ApiClient.Contracts;
 using Microsoft.Extensions.Logging;
@@ -8,13 +8,18 @@ namespace Electrify.Server.ApiClient;
 
 public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyApiClient> _logger) : IElectrifyApiClient
 {
-    public async Task<AvailabilityResponse> Register(int port, string secret)
+    public async Task<AvailabilityResponse> Register(int port, string secret, Guid clientId)
     {
-        var response = await httpClient.PostAsJsonAsync("/v1/available", new AvailabilityRequest
+        await Task.Delay(1000);
+
+        try
         {
-            Port = port,
-            Secret = secret,
-        });
+            var response = await httpClient.PostAsJsonAsync("/v1/available", new AvailabilityRequest
+            {
+                Port = port,
+                Secret = secret,
+                ClientId = clientId.ToString(),
+            });
 
         if (!response.IsSuccessStatusCode)
         {
@@ -26,16 +31,21 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
             throw new Exception(await response.Content.ReadAsStringAsync());
         }
 
-        var availabilityResponse = await response.Content.ReadFromJsonAsync<AvailabilityResponse>();
+            var availabilityResponse = await response.Content.ReadFromJsonAsync<AvailabilityResponse>();
 
-        if (availabilityResponse is null)
-        {
-            _logger.LogError("Failed to parse the {AvailabilityResponse}", availabilityResponse);
-            
-            throw new Exception($"An error occured parsing the {nameof(AvailabilityResponse)}");
+            if (availabilityResponse is null)
+            {
+                _logger.LogError("Failed to parse the {AvailabilityResponse}", availabilityResponse);
+                throw new Exception($"An error occured parsing the {nameof(AvailabilityResponse)}");
+            }
+
+            return availabilityResponse;
         }
-        
-        return availabilityResponse;
+        catch (Exception exception)
+        {
+            Console.WriteLine(exception.Message);
+            throw;
+        }
     }
 
     public async Task<HttpAdminLoginResponse> AdminLogin(string email, string password)
@@ -90,5 +100,10 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
         }
 
         return insertClientResponse;
+    }
+    
+    public void Dispose()
+    {
+        httpClient.Dispose();
     }
 }

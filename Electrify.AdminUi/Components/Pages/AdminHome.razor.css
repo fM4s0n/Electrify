@@ -43,3 +43,13 @@
 .home-account-ids{
     padding: 1em 0;
 }
+
+.toast-list-container {
+    z-index: 10;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}

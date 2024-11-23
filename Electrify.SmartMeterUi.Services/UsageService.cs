@@ -81,5 +81,6 @@ public class UsageService : IUsageService, IDisposable
     public void Dispose()
     {
         _timer?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

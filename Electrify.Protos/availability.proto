@@ -2,14 +2,15 @@ syntax = "proto3";
 
 import "google/api/annotations.proto";
 
-option csharp_namespace = "Electrify.DlmsServer";
+option csharp_namespace = "Electrify.Protos";
 
 package availability;
 
 service MeterAvailability {
   rpc Register (AvailabilityRequest) returns (AvailabilityResponse) {
     option (google.api.http) = {
-      post: "/v1/available"
+      post: "/v1/available",
+      body: "*"
     };
   }
 }

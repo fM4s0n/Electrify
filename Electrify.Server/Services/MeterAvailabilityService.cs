@@ -1,7 +1,6 @@
 using Electrify.Dlms.Client;
-using Electrify.Dlms.Client.Abstraction;
 using Electrify.Dlms.Options;
-using Electrify.DlmsServer;
+using Electrify.Protos;
 using Electrify.Server.Options;
 using Electrify.Server.Services.Abstraction;
 using Grpc.Core;
@@ -13,10 +12,10 @@ using Microsoft.Extensions.Options;
 namespace Electrify.Server.Services;
 
 public class MeterAvailabilityService(
-    ILogger<MeterAvailabilityService> logger,
     IOptions<DlmsClientOptions> dlmsClientOptions,
     IOptions<ObservabilityOptions> observabilityOptions,
     ILogger<DlmsClient> dlmsClientLogger,
+    ILogger<MeterAvailabilityService> logger,
     TimeProvider timeProvider,
     IDlmsClientService dlmsClientService)
     : MeterAvailability.MeterAvailabilityBase
@@ -28,6 +27,8 @@ public class MeterAvailabilityService(
             logger.LogError("ClientId was not a valid Guid : {ClientId}", request.ClientId);
             throw new RpcException(new Status(StatusCode.InvalidArgument, "ClientId should be in GUID format"));
         }
+        
+        // TODO verify the client is actually valid (check db)
         
         var media = new GXNet(dlmsClientOptions.Value.Protocol, dlmsClientOptions.Value.ServerHostname, request.Port);
         
@@ -44,13 +45,25 @@ public class MeterAvailabilityService(
         var registers = dlmsClientOptions.Value.LogicalNames
             .Select(register => new GXDLMSRegister(register));
 
-        var client = new DlmsClient(clientId, dlmsClientLogger, media, reader, registers, timeProvider);
-        
-        dlmsClientService.AddClient(request.Port, clientId, client);
+        try
+        {
+            var client = new DlmsClient(clientId, dlmsClientLogger, media, reader, registers, timeProvider);
 
+            dlmsClientService.AddClient(request.Port, clientId, client);
+        }
+        catch (Exception exception)
+        {
+            logger.LogError(exception, "An error occured creating a DLMS client on port: {Port}", request.Port);
+            
+            return Task.FromResult(new AvailabilityResponse
+            {
+                Success = false,  // TODO maybe we want to display something on MeterUI if this occurs
+            });
+        }
+        
         return Task.FromResult(new AvailabilityResponse
         {
-            Success = true
+            Success = true,
         });
     }
 }
