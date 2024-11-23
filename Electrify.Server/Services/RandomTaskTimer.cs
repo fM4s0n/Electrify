@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Electrify.Server.Services;
 
 /// <summary>
@@ -30,6 +32,7 @@ public class RandomTaskTimer : IDisposable, IAsyncDisposable
             TimeSpan.FromSeconds(_random.Next(_startRange, _endRange)));
     }
     
+    [ExcludeFromCodeCoverage]
     public void Dispose()
     {
         _timer.Dispose();
