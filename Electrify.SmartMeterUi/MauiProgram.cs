@@ -74,6 +74,13 @@ public static class MauiProgram
 				Unit = Unit.LocalCurrency,
 				Value = 0.1,
 			};
+			
+			var errorMessageRegister = new GXDLMSRegister(RegisterNames.ErrorMessage)
+			{
+				Scaler = 1.0,
+				Unit = Unit.NoUnit,
+				Value = string.Empty,
+			};
 
 			var energyProfile = new GXDLMSProfileGeneric(RegisterNames.EnergyProfile)
 			{
@@ -90,6 +97,7 @@ public static class MauiProgram
 			server.AddObject(energyRegister);
 			server.AddObject(tariffRegister, true);
 			server.AddObject(energyProfile);
+			server.AddObject(errorMessageRegister, true);
 		});
 		
         return builder.Build();

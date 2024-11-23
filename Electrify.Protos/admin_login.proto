@@ -4,7 +4,7 @@ import "google/api/annotations.proto";
 
 option csharp_namespace = "Electrify.Protos";
 
-package adminLogin;
+package admin_login;
 
 service AdminLogin {
   rpc AdminLogin (AdminLoginRequest) returns (AdminLoginResponse) {

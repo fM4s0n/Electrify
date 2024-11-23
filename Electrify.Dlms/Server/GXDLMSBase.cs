@@ -39,6 +39,7 @@ using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Electrify.Dlms.Constants;
 using Gurux.DLMS;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
@@ -57,6 +58,7 @@ public class GXDLMSBase : GXDLMSSecureServer
 {
     public Action OnConnectedCallback { private get; set; }
     public Action OnDisconnectedCallback { private get; set; }
+    public Action OnErrorMessageUpdateCallback { private get; set; }
 
     private readonly GXDLMSClock _clock;
     
@@ -1120,11 +1122,17 @@ public class GXDLMSBase : GXDLMSSecureServer
         }
     }
 
+    
     protected override void PostWrite(ValueEventArgs[] args)
     {
         foreach (ValueEventArgs it in args)
         {
             System.Diagnostics.Debug.WriteLine("Writing " + it.Target.LogicalName);
+
+            if (it.Target.LogicalName is RegisterNames.ErrorMessage)
+            {
+                OnErrorMessageUpdateCallback.Invoke();
+            }
         }
     }
 

@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Electrify.Protos";
+
+package error_message;
+
+service ErrorMessage {
+  rpc DisplayErrorMessage(ErrorMessageRequest) returns (ErrorMessageResponse) {
+    option (google.api.http) = {
+      post: "/v1/errorMessage"
+      body: "*"
+    };
+  }
+}
+
+message ErrorMessageRequest {
+}
+
+message ErrorMessageResponse {
+  bool success = 1;
+}
