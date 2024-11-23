@@ -22,7 +22,6 @@ public sealed class AdminLoginServiceTests(TestFixture fixture) : IClassFixture<
             response.Id.Should().NotBeEmpty();
             response.Name.Should().Be("Administrator");
             response.Email.Should().Be(email);
-            response.PasswordHash.Should().NotBeEmpty();  // TODO we shouldn't be returning the password hash it's insecure
             response.Token.Should().NotBeEmpty();
         }
     }

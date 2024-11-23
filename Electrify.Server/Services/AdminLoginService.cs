@@ -30,7 +30,6 @@ public class AdminLoginService(IAdminService adminService, ILogger<AdminLoginSer
             Id = admin.Id.ToString(),
             Name = admin.Name,
             Email = admin.Email,
-            PasswordHash = admin.PasswordHash,
             Token = admin.AccessToken.ToString(),
         });
     }

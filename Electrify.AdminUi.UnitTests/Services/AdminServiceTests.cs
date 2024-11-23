@@ -53,7 +53,7 @@ public class AdminServiceTests
         var actual = _adminService.CurrentAdmin;
 
         // Assert
-        actual.Should().BeEquivalentTo(expected);
+        actual.Should().BeEquivalentTo(expected, options => options.Excluding(admin => admin.PasswordHash));
     }
 
     [Fact]
@@ -100,7 +100,6 @@ public class AdminServiceTests
             Success = true,
             Name = name,
             Email = email,
-            PasswordHash = passwordHash,
             Token = token.ToString(),
             Id = id.ToString()
         };
