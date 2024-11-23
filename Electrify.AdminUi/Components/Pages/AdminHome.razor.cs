@@ -2,6 +2,7 @@
 using Electrify.Models;
 using Microsoft.AspNetCore.Components;
 using Electrify.Models.Enums;
+using Electrify.Server.ApiClient.Contracts;
 
 namespace Electrify.AdminUi.Components.Pages;
 
@@ -18,7 +19,7 @@ public partial class AdminHome : ComponentBase
 
     [Inject] IGreetingService GreetingService { get; set; } = default!;
 
-    private Admin? _admin;
+    private HttpAdminLoginResponse? _admin;
     private Client? _currentClient;
     private readonly List<ToastDefinition> _toasts = [];
     private Timer? _toastTimer;

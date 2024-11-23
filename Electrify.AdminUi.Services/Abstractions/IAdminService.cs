@@ -1,10 +1,11 @@
 ﻿using Electrify.Models;
+using Electrify.Server.ApiClient.Contracts;
 
 namespace Electrify.AdminUi.Services.Abstractions;
 
 public interface IAdminService
 {
-    Admin? CurrentAdmin { get; }
+    HttpAdminLoginResponse? CurrentAdmin { get; }
     Task<bool> ValidateLogin(string email, string password);
     void LogoutCurrentAdmin();
 }

@@ -1,9 +1,7 @@
 ﻿using NSubstitute;
 using FluentAssertions;
 using Electrify.AdminUi.Services;
-using Electrify.Models;
 using Electrify.Server.ApiClient.Abstraction;
-using Microsoft.AspNetCore.Identity;
 using Electrify.Server.ApiClient.Contracts;
 
 namespace Electrify.AdminUi.UnitTests.Services;
@@ -11,23 +9,23 @@ namespace Electrify.AdminUi.UnitTests.Services;
 public class AdminServiceTests
 {
     private readonly AdminService _adminService;
-    private readonly IElectrifyApiClient _adminLoginClient;
+    private readonly IElectrifyApiClient _electrifyApiClient;
 
     public AdminServiceTests()
     {
-        _adminLoginClient = Substitute.For<IElectrifyApiClient>();
-        _adminService = new AdminService(_adminLoginClient);
+        _electrifyApiClient = Substitute.For<IElectrifyApiClient>();
+        _adminService = new AdminService(_electrifyApiClient);
     }
 
     [Fact]
-    public void GetCurrentAdmin_Returns_Null_When_No_Admin_Is_Logged_In()
+    public async Task GetCurrentAdmin_Returns_Null_When_No_Admin_Is_Logged_In()
     {
-        // Arrange
-        // Act
+        // Act & Arrange
         var currentAdmin = _adminService.CurrentAdmin;
 
         // Assert
         currentAdmin.Should().BeNull();
+        await _electrifyApiClient.DidNotReceive().AdminLogin(Arg.Any<string>(), Arg.Any<string>());
     }
 
     [Fact]
@@ -40,15 +38,39 @@ public class AdminServiceTests
         string email = "email@email.com";
         Guid token = Guid.NewGuid();
 
-        var expected = ArrangeAdminLogin(email, name, plainPassword, id, token);
-
+        var expected = ArrangeAdminLogin(email, name, id, token);
         await _adminService.ValidateLogin(email, plainPassword);
 
         // Act
         var actual = _adminService.CurrentAdmin;
 
         // Assert
-        actual.Should().BeEquivalentTo(expected, options => options.Excluding(admin => admin.PasswordHash));
+        actual.Should().BeEquivalentTo(expected);
+        await _electrifyApiClient.Received(1).AdminLogin(email, plainPassword);
+    }
+
+    [Fact]
+    public async Task ValidateLogin_Fails_When_Credentials_Are_Invalid()
+    {
+        // Arrange
+        var response = new HttpAdminLoginResponse 
+        { 
+            Success = false,
+            Id = string.Empty,
+            Name = string.Empty,
+            Email = string.Empty,
+            Token = string.Empty
+        };
+
+        _electrifyApiClient.AdminLogin(Arg.Any<string>(), Arg.Any<string>())
+            .Returns(response);
+
+        // Act
+        var result = await _adminService.ValidateLogin("invalid@email.com", "wrongpassword");
+
+        // Assert
+        result.Should().BeFalse();
+        _adminService.CurrentAdmin.Should().BeNull();
     }
 
     [Fact]
@@ -61,35 +83,37 @@ public class AdminServiceTests
         string email = "email@email.com";
         Guid token = Guid.NewGuid();
 
-        ArrangeAdminLogin(email, name, plainPassword, id, token);
-
-        // Act
+        ArrangeAdminLogin(email, name, id, token);
         await _adminService.ValidateLogin(email, plainPassword);
 
+        // Act
         _adminService.LogoutCurrentAdmin();
-
         var actual = _adminService.CurrentAdmin;
 
         // Assert
         actual.Should().BeNull();
     }
 
-    private Admin ArrangeAdminLogin(string email, string name, string plainPassword, Guid id, Guid token)
+    [Theory]
+    [InlineData(null, "password")]
+    [InlineData("email@email.com", null)]
+    [InlineData("", "password")]
+    [InlineData("email@email.com", "")]
+    [InlineData("   ", "password")]
+    [InlineData("email@email.com", "   ")]
+    public async Task ValidateLogin_Throws_Exception_When_Inputs_Are_Invalid(string? email, string? password)
     {
-        PasswordHasher<Admin> passwordHasher = new();
+        // Act
+        Func<Task> act = async () => await _adminService.ValidateLogin(email!, password!);
 
-        var expected = new Admin
-        {
-            Id = id,
-            Name = name,
-            Email = email,
-            PasswordHash = string.Empty,
-            AccessToken = token,
-        };
+        // Assert
+        await act.Should()
+            .ThrowAsync<ArgumentException>()
+            .WithMessage("Value cannot be null or whitespace.*");
+    }
 
-        string passwordHash = passwordHasher.HashPassword(expected, plainPassword);
-        expected.PasswordHash = passwordHash;
-
+    private HttpAdminLoginResponse ArrangeAdminLogin(string email, string name, Guid id, Guid token)
+    {
         var response = new HttpAdminLoginResponse
         {
             Success = true,
@@ -99,8 +123,7 @@ public class AdminServiceTests
             Id = id.ToString()
         };
 
-        _adminLoginClient.AdminLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(response);
-
-        return expected;
+        _electrifyApiClient.AdminLogin(Arg.Any<string>(), Arg.Any<string>()).Returns(response);
+        return response;
     }
 }
