@@ -1,28 +1,26 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
-using Electrify.Protos;
 using FluentAssertions;
-using Grpc.Core;
 using Gurux.DLMS;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Authentication = Gurux.DLMS.Enums.Authentication;
+using NSubstitute;
 using Task = System.Threading.Tasks.Task;
 
 namespace Electrify.ComponentTests.Services;
 
-public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<TestFixture>
+public class ErrorMessageServiceTests(TestFixture fixture) : IClassFixture<TestFixture>
 {
     [Fact]
-    public async Task Register_Should_Return_Success_If_Port_Open()
+    public async Task ErrorMessage_Should_Trigger_Error_Message_Update_Invocation()
     {
         // Arrange
         var secret = Guid.NewGuid().ToString();
@@ -35,30 +33,53 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
         
         var serverServiceProvider = ConfigureServer(port, secret).BuildServiceProvider();
 
-        CreateAndInitialiseServer(serverServiceProvider);
+        var errorCallback = Substitute.For<Action>();
         
-        Thread.Sleep(100);  // make sure server finished initialisation before trying to connect to it
+        CreateAndInitialiseServer(serverServiceProvider, errorCallback);
+
+        await Task.Delay(100);  // make sure server finished initialisation before trying to connect to it
+        
+        var response = await fixture.ApiClient.Register(port, secret, clientId);
+        response.Success.Should().BeTrue();
+
+        await Task.Delay(50);
         
         // Act
-        var response = await fixture.ApiClient.Register(port, secret, clientId);
+        await fixture.ApiClient.ErrorMessage();
+
+        await Task.Delay(50);
         
         // Assert
-        response.Success.Should().BeTrue();
+        errorCallback.Received(1).Invoke();
     }
     
     [Fact]
-    public async Task Register_Should_Be_Unsuccessful_If_Cannot_Connect_To_Port()
+    public async Task ErrorMessage_Should_NotTrigger_Error_Message_Update_Invocation_When_Not_Called()
     {
         // Arrange
-        const int port = 999999;
         var secret = Guid.NewGuid().ToString();
         var clientId = Guid.NewGuid();
         
-        // Act
+        var listener = new TcpListener(IPAddress.Loopback, 0);
+        listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+        listener.Stop();
+        
+        var serverServiceProvider = ConfigureServer(port, secret).BuildServiceProvider();
+
+        var errorCallback = Substitute.For<Action>();
+        
+        CreateAndInitialiseServer(serverServiceProvider, errorCallback);
+
+        await Task.Delay(100);  // make sure server finished initialisation before trying to connect to it
+        
         var response = await fixture.ApiClient.Register(port, secret, clientId);
+        response.Success.Should().BeTrue();
+
+        await Task.Delay(50);
         
         // Assert
-        response.Success.Should().BeFalse();
+        errorCallback.Received(0).Invoke();
     }
     
     // TODO not SOLID this is copy pasted from E2E tests, make sure password matches if combining though
@@ -101,7 +122,7 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
         return services;
     }
     
-    private DlmsServer CreateAndInitialiseServer(IServiceProvider serviceProvider)
+    private DlmsServer CreateAndInitialiseServer(IServiceProvider serviceProvider,  Action onErrorMessageUpdateCallback)
     {
         void Configure(DlmsServer server, IServiceProvider sp)
         {
@@ -149,7 +170,7 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
                 serviceProvider.GetRequiredService<IOptions<DlmsServerOptions>>(),
                 () => {},
                 () => {},
-                () => {});
+                onErrorMessageUpdateCallback);
         });
 
         return server;

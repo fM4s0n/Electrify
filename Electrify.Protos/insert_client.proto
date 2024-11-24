@@ -4,7 +4,7 @@ import "google/api/annotations.proto";
 
 option csharp_namespace = "Electrify.Protos";
 
-package insertClient;
+package insert_client;
 
 service InsertClient {
   rpc InsertClient(InsertClientRequest) returns (InsertClientResponse) {
@@ -15,11 +15,11 @@ service InsertClient {
   }
 }
 
-message InsertClientRequest{
+message InsertClientRequest {
   string id = 1;
   string userId = 2;
 }
 
-message InsertClientResponse{
+message InsertClientResponse {
   bool success = 1;
 }

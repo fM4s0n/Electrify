@@ -50,10 +50,15 @@ public sealed class DlmsServer : IDlmsServer
         }
     }
 
-    public void Initialise(IOptions<DlmsServerOptions> options, Action onConnectedCallback, Action onDisconnectedCallback)
+    public void Initialise(
+        IOptions<DlmsServerOptions> options,
+        Action onConnectedCallback,
+        Action onDisconnectedCallback,
+        Action onErrorMessageUpdateCallback)
     {
         _server.OnConnectedCallback = onConnectedCallback;
         _server.OnDisconnectedCallback = onDisconnectedCallback;
+        _server.OnErrorMessageUpdateCallback = onErrorMessageUpdateCallback;
 
         _server.Initialize(options.Value.Port, options.Value.TraceLevel);
 
@@ -73,6 +78,19 @@ public sealed class DlmsServer : IDlmsServer
         };
         using var csv = new CsvReader(reader, config);
         return csv.GetRecords<GenericProfileRow>().ToList();
+    }
+
+    public string? GetErrorMessage()
+    {
+        var errorMessageRegister = _server.Items
+            .First(r => r.LogicalName == RegisterNames.ErrorMessage);
+
+        if (errorMessageRegister is GXDLMSRegister { Value: string registerValue })
+        {
+            return registerValue == string.Empty ? null : registerValue;
+        }
+
+        return null;
     }
 
     private Task RunAsync(CancellationToken cancellationToken)

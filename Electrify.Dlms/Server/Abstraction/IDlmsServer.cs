@@ -11,7 +11,13 @@ public interface IDlmsServer : IDisposable
 
     void SetEnergy(double energyValue);
 
-    void Initialise(IOptions<DlmsServerOptions> options, Action onConnectedCallback, Action onDisconnectedCallback);
+    void Initialise(
+        IOptions<DlmsServerOptions> options,
+        Action onConnectedCallback, 
+        Action onDisconnectedCallback,
+        Action onErrorMessageUpdateCallback);
     
     IEnumerable<GenericProfileRow> GetReadings();
+
+    string? GetErrorMessage();
 }

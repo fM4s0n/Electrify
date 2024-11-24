@@ -30,9 +30,11 @@ public partial class MainLayout
     {
         Task.Run(() =>
         {
-            DlmsServer.Initialise(Options, () => ErrorMessageService.IsConnected = true,
-                () => ErrorMessageService.IsConnected =
-                    false);
+            DlmsServer.Initialise(
+                Options,
+                () => ErrorMessageService.IsConnected = true,
+                () => ErrorMessageService.IsConnected = false,
+                () => ErrorMessageService.ErrorMessage = DlmsServer.GetErrorMessage());
         });
     }
 
