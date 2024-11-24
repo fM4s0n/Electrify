@@ -1,10 +1,11 @@
 ﻿using Electrify.AdminUi.Services.Abstractions;
 using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.ApiClient.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace Electrify.AdminUi.Services;
 
-public class AdminService(IElectrifyApiClient electrifyApiClient) : IAdminService
+public class AdminService(IElectrifyApiClient electrifyApiClient, ILogger<AdminService> logger) : IAdminService
 {
     public HttpAdminLoginResponse? CurrentAdmin { get; private set; }
     
@@ -25,6 +26,10 @@ public class AdminService(IElectrifyApiClient electrifyApiClient) : IAdminServic
         if (response?.Success == true)
         {
             CurrentAdmin = response;
+        }
+        else
+        {
+            logger.LogWarning("Admin login failed for email: {email}", email);
         }
 
         return response?.Success ?? false;

@@ -3,6 +3,7 @@ using FluentAssertions;
 using Electrify.AdminUi.Services;
 using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.ApiClient.Contracts;
+using Microsoft.Extensions.Logging;
 
 namespace Electrify.AdminUi.UnitTests.Services;
 
@@ -13,8 +14,9 @@ public class AdminServiceTests
 
     public AdminServiceTests()
     {
+        var logger = Substitute.For<ILogger<AdminService>>();
         _electrifyApiClient = Substitute.For<IElectrifyApiClient>();
-        _adminService = new AdminService(_electrifyApiClient);
+        _adminService = new AdminService(_electrifyApiClient, logger);
     }
 
     [Fact]

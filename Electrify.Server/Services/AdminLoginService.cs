@@ -5,7 +5,7 @@ using Electrify.Protos;
 
 namespace Electrify.Server.Services;
 
-public class AdminLoginService(IAdminService adminService) : AdminLogin.AdminLoginBase
+public class AdminLoginService(IAdminService adminService, ILogger<AdminLoginService> logger) : AdminLogin.AdminLoginBase
 {
     public override Task<AdminLoginResponse> AdminLogin(AdminLoginRequest request, ServerCallContext context)
     {
@@ -13,6 +13,8 @@ public class AdminLoginService(IAdminService adminService) : AdminLogin.AdminLog
 
         if (admin == null || !adminService.VerifyPassword(admin, request.Password))
         {
+            logger.LogWarning("Invalid login attempt for email: {Email}", request.Email);
+            
             return Task.FromResult(new AdminLoginResponse
             {
                 Success = false,

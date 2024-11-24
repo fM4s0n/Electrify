@@ -24,6 +24,7 @@ public class MeterAvailabilityService(
     {
         if (!Guid.TryParse(request.ClientId, out var clientId))
         {
+            logger.LogError("ClientId was not a valid Guid : {ClientId}", request.ClientId);
             throw new RpcException(new Status(StatusCode.InvalidArgument, "ClientId should be in GUID format"));
         }
         
