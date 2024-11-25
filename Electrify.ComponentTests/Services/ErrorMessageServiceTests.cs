@@ -5,6 +5,7 @@ using System.Text;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
+using Electrify.Models;
 using FluentAssertions;
 using Gurux.DLMS;
 using Gurux.DLMS.Enums;
@@ -24,7 +25,10 @@ public class ErrorMessageServiceTests(TestFixture fixture) : IClassFixture<TestF
     {
         // Arrange
         var secret = Guid.NewGuid().ToString();
-        var clientId = Guid.NewGuid();
+
+        Client client = fixture.CreateEClient();
+
+        await fixture.Database.SaveChangesAsync();
         
         var listener = new TcpListener(IPAddress.Loopback, 0);
         listener.Start();
@@ -39,7 +43,7 @@ public class ErrorMessageServiceTests(TestFixture fixture) : IClassFixture<TestF
 
         await Task.Delay(100);  // make sure server finished initialisation before trying to connect to it
         
-        var response = await fixture.ApiClient.Register(port, secret, clientId);
+        var response = await fixture.ApiClient.Register(port, secret, client.Id);
         response.Success.Should().BeTrue();
 
         await Task.Delay(50);
@@ -58,7 +62,8 @@ public class ErrorMessageServiceTests(TestFixture fixture) : IClassFixture<TestF
     {
         // Arrange
         var secret = Guid.NewGuid().ToString();
-        var clientId = Guid.NewGuid();
+        
+        Client client = fixture.CreateEClient();
         
         var listener = new TcpListener(IPAddress.Loopback, 0);
         listener.Start();
@@ -73,7 +78,7 @@ public class ErrorMessageServiceTests(TestFixture fixture) : IClassFixture<TestF
 
         await Task.Delay(100);  // make sure server finished initialisation before trying to connect to it
         
-        var response = await fixture.ApiClient.Register(port, secret, clientId);
+        var response = await fixture.ApiClient.Register(port, secret, client.Id);
         response.Success.Should().BeTrue();
 
         await Task.Delay(50);
