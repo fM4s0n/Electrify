@@ -5,6 +5,7 @@ using System.Text;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
+using Electrify.Models;
 using Electrify.Protos;
 using FluentAssertions;
 using Grpc.Core;
@@ -26,7 +27,8 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
     {
         // Arrange
         var secret = Guid.NewGuid().ToString();
-        var clientId = Guid.NewGuid();
+        
+        Client client = fixture.CreateEClient();
         
         var listener = new TcpListener(IPAddress.Loopback, 0);
         listener.Start();
@@ -40,7 +42,7 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
         Thread.Sleep(100);  // make sure server finished initialisation before trying to connect to it
         
         // Act
-        var response = await fixture.ApiClient.Register(port, secret, clientId);
+        var response = await fixture.ApiClient.Register(port, secret, client.Id);
         
         // Assert
         response.Success.Should().BeTrue();
@@ -52,10 +54,11 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
         // Arrange
         const int port = 999999;
         var secret = Guid.NewGuid().ToString();
-        var clientId = Guid.NewGuid();
+        
+        Client client = fixture.CreateEClient();
         
         // Act
-        var response = await fixture.ApiClient.Register(port, secret, clientId);
+        var response = await fixture.ApiClient.Register(port, secret, client.Id);
         
         // Assert
         response.Success.Should().BeFalse();
