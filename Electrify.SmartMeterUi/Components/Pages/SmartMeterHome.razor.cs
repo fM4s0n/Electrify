@@ -23,6 +23,7 @@ public partial class SmartMeterHome
     [Inject] private IUsageService UsageService { get; set; } = default!;
     [Inject] private IErrorMessageService ErrorMessageService { get; set; } = default!;
     [Inject] private IDlmsServer DlmsServer { get; set; } = default!;
+    [Inject] private IConnectionService ConnectionService { get; set; } = default!;
 
     protected override void OnInitialized()
     {
@@ -75,7 +76,7 @@ public partial class SmartMeterHome
         _dialBackground = $"conic-gradient({_barColour} 45deg, {_barColour} {adjustedPercentage}deg, #72777E {adjustedPercentage}deg, #72777E 360deg)";
     }
 
-    private void CheckForNewToastMessage()
+    private async Task CheckForNewToastMessage()
     {
         bool connected = ErrorMessageService.IsConnected;
         string? errorMessage = ErrorMessageService.ErrorMessage;
@@ -91,6 +92,23 @@ public partial class SmartMeterHome
                     Type = ToastType.NoConnection
                 });
             }
+
+            if (ConnectionService.InitialConnectionMade)
+            {
+                try
+                {
+                    await ConnectionService.AttemptReconnectAsync();
+                }
+                catch (TaskCanceledException)
+                {
+                    Console.WriteLine("Reconnection attempt was canceled.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Unexpected error during reconnection: {ex.Message}");
+                }
+            }
+
         }
         else
         {

@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Extensions;
 using Electrify.Dlms.Options;
@@ -32,10 +34,15 @@ public static class MauiProgram
             .WriteTo.Debug()
             .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.log"))
             .Enrich.FromLogContext().Enrich.WithMachineName().Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId);
-
+		
+		var listener = new TcpListener(IPAddress.Loopback, 0);
+		listener.Start();
+		var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+		listener.Stop();
+		
 		builder.Services.AddSingleton(Options.Create(new DlmsServerOptions
 		{
-			Port = 56527,
+			Port = port,
 			Password = "YourSuperSecureSecretKey1234567890",
 			Authentication = Authentication.HighSHA256,
 			TraceLevel = TraceLevel.Verbose,
@@ -55,6 +62,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IUsageService, UsageService>();
 
 		builder.Services.AddSingleton<IErrorMessageService, ErrorMessageService>();
+		builder.Services.AddScoped<IConnectionService, ConnectionService>();
 		
         builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
 		{
