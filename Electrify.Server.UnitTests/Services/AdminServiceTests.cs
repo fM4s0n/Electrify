@@ -53,7 +53,7 @@ public class AdminServiceTests
     {
         // Arrange
         const string name = "Lewis Hamilton";
-        const string email = "test1@mercedes.com";
+        const string email = "test1@Mercedes.com";
         const string plainTextPassword = "password1";
         _adminService.CreateAdmin(name, email, plainTextPassword);
 
@@ -70,7 +70,7 @@ public class AdminServiceTests
     {
         // Arrange
         const string name = "Charles Leclerc";
-        const string email = "test@ferrari.com";
+        const string email = "test@Ferrari.com";
         const string plainTextPassword = "password2";
         _adminService.CreateAdmin(name, email, plainTextPassword);
 

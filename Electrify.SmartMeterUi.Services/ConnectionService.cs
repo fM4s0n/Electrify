@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
 using Electrify.Server.ApiClient;
@@ -10,10 +7,17 @@ using Microsoft.Extensions.Options;
 
 namespace Electrify.SmartMeterUi.Services;
 
-public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsServerOptions> options, IDlmsServer dlmsServer, IErrorMessageService errorMessageService, ILogger<ElectrifyApiClient> logger) : IConnectionService
+public class ConnectionService(
+    IHttpClientFactory clientFactory,
+    IOptions<DlmsServerOptions> options,
+    IDlmsServer dlmsServer,
+    IErrorMessageService errorMessageService,
+    ILogger<ElectrifyApiClient> logger) : IConnectionService
 {
     private ElectrifyApiClient _apiClient = default!;
     private CancellationTokenSource? _reconnectCts;
+    private Guid? _clientId;
+
     public bool InitialConnectionMade { get; private set; }
 
     public async Task InitializeConnectionAsync(bool isReconnect)
@@ -49,7 +53,12 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
 
     private async Task RegisterConnectionWithServer()
     {
-        await _apiClient.Register(options.Value.Port, options.Value.Password, Guid.NewGuid());
+        if (_clientId == null)
+        {
+            throw new InvalidOperationException("Client ID is not set.");
+        }
+
+        await _apiClient.Register(options.Value.Port, options.Value.Password, _clientId.Value);
         InitialConnectionMade = true;
     }
 
@@ -98,7 +107,6 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
         }
     }
 
-
     private void CancelReconnect()
     {
         if (_reconnectCts == null || _reconnectCts.IsCancellationRequested) return;
@@ -108,4 +116,6 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
         _reconnectCts = null;
         Console.WriteLine("Reconnection attempts canceled.");
     }
+
+    public void SetClientId(Guid clientId) => _clientId = clientId;
 }

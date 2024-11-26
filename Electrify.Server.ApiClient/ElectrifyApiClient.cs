@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Electrify.Server.ApiClient;
 
-public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyApiClient> _logger) : IElectrifyApiClient
+public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyApiClient> logger) : IElectrifyApiClient
 {
     public async Task<AvailabilityResponse> Register(int port, string secret, Guid clientId)
     {
@@ -21,22 +21,22 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
                 ClientId = clientId.ToString(),
             });
 
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger
-                .LogError(
-                    "Failed to register the server with the Electrify API. Response: {Response}",
-                    response);
+            if (!response.IsSuccessStatusCode)
+            {
+                logger
+                    .LogError(
+                        "Failed to register the server with the Electrify API. Response: {Response}",
+                        response);
             
-            throw new Exception(await response.Content.ReadAsStringAsync());
-        }
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            }
 
             var availabilityResponse = await response.Content.ReadFromJsonAsync<AvailabilityResponse>();
 
             if (availabilityResponse is null)
             {
-                _logger.LogError("Failed to parse the {AvailabilityResponse}", availabilityResponse);
-                throw new Exception($"An error occured parsing the {nameof(AvailabilityResponse)}");
+                logger.LogError("Failed to parse the {AvailabilityResponse}", availabilityResponse);
+                throw new Exception($"An error occurred parsing the {nameof(AvailabilityResponse)}");
             }
 
             return availabilityResponse;
@@ -58,7 +58,7 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("Failed to login the admin. Response: {Response}", response);
+            logger.LogError("Failed to login the admin. Response: {Response}", response);
             
             throw new Exception(await response.Content.ReadAsStringAsync());
         }
@@ -67,9 +67,9 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
 
         if (adminLoginResponse is null)
         {
-            _logger.LogError("Failed to parse the {HttpAdminLoginResponse}", adminLoginResponse);
+            logger.LogError("Failed to parse the {HttpAdminLoginResponse}", adminLoginResponse);
             
-            throw new Exception($"An error occured parsing the {nameof(HttpAdminLoginResponse)}");
+            throw new Exception($"An error occurred parsing the {nameof(HttpAdminLoginResponse)}");
         }
         
         return adminLoginResponse;
@@ -85,7 +85,7 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
 
         if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError("Failed to insert the client. Response: {Response}", response);
+            logger.LogError("Failed to insert the client. Response: {Response}", response);
             
             throw new Exception(await response.Content.ReadAsStringAsync());
         }
@@ -94,9 +94,9 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
 
         if (insertClientResponse is null)
         {
-            _logger.LogError("Failed to parse the {HttpInsertClientResponse}", insertClientResponse);
+            logger.LogError("Failed to parse the {HttpInsertClientResponse}", insertClientResponse);
             
-            throw new Exception($"An error occured parsing the {nameof(HttpInsertClientResponse)}");
+            throw new Exception($"An error occurred parsing the {nameof(HttpInsertClientResponse)}");
         }
 
         return insertClientResponse;
@@ -106,7 +106,31 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
     {
         await httpClient.PostAsJsonAsync("/v1/errorMessage", new {});
     }
-    
+
+    public async Task<ClientRegistrationResponse> ClientIdExists(Guid clientId)
+    {
+        var response = await httpClient.PostAsJsonAsync("/v1/clientIdExists", new ClientRegistrationRequest 
+        {
+            ClientId = clientId.ToString()
+        });
+
+        if (!response.IsSuccessStatusCode)
+        {
+            logger.LogError("Failed to complete search. Response: {Response}", response);
+            throw new Exception(await response.Content.ReadAsStringAsync());
+        }
+
+        var clientRegistrationResponse = await response.Content.ReadFromJsonAsync<ClientRegistrationResponse>();
+
+        if (clientRegistrationResponse is null)
+        {
+            logger.LogError("Failed to parse the {ClientRegistrationResponse}", clientRegistrationResponse);
+            throw new Exception($"An error occurred parsing the {nameof(ClientRegistrationResponse)}");
+        }
+
+        return clientRegistrationResponse;
+    }
+
     public void Dispose()
     {
         httpClient.Dispose();

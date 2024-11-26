@@ -5,4 +5,5 @@ public enum ToastType
     NoConnection = 1,
     ServerUpdate = 2,
     InsertClientError = 3,
+    InvalidClientId = 4
 }

@@ -70,5 +70,53 @@ html, body {
     width: 100vw;
     height: 100svh;
     overflow: hidden;
-    background: #000000;
+    background: var(--brand-dark);
+}
+
+.button {
+    border-radius: 5px;
+    border: 2px solid var(--brand-light);
+    color: var(--brand-light);
+    padding: 0.5em;
+    box-sizing: border-box;
+    transition: ease-in-out 0.2s;
+    width: fit-content;
+    margin: auto;
+}
+
+.button:hover {
+    background: var(--brand-light);
+    color: var(--brand-dark);
+    cursor: pointer;
+}
+
+.input-text {
+    padding: 0.5em;
+    color: var(--brand-light);
+    border: none;
+    border-bottom: 2px solid #aaaaaa;
+    background: none;
+    transition: ease-in-out 0.2s;
+    margin: 0 auto;
+    width: 100%;
+}
+
+    .input-text:focus {
+        border-bottom: 2px solid var(--brand-light);
+        outline: none;
+    }
+
+.client-id-input {
+    font-size: 2em;
+    text-align: center;
+}
+
+.toast-list-container {
+    z-index: 10;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
 }

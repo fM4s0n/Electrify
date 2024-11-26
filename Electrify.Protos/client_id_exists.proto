@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Electrify.Protos";
+
+package client_id_exists;
+
+service ClientRegistration {
+  rpc ClientRegistration (ClientRegistrationRequest) returns (ClientRegistrationResponse) {
+    option (google.api.http) = {
+      post: "/v1/clientIdExists",
+      body: "*"
+    };
+  }
+}
+
+message ClientRegistrationRequest {
+  string clientId = 1;
+}
+
+message ClientRegistrationResponse {
+  bool success = 1;
+}

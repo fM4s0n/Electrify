@@ -62,6 +62,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IUsageService, UsageService>();
 
 		builder.Services.AddSingleton<IErrorMessageService, ErrorMessageService>();
+		builder.Services.AddSingleton<IClientRegistrationService, ClientRegistrationService>();
 		builder.Services.AddScoped<IConnectionService, ConnectionService>();
 		
         builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>

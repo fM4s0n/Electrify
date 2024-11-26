@@ -12,4 +12,6 @@ public interface IElectrifyApiClient : IDisposable
     Task<HttpInsertClientResponse> InsertClient(Guid id, Guid userId);
 
     Task ErrorMessage();
+
+    Task<ClientRegistrationResponse> ClientIdExists(Guid clientId);
 }

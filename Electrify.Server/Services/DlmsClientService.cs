@@ -31,6 +31,8 @@ public sealed class DlmsClientService(
             var lastReading = database.GetLastReading(clientId) ?? timeProvider.GetLocalNow().AddMinutes(-1).DateTime;
             var readings = _clients[port].ReadEnergyProfile(lastReading).ToList();
 
+            database.AddRange(readings);
+
             for (var i = 0; i < readings.Count; i++)
             {
                 var reading = readings[i];

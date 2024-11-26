@@ -1,0 +1,19 @@
+﻿@using Electrify.UiComponents;
+
+@page "/"
+
+<div class="main-page">
+    <div class="client-setup-container">
+        <InputText placeholer="Client ID" @bind-Value="_clientId" class="input-text client-id-input" />
+        <a class="button" @onclick="HandleSetup">
+            Register Client ID
+        </a>    
+    </div>
+
+    <div class="toast-list-container">
+        @foreach (var toast in _displayToasts)
+        {
+            <Toast Title="@toast.Title" Message="@toast.Message"></Toast>
+        }
+    </div>
+</div>

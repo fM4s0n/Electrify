@@ -92,13 +92,3 @@
 .usage-divider {
     border-bottom: 1px solid #454C57;
 }
-
-.toast-list-container {
-    z-index: 10;
-    position: absolute;
-    top: 1em;
-    left: 1em;
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-}
