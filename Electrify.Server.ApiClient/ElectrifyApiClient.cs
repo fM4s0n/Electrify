@@ -102,6 +102,11 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
         return insertClientResponse;
     }
     
+    public async Task ErrorMessage()
+    {
+        await httpClient.PostAsJsonAsync("/v1/errorMessage", new {});
+    }
+    
     public void Dispose()
     {
         httpClient.Dispose();

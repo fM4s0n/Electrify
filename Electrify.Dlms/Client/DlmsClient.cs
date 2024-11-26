@@ -66,6 +66,13 @@ public sealed class DlmsClient : IDlmsClient
         register.Value = tariff;
         _reader.Write(register, 2);
     }
+    
+    public void WriteErrorMessage(string message)
+    {
+        var register = _registers.First(r => r.LogicalName == RegisterNames.ErrorMessage);
+        register.Value = message;
+        _reader.Write(register, 2);
+    }
 
     private void OnNotification(object data)
     {

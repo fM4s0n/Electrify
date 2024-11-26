@@ -167,10 +167,18 @@ public class EndToEndTests : IDisposable
                 SortObject = clock,
                 CaptureObjects = [new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(clock, new GXDLMSCaptureObject(2, 0)), new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(energyRegister, new GXDLMSCaptureObject(2, 0)), new GXKeyValuePair<GXDLMSObject, GXDLMSCaptureObject>(tariffRegister, new GXDLMSCaptureObject(2, 0)),]
             };
+            
+            var errorMessageRegister = new GXDLMSRegister(RegisterNames.ErrorMessage)
+            {
+                Scaler = 1.0,
+                Unit = Unit.NoUnit,
+                Value = string.Empty,
+            };
 
             server.AddObject(energyRegister);
             server.AddObject(tariffRegister, true);
             server.AddObject(energyProfile);
+            server.AddObject(errorMessageRegister, true);
 
             _usageTimer = new Timer(_ =>
             {
@@ -195,6 +203,7 @@ public class EndToEndTests : IDisposable
         {
             server.Initialise(
                 serviceProvider.GetRequiredService<IOptions<DlmsServerOptions>>(),
+                () => {},
                 () => {},
                 () => {});
         });

@@ -1,3 +1,4 @@
+using Electrify.Models;
 using Electrify.Server.ApiClient;
 using Electrify.Server.Database;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -26,6 +27,21 @@ public sealed class TestFixture : WebApplicationFactory<Program>
         Database = _serviceScope.ServiceProvider.GetRequiredService<ElectrifyDbContext>();
     }
 
+    public Client CreateEClient()
+    {
+        Client client = new Client
+        {
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+        };
+        
+        Database.Clients.Add(client);
+        
+        Database.SaveChanges();
+
+        return client;
+    }
+    
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

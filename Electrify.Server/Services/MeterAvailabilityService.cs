@@ -1,6 +1,7 @@
 using Electrify.Dlms.Client;
 using Electrify.Dlms.Options;
 using Electrify.Protos;
+using Electrify.Server.Database;
 using Electrify.Server.Options;
 using Electrify.Server.Services.Abstraction;
 using Grpc.Core;
@@ -17,6 +18,7 @@ public class MeterAvailabilityService(
     ILogger<DlmsClient> dlmsClientLogger,
     ILogger<MeterAvailabilityService> logger,
     TimeProvider timeProvider,
+    ElectrifyDbContext dbContext,
     IDlmsClientService dlmsClientService)
     : MeterAvailability.MeterAvailabilityBase
 {
@@ -28,7 +30,11 @@ public class MeterAvailabilityService(
             throw new RpcException(new Status(StatusCode.InvalidArgument, "ClientId should be in GUID format"));
         }
         
-        // TODO verify the client is actually valid (check db)
+        if (dbContext.Clients.Any(client => client.Id == clientId) == false)
+        {
+            logger.LogWarning("Client ID is not registered: {ClientId}", request.ClientId);
+            throw new RpcException(new Status(StatusCode.Unauthenticated, "Client ID is not registered"));
+        }
         
         var media = new GXNet(dlmsClientOptions.Value.Protocol, dlmsClientOptions.Value.ServerHostname, request.Port);
         
