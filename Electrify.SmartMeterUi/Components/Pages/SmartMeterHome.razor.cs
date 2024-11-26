@@ -10,7 +10,6 @@ namespace Electrify.SmartMeterUi.Components.Pages;
 public partial class SmartMeterHome
 {
     private float _currentUsage = 3.45f;
-    private float _pricePerKw;
     private float _usagePercent;
     private string _barColour = "#00b5f1";
     private string _dialBackground = string.Empty;
@@ -27,7 +26,6 @@ public partial class SmartMeterHome
 
     protected override void OnInitialized()
     {
-        GetPrice();
         SetUpTimer();
         UpdateDial();
     }
@@ -37,24 +35,19 @@ public partial class SmartMeterHome
         _timer = new Timer(OnTimerElapsed, null, 0, 2000);
     }
 
-    private void GetPrice()
-    {
-        _pricePerKw = 0.2122f;
-    }
-
     private void GetCurrentUsage()
     {
         _currentUsage = UsageService.GetCurrentUsage();
         _usagePercent = (float)Math.Round(_currentUsage * 10000, 6);
     }
 
-    private void OnTimerElapsed(object? state)
+    private async void OnTimerElapsed(object? state)
     {
         GetCurrentUsage();
         UpdateDial();
-        CheckForNewToastMessage();
+        await CheckForNewToastMessage();
         GetReadings();
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
     private void UpdateDial()
@@ -108,7 +101,6 @@ public partial class SmartMeterHome
                     Console.WriteLine($"Unexpected error during reconnection: {ex.Message}");
                 }
             }
-
         }
         else
         {
@@ -192,12 +184,12 @@ public partial class SmartMeterHome
 
     #region UI Formatting
 
-    private string FormatCurrency(double currency)
+    private static string FormatCurrency(double currency)
     {
         return currency.ToString("C");
     }
 
-    private string FormatKwh(double kwh)
+    private static string FormatKwh(double kwh)
     {
         return Math.Round(kwh, 3) + "kw/h";
     }
