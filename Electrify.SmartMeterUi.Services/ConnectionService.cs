@@ -49,7 +49,7 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
 
     private async Task RegisterConnectionWithServer()
     {
-        await _apiClient.Register(options.Value.Port, options.Value.Password, Guid.NewGuid());
+        await _apiClient.Register(options.Value.Port, options.Value.Password, Guid.Parse(Environment.GetCommandLineArgs()[2]));
         InitialConnectionMade = true;
     }
 

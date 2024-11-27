@@ -35,14 +35,16 @@ public static class MauiProgram
             .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.log"))
             .Enrich.FromLogContext().Enrich.WithMachineName().Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId);
 		
-		var listener = new TcpListener(IPAddress.Loopback, 0);
-		listener.Start();
-		var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-		listener.Stop();
+		//var listener = new TcpListener(IPAddress.Loopback, 0);
+		//listener.Start();
+		//var port = ((IPEndPoint)listener.LocalEndpoint).Port;
+		//listener.Stop();
+		
+		
 		
 		builder.Services.AddSingleton(Options.Create(new DlmsServerOptions
 		{
-			Port = port,
+			Port = 8643,
 			Password = "YourSuperSecureSecretKey1234567890",
 			Authentication = Authentication.HighSHA256,
 			TraceLevel = TraceLevel.Verbose,
