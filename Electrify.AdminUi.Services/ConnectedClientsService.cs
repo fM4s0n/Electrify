@@ -5,7 +5,7 @@ namespace Electrify.AdminUi.Services;
 
 public sealed class ConnectedClientsService(
     IElectrifyApiClient electrifyApiClient,
-    AdminService adminService)
+    IAdminService adminService)
     : IConnectedClientsService
 {
     public async Task<IEnumerable<string>> GetConnectedClientIds()
