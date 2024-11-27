@@ -2,6 +2,7 @@
 using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Electrify.Server.Services;
 
@@ -31,6 +32,11 @@ public class AdminService(ElectrifyDbContext dbContext, PasswordHasher<Admin> pa
     public Guid GenerateAccessToken()
     {
         return Guid.NewGuid();
+    }
+
+    public Task<bool> ValidateToken(Guid token)
+    {
+        return dbContext.Admins.AnyAsync(a => a.AccessToken == token);
     }
 
     private async Task InsertAdmin(Admin admin)

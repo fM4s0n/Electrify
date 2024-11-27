@@ -12,4 +12,6 @@ public interface IAdminService
     void UpdateAccessToken(Admin admin, Guid? token);
 
     Admin? GetAdminByEmail(string email);
+
+    Task<bool> ValidateToken(Guid token);
 }

@@ -10,7 +10,7 @@ namespace Electrify.Dlms.Client;
 
 public sealed class DlmsClient : IDlmsClient
 {
-    private readonly Guid _clientId;
+    public Guid ClientId { get; private set; }
     private readonly ILogger<DlmsClient> _logger;
     private readonly GXNet _media;
     private readonly GXDLMSReader _reader;
@@ -19,7 +19,7 @@ public sealed class DlmsClient : IDlmsClient
     
     public DlmsClient(Guid clientId, ILogger<DlmsClient> logger, GXNet media, GXDLMSReader reader, IEnumerable<GXDLMSRegister> registers, TimeProvider timeProvider)
     {
-        _clientId = clientId;
+        ClientId = clientId;
         _logger = logger;
         _media = media;
         _reader = reader;
@@ -51,7 +51,7 @@ public sealed class DlmsClient : IDlmsClient
             {
                 yield return new Reading
                 {
-                    ClientId = _clientId,
+                    ClientId = ClientId,
                     DateTime = gxDateTime,
                     EnergyUsage = energyUsage,
                     Tariff = energyTariff,

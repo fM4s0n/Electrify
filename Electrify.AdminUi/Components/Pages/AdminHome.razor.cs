@@ -68,6 +68,11 @@ public partial class AdminHome : ComponentBase
         NavigationManager.NavigateTo("/");
     }
 
+    private void ViewConnectedClients()
+    {
+        NavigationManager.NavigateTo("/connectedClients");
+    }
+
     private string GetGreeting() => GreetingService.GetGreeting(_admin?.Name ?? "Admin");
 
     private static async Task CopyToClipboard(string stringToCopy)

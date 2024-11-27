@@ -106,6 +106,23 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
     {
         await httpClient.PostAsJsonAsync("/v1/errorMessage", new {});
     }
+
+    public async Task<IEnumerable<string>> GetConnectedClientIds(string token)
+    {
+        var response = await httpClient.PostAsJsonAsync("/v1/connectedClientIds", new
+        {
+            Token = token
+        });
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return [];
+        }
+
+        var connectedClientIdsResponse = await response.Content.ReadFromJsonAsync<HttpConnectedClientIdsResponse>();
+
+        return connectedClientIdsResponse?.ClientIds ?? [];
+    }
     
     public void Dispose()
     {
