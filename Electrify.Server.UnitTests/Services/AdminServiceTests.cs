@@ -24,7 +24,7 @@ public class AdminServiceTests
     }
 
     [Fact]
-    public void CreateAdmin_Should_Create_Valid_Admin()
+    public async Task CreateAdmin_Should_Create_Valid_Admin()
     {
         // Arrange
         const string name = "John Doe";
@@ -32,7 +32,7 @@ public class AdminServiceTests
         const string plainTextPassword = "password";
 
         // Act
-        _adminService.CreateAdmin(name, email, plainTextPassword);
+        await _adminService.CreateAdmin(name, email, plainTextPassword);
 
         var admin = _database.Admins.FirstOrDefault(a => a.Email == email);
 
@@ -49,13 +49,13 @@ public class AdminServiceTests
     }
 
     [Fact]
-    public void VerifyPassword_Should_Return_True()
+    public async Task VerifyPassword_Should_Return_True()
     {
         // Arrange
         const string name = "Lewis Hamilton";
         const string email = "test1@mercedes.com";
         const string plainTextPassword = "password1";
-        _adminService.CreateAdmin(name, email, plainTextPassword);
+        await _adminService.CreateAdmin(name, email, plainTextPassword);
 
         // Act
         var admin = _database.Admins.FirstOrDefault(a => a.Email == email);
@@ -66,13 +66,13 @@ public class AdminServiceTests
     }
 
     [Fact]
-    public void VerifyPassword_Should_Return_False()
+    public async Task VerifyPassword_Should_Return_False()
     {
         // Arrange
         const string name = "Charles Leclerc";
         const string email = "test@ferrari.com";
         const string plainTextPassword = "password2";
-        _adminService.CreateAdmin(name, email, plainTextPassword);
+        await _adminService.CreateAdmin(name, email, plainTextPassword);
 
         // Act
         var admin = _database.Admins.FirstOrDefault(a => a.Email == email);

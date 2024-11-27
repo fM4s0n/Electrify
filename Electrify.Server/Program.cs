@@ -69,7 +69,8 @@ app.UseSwagger().UseSwaggerUI(options =>
 using (var scope = app.Services.CreateScope())
 {
     var seeder = scope.ServiceProvider.GetRequiredService<IDatabaseSeeder>();
-    seeder.SeedDefaultAdmin();
+    await seeder.SeedDefaultAdmin();
+    await seeder.SeedDefaultClientId();
 }
 
 app.MapGrpcService<MeterAvailabilityService>();

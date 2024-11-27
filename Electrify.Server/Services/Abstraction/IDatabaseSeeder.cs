@@ -2,5 +2,6 @@
 
 public interface IDatabaseSeeder
 {
-    void SeedDefaultAdmin();
+    Task SeedDefaultAdmin();
+    Task SeedDefaultClientId();
 }
