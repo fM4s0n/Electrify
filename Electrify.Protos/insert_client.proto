@@ -16,8 +16,9 @@ service InsertClient {
 }
 
 message InsertClientRequest {
-  string id = 1;
-  string userId = 2;
+  string token = 1;
+  string id = 2;
+  string userId = 3;
 }
 
 message InsertClientResponse {

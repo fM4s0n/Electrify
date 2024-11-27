@@ -9,7 +9,7 @@ public interface IElectrifyApiClient : IDisposable
 
     Task<HttpAdminLoginResponse> AdminLogin(string email, string password);
 
-    Task<HttpInsertClientResponse> InsertClient(Guid id, Guid userId);
+    Task<HttpInsertClientResponse> InsertClient(string token, Guid id, Guid userId);
 
     Task ErrorMessage();
 

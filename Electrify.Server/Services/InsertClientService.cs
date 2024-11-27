@@ -5,10 +5,24 @@ using Grpc.Core;
 
 namespace Electrify.Server.Services;
 
-public class InsertClientService(IClientService clientService, ILogger<InsertClientService> logger) : InsertClient.InsertClientBase
+public class InsertClientService(
+    IClientService clientService,
+    ILogger<InsertClientService> logger,
+    IAdminService adminService)
+    : InsertClient.InsertClientBase
 {
     public override async Task<InsertClientResponse> InsertClient(InsertClientRequest request, ServerCallContext context)
     {
+        if (!Guid.TryParse(request.Token, out var token))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Token must be in GUID format"));
+        }
+
+        if (!await adminService.ValidateToken(token))
+        {
+            throw new RpcException(new Status(StatusCode.Unauthenticated, "Token is invalid"));
+        }
+        
         if (!Guid.TryParse(request.UserId, out var userId))
         {
             logger.LogError("UserId was not a valid Guid : {UserId}", request.UserId);

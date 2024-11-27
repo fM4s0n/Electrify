@@ -10,11 +10,21 @@ public class DatabaseSeeder(IAdminService adminService, ElectrifyDbContext dbCon
     /// </summary>
     public async Task SeedDefaultAdmin()
     {
+        if (dbContext.Admins.Any(a => a.Email == "admin@electrify.com"))
+        {
+            return;
+        }
+        
         await adminService.CreateAdmin("Administrator", "admin@electrify.com", "Password");
     }
 
     public async Task SeedDefaultClientId()
     {
+        if (dbContext.Clients.Any(c => c.Id == Guid.Parse("4b34de2e-c340-4aec-84bf-636e7a388410")))
+        {
+            return;
+        }
+        
         await dbContext.Clients.AddRangeAsync(new Client
         {
             Id = Guid.Parse("4b34de2e-c340-4aec-84bf-636e7a388410"),

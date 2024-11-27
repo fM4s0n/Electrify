@@ -75,10 +75,11 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
         return adminLoginResponse;
     }
 
-    public async Task<HttpInsertClientResponse> InsertClient(Guid id, Guid userId)
+    public async Task<HttpInsertClientResponse> InsertClient(string token, Guid id, Guid userId)
     {
         var response = await httpClient.PostAsJsonAsync("/v1/insertClient", new HttpInsertClientRequest
         {
+            Token = token,
             Id = id.ToString(),
             UserId = userId.ToString(),
         });

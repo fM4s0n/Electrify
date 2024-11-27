@@ -2,6 +2,7 @@
 
 public sealed record HttpInsertClientRequest
 {
-    public required string Id { get; set; } = string.Empty;
-    public required string UserId { get; set; } = string.Empty;
+    public required string Token { get; set; }
+    public required string Id { get; set; }
+    public required string UserId { get; set; }
 }
