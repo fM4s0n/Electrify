@@ -28,6 +28,7 @@ public partial class ConnectedClients : ComponentBase, IDisposable
     private async void UpdateConnectedClientIds(object? state)
     {
         _connectedClientIds = await ConnectedClientsService.GetConnectedClientIds();
+        await InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
