@@ -24,9 +24,4 @@
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="obj\Debug\net8.0\" />
-	</ItemGroup>
-	
 </Project>
