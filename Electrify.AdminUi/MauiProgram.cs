@@ -36,6 +36,7 @@ public static class MauiProgram
         builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
         builder.Services.AddSingleton<IClientService, ClientService>();
         builder.Services.AddSingleton<IAdminService, AdminService>();
+        builder.Services.AddSingleton<IBillService, BillService>();
         builder.Services.AddSingleton<IGreetingService, GreetingService>();
         builder.Services.AddSingleton<IConnectedClientsService, ConnectedClientsService>();
         builder.Services.AddSingleton(TimeProvider.System);

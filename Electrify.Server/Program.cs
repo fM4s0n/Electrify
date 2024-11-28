@@ -42,6 +42,7 @@ builder.Services.AddDbContext<ElectrifyDbContext>(options =>
     options.UseInMemoryDatabase("ElectrifyDB"));
 
 builder.Services.AddScoped(typeof(PasswordHasher<>));
+builder.Services.AddScoped<IReadingService, ReadingService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
@@ -78,6 +79,7 @@ app.MapGrpcService<AdminLoginService>();
 app.MapGrpcService<InsertClientService>();
 app.MapGrpcService<ErrorMessageService>();
 app.MapGrpcService<ConnectedClientsService>();
+app.MapGrpcService<ClientBillService>();
 
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

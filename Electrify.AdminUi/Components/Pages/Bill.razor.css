@@ -1,0 +1,10 @@
+﻿.page-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--brand-dark);
+}
+
+h1 {
+    color: #FFFFFF;
+}

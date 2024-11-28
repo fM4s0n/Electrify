@@ -1,0 +1,25 @@
+﻿syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Electrify.Protos";
+
+package client_bills;
+
+service ClientBills {
+  rpc GetClientBill(GetClientBillRequest) returns (GetClientBillResponse) {
+    option (google.api.http) = {
+      post: "/v1/getClientBill",
+      body: "*"
+    };
+  }
+}
+
+message GetClientBillRequest {
+  string clientId = 1;
+  string date = 2;
+}
+
+message GetClientBillResponse {
+  double payableAmount = 1;
+}
