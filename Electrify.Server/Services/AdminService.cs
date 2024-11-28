@@ -2,12 +2,13 @@
 using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Electrify.Server.Services;
 
 public class AdminService(ElectrifyDbContext dbContext, PasswordHasher<Admin> passwordHasher) : IAdminService 
 {
-    public void CreateAdmin(string name, string email, string plainTextPassword)
+    public async Task CreateAdmin(string name, string email, string plainTextPassword)
     {
         Admin admin = new()
         {
@@ -20,7 +21,7 @@ public class AdminService(ElectrifyDbContext dbContext, PasswordHasher<Admin> pa
         // Hash the password
         admin.PasswordHash = passwordHasher.HashPassword(admin, plainTextPassword);
 
-        InsertAdmin(admin);
+        await InsertAdmin(admin);
     }
 
     public bool VerifyPassword(Admin admin, string plainTextPassword)
@@ -33,10 +34,15 @@ public class AdminService(ElectrifyDbContext dbContext, PasswordHasher<Admin> pa
         return Guid.NewGuid();
     }
 
-    private void InsertAdmin(Admin admin)
+    public Task<bool> ValidateToken(Guid token)
     {
-        dbContext.Admins.Add(admin);
-        dbContext.SaveChanges();
+        return dbContext.Admins.AnyAsync(a => a.AccessToken == token);
+    }
+
+    private async Task InsertAdmin(Admin admin)
+    {
+        await dbContext.Admins.AddAsync(admin);
+        await dbContext.SaveChangesAsync();
     }
 
     public void UpdateAccessToken(Admin admin, Guid? token)

@@ -75,10 +75,11 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
         return adminLoginResponse;
     }
 
-    public async Task<HttpInsertClientResponse> InsertClient(Guid id, Guid userId)
+    public async Task<HttpInsertClientResponse> InsertClient(string token, Guid id, Guid userId)
     {
         var response = await httpClient.PostAsJsonAsync("/v1/insertClient", new HttpInsertClientRequest
         {
+            Token = token,
             Id = id.ToString(),
             UserId = userId.ToString(),
         });
@@ -105,6 +106,23 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
     public async Task ErrorMessage()
     {
         await httpClient.PostAsJsonAsync("/v1/errorMessage", new {});
+    }
+
+    public async Task<IEnumerable<string>> GetConnectedClientIds(string token)
+    {
+        var response = await httpClient.PostAsJsonAsync("/v1/connectedClientIds", new
+        {
+            Token = token
+        });
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return [];
+        }
+
+        var connectedClientIdsResponse = await response.Content.ReadFromJsonAsync<HttpConnectedClientIdsResponse>();
+
+        return connectedClientIdsResponse?.ClientIds ?? [];
     }
     
     public void Dispose()

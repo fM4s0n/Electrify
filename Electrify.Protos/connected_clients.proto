@@ -1,0 +1,24 @@
+﻿syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option csharp_namespace = "Electrify.Protos";
+
+package connected_clients;
+
+service ConnectedClients {
+  rpc GetConnectedClientIds (GetConnectedClientIdsRequest) returns (GetConnectedClientIdsResponse) {
+    option (google.api.http) = {
+      post: "/v1/connectedClientIds",
+      body: "*"
+    };
+  }
+}
+
+message GetConnectedClientIdsRequest {
+  string token = 1;
+}
+
+message GetConnectedClientIdsResponse {
+  repeated string clientIds = 1;
+}

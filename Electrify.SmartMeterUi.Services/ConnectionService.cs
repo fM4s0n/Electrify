@@ -49,7 +49,12 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
 
     private async Task RegisterConnectionWithServer()
     {
-        await _apiClient.Register(options.Value.Port, options.Value.Password, Guid.NewGuid());
+        if (!Guid.TryParse(Environment.GetCommandLineArgs()[1], out var clientId))
+        {
+            throw new ArgumentException("Invalid ClientId specified in command line arguments");
+        }
+        
+        await _apiClient.Register(options.Value.Port, options.Value.Password, clientId);
         InitialConnectionMade = true;
     }
 

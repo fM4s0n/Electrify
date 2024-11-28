@@ -1,0 +1,25 @@
+﻿@page "/connectedClients"
+
+<div class="admin-home">
+    <div class="home-left">
+        <div class="home-left-content">
+            <h1>Connected Clients</h1>
+
+            <a class="button" @onclick="ReturnHome">
+                Back
+            </a>
+        </div>
+    </div>
+
+    <div class="home-right">
+        <div class="home-right-content">
+            @foreach (var clientId in _connectedClientIds)
+            {
+                <div class="client-id-row">
+                    <span class="online-dot"></span>
+                    <h3>@clientId</h3>
+                </div>
+            }
+        </div>
+    </div>
+</div>

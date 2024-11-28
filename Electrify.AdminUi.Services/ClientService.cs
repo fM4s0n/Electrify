@@ -4,11 +4,16 @@ using Electrify.Server.ApiClient.Abstraction;
 
 namespace Electrify.AdminUi.Services;
 
-public class ClientService(IElectrifyApiClient electrifyApiClient) : IClientService
+public class ClientService(IElectrifyApiClient electrifyApiClient, IAdminService adminService) : IClientService
 {
     public async Task<bool> InsertClient(Client newClient)
     {
-        var response = await electrifyApiClient.InsertClient(newClient.Id, newClient.UserId);
+        if (adminService.CurrentAdmin is null)
+        {
+            return false;
+        }
+        
+        var response = await electrifyApiClient.InsertClient(adminService.CurrentAdmin.Token, newClient.Id, newClient.UserId);
         return response.Success;
     }
 }

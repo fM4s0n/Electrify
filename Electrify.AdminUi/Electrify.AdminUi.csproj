@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
+        <UseInterpreter>true</UseInterpreter>
+    </PropertyGroup>
+    
+    <PropertyGroup>
 		<!-- Set the TargetFrameworks conditionally based on the OS -->
 		<TargetFramework Condition="$([MSBuild]::IsOsPlatform('windows'))">net8.0-windows10.0.19041.0</TargetFramework>
 		<TargetFramework Condition="$([MSBuild]::IsOsPlatform('osx'))">net8.0-maccatalyst</TargetFramework>

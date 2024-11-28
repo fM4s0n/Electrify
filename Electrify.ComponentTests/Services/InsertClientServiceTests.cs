@@ -8,11 +8,12 @@ public sealed class InsertClientServiceTests(TestFixture fixture) : IClassFixtur
     public async Task InsertClient_Should_Create_New_Client_In_Database_And_Return_Success()
     {
         // Arrange
+        var token = fixture.Database.Admins.First().AccessToken.ToString()!;
         var clientId = Guid.NewGuid();
         var userId = Guid.NewGuid();
         
         // Act
-        var response = await fixture.ApiClient.InsertClient(clientId, userId);
+        var response = await fixture.ApiClient.InsertClient(token, clientId, userId);
         
         // Assert
         response.Success.Should().BeTrue();
