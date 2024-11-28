@@ -49,7 +49,7 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
 
     private async Task RegisterConnectionWithServer()
     {
-        if (!Guid.TryParse(Environment.GetCommandLineArgs()[1], out var clientId))
+        if (!Guid.TryParse("4b34de2e-c340-4aec-84bf-636e7a388410", out var clientId))
         {
             throw new ArgumentException("Invalid ClientId specified in command line arguments");
         }

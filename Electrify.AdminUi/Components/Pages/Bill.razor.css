@@ -7,4 +7,11 @@
 
 h1 {
     color: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+    font-size: 7rem;
+}
+
+a {
+    margin-top: 1rem;
 }

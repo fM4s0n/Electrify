@@ -1,7 +1,10 @@
 ﻿@page "/bill/{clientId:guid}"
 
 <div class="page-container">
-    <p @onclick="@(() => NavigationManager.NavigateTo("home"))">Back</p>
+    <a class="button" @onclick="@(() => NavigationManager.NavigateTo("home"))">
+        Back
+    </a>
+    <h1>Client Bill:</h1>
     @if (_payableAmount == null)
     {
         <h1>No Bill Available For Client</h1>
@@ -11,5 +14,3 @@
         <h1>£@Math.Round(_payableAmount.Value, 2)</h1>
     }
 </div>
-<h1>Today's Bill:</h1>
-
