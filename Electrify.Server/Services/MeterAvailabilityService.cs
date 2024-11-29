@@ -36,6 +36,8 @@ public class MeterAvailabilityService(
             throw new RpcException(new Status(StatusCode.Unauthenticated, "Client ID is not registered"));
         }
         
+        dlmsClientService.TryRemoveClient(clientId);
+        
         var media = new GXNet(dlmsClientOptions.Value.Protocol, dlmsClientOptions.Value.ServerHostname, request.Port);
         
         var secureClient = new GXDLMSSecureClient(
@@ -53,7 +55,10 @@ public class MeterAvailabilityService(
 
         try
         {
-            var client = new DlmsClient(clientId, dlmsClientLogger, media, reader, registers, timeProvider);
+            var client = new DlmsClient(clientId, dlmsClientLogger, media, reader, registers, timeProvider, delegate
+            {
+                dlmsClientService.TryRemoveClient(clientId);
+            });
 
             dlmsClientService.AddClient(request.Port, clientId, client);
         }
@@ -63,7 +68,7 @@ public class MeterAvailabilityService(
             
             return Task.FromResult(new AvailabilityResponse
             {
-                Success = false,  // TODO maybe we want to display something on MeterUI if this occurs
+                Success = false,
             });
         }
         

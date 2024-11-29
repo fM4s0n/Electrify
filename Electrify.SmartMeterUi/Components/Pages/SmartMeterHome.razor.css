@@ -102,3 +102,12 @@
     flex-direction: column;
     gap: 1em;
 }
+
+#close {
+    position: absolute;
+    font-size: 3em;
+    z-index: 2000;
+    color: transparent;
+    cursor: initial;
+    top: 0.5em;
+    left: 0.5em;}

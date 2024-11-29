@@ -20,4 +20,6 @@ public interface IDlmsServer : IDisposable
     IEnumerable<GenericProfileRow> GetReadings();
 
     string? GetErrorMessage();
+
+    void Close();
 }

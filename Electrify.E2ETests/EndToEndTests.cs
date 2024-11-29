@@ -227,7 +227,8 @@ public class EndToEndTests : IDisposable
             media,
             reader,
             registers,
-            timeProvider);
+            timeProvider,
+            () => {});
     }
     
     [Fact]

@@ -17,7 +17,7 @@ public sealed class DlmsClient : IDlmsClient
     private readonly IEnumerable<GXDLMSRegister> _registers;
     private readonly TimeProvider _timeProvider;
     
-    public DlmsClient(Guid clientId, ILogger<DlmsClient> logger, GXNet media, GXDLMSReader reader, IEnumerable<GXDLMSRegister> registers, TimeProvider timeProvider)
+    public DlmsClient(Guid clientId, ILogger<DlmsClient> logger, GXNet media, GXDLMSReader reader, IEnumerable<GXDLMSRegister> registers, TimeProvider timeProvider, Action disconnectionCallback)
     {
         ClientId = clientId;
         _logger = logger;
@@ -27,6 +27,7 @@ public sealed class DlmsClient : IDlmsClient
         _registers = registers;
 
         _reader.OnNotification += OnNotification;
+        _media.OnClientDisconnected += (_, _) => disconnectionCallback.Invoke();;
         
         _media.Open();
         
