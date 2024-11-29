@@ -182,6 +182,12 @@ public partial class SmartMeterHome
         return new Tuple<double, double>(totalPrice, totalUsage);
     }
 
+    private void Close()
+    {
+        DlmsServer.Close();
+        Application.Current!.Quit();
+    }
+
     #region UI Formatting
 
     private static string FormatCurrency(double currency)

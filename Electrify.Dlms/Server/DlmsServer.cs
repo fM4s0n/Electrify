@@ -111,4 +111,9 @@ public sealed class DlmsServer : IDlmsServer
     {
         _cts.Cancel();
     }
+
+    public void Close()
+    {
+        _server.Close();
+    }
 }

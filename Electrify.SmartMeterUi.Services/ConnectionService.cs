@@ -10,7 +10,8 @@ using Microsoft.Extensions.Options;
 
 namespace Electrify.SmartMeterUi.Services;
 
-public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsServerOptions> options, IDlmsServer dlmsServer, IErrorMessageService errorMessageService, ILogger<ElectrifyApiClient> logger) : IConnectionService
+public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsServerOptions> options, IDlmsServer dlmsServer, IErrorMessageService errorMessageService, ILogger<ElectrifyApiClient> logger) 
+    : IConnectionService
 {
     private ElectrifyApiClient _apiClient = default!;
     private CancellationTokenSource? _reconnectCts;
@@ -42,7 +43,7 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
                 options,
                 () => errorMessageService.IsConnected = true,
                 () => errorMessageService.IsConnected = false,
-                () => dlmsServer.GetErrorMessage()
+                () => errorMessageService.ErrorMessage = dlmsServer.GetErrorMessage()
             );
         });
     }
