@@ -8,9 +8,8 @@ public class ErrorMessageService(IDlmsClientService dlmsClientService) : ErrorMe
 {
     private readonly Random _random = new();
     
-    public override async Task<ErrorMessageResponse> DisplayErrorMessage(ErrorMessageRequest request, ServerCallContext context)
+    public override Task<ErrorMessageResponse> DisplayErrorMessage(ErrorMessageRequest request, ServerCallContext context)
     {
-        // TODO decide if we want to allow custom errors from API or we should just randomise from set
         string[] errors = ["Example Error A From Grid", "Example Error B From Grid", "Example Error C From Grid"];
         
         foreach (var dlmsClient in dlmsClientService.GetClients())
@@ -19,9 +18,6 @@ public class ErrorMessageService(IDlmsClientService dlmsClientService) : ErrorMe
             dlmsClient.WriteErrorMessage(randomError);
         }
 
-        return new ErrorMessageResponse
-        {
-            Success = true
-        };
+        return Task.FromResult(new ErrorMessageResponse() { Success = true});
     }
 }

@@ -2,7 +2,6 @@ namespace Electrify.Server.Extensions;
 
 public static class EnumerableExtensions
 {
-    // TODO unit test
     public static T? MaxOrDefault<T>(this IEnumerable<T> source) where T : IComparable<T>
     {
         T? max = default;
