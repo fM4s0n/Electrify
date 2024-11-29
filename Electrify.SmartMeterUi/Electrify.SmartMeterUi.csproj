@@ -89,5 +89,9 @@
     <ItemGroup>
         <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="ServerCloser.cs" />
+    </ItemGroup>
     
 </Project>

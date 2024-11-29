@@ -94,7 +94,7 @@ public class GXDLMSBase : GXDLMSSecureServer
         }
     
         // Define path to data.csv
-        return Path.Combine(dataDirectory, "data.csv");
+        return Path.Combine(dataDirectory, $"{Environment.GetCommandLineArgs()[1]}-data.csv");
     }
     TraceLevel Trace = TraceLevel.Error;
 

@@ -11,18 +11,12 @@ public sealed class DlmsClientService(
     IServiceProvider serviceProvider)
     : IDlmsClientService
 {
-    private readonly Dictionary<int, IDlmsClient> _clients = [];
-    private readonly List<RandomTaskTimer> _timers = [];
-
-    public IDlmsClient? TryGetClient(int port)
-    {
-        _clients.TryGetValue(port, out var client);
-        return client;
-    }
+    private readonly Dictionary<Guid, IDlmsClient> _clients = [];
+    private readonly Dictionary<Guid,RandomTaskTimer> _timers = [];
 
     public void AddClient(int port, Guid clientId, IDlmsClient client)
     {
-        _clients[port] = client;
+        _clients[clientId] = client;
         
         var timer = new RandomTaskTimer(timeProvider, delegate
         {
@@ -30,7 +24,7 @@ public sealed class DlmsClientService(
             var database = scope.ServiceProvider.GetRequiredService<ElectrifyDbContext>();
 
             var lastReading = database.GetLastReading(clientId) ?? timeProvider.GetLocalNow().AddMinutes(-1).DateTime;
-            var readings = _clients[port].ReadEnergyProfile(lastReading).ToList();
+            var readings = _clients[clientId].ReadEnergyProfile(lastReading).ToList();
 
             for (var i = 0; i < readings.Count; i++)
             {
@@ -49,17 +43,25 @@ public sealed class DlmsClientService(
             }
         }, 15, 60);
         
-        _timers.Add(timer);
+        _timers[clientId] = timer;
     }
 
     public IEnumerable<IDlmsClient> GetClients()
     {
         return _clients.Values;
     }
-    
+
+    public void TryRemoveClient(Guid clientId)
+    {
+        _timers.TryGetValue(clientId, out var timer); 
+        timer?.Dispose();
+        _timers.Remove(clientId);
+        _clients.Remove(clientId);
+    }
+
     public async ValueTask DisposeAsync()
     {
-        foreach (var timer in _timers)
+        foreach (var timer in _timers.Values)
         {
             await timer.DisposeAsync();
         }
