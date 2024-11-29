@@ -28,10 +28,5 @@
         <PackageReference Include="Grpc.AspNetCore" Version="2.66.0" />
     </ItemGroup>
     
-    <ItemGroup>
-      <Reference Include="Electrify.Protos">
-        <HintPath>bin\Debug\net8.0\Electrify.Protos.dll</HintPath>
-      </Reference>
-    </ItemGroup>
 
 </Project>

@@ -1,4 +1,8 @@
-﻿using Electrify.Server.Extensions;
+﻿#pragma warning disable CS8625
+#pragma warning disable CS8600
+#pragma warning disable CS8604
+
+using Electrify.Server.Extensions;
 using FluentAssertions;
 
 namespace Electrify.Server.UnitTests.Extensions;
@@ -28,7 +32,7 @@ public class EnumerableExtensionsTests
         var result = source.MaxOrDefault();
 
         // Assert
-        result.Should().Be(default(int));
+        result.Should().Be(default);
     }
 
     [Fact]
@@ -122,3 +126,7 @@ public class EnumerableExtensionsTests
         result.Should().BeNull();
     }
 }
+
+#pragma warning restore CS8625
+#pragma warning restore CS8600
+#pragma warning restore CS8604
