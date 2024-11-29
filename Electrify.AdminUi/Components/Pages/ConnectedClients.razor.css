@@ -37,6 +37,16 @@
     align-items: center;
 }
 
+.client-id-row > h3 {
+    cursor: pointer;
+    transition: .3s ease-in-out;
+}
+
+.client-id-row > h3:hover {
+    color: #00b5f1;
+    transform: scale(1.03);
+}
+
 .online-dot {
     width: 8px;
     height: 8px;

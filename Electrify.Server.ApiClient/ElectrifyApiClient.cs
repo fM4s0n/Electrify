@@ -124,6 +124,24 @@ public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyA
 
         return connectedClientIdsResponse?.ClientIds ?? [];
     }
+
+    public async Task<double?> GetClientBill(string clientId, DateOnly date)
+    {
+        var response = await httpClient.PostAsJsonAsync("/v1/getClientBill", new
+        {
+            ClientId = clientId,
+            Date = date.ToString("dd/MM/yyyy"),
+        });
+        
+        if (!response.IsSuccessStatusCode)
+        {
+            return null;
+        }
+        
+        var clientBillResponse = await response.Content.ReadFromJsonAsync<HttpClientBillResponse>();
+        
+        return clientBillResponse?.PayableAmount;
+    }
     
     public void Dispose()
     {

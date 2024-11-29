@@ -24,6 +24,11 @@ public partial class ConnectedClients : ComponentBase, IDisposable
     {
         NavigationManager.NavigateTo("/home");    
     }
+    
+    private void GoToBill(string clientId)
+    {
+        NavigationManager.NavigateTo($"/bill/{clientId}");
+    }
 
     private async void UpdateConnectedClientIds(object? state)
     {

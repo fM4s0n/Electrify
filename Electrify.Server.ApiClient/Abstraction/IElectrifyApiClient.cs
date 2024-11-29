@@ -14,4 +14,6 @@ public interface IElectrifyApiClient : IDisposable
     Task ErrorMessage();
 
     Task<IEnumerable<string>> GetConnectedClientIds(string token);
+
+    Task<double?> GetClientBill(string clientId, DateOnly date);
 }

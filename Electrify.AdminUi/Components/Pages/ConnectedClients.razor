@@ -15,7 +15,7 @@
         <div class="home-right-content">
             @foreach (var clientId in _connectedClientIds)
             {
-                <div class="client-id-row">
+                <div class="client-id-row" @onclick="@(() => GoToBill(clientId))">
                     <span class="online-dot"></span>
                     <h3>@clientId</h3>
                 </div>

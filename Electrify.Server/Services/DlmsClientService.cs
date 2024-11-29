@@ -1,4 +1,5 @@
 using Electrify.Dlms.Client.Abstraction;
+using Electrify.Models;
 using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
 
@@ -33,7 +34,16 @@ public sealed class DlmsClientService(
 
             for (var i = 0; i < readings.Count; i++)
             {
-                var reading = readings[i];
+                Reading reading = readings[i];
+
+                if (database.Readings
+                        .Any(dbReading => dbReading.ClientId == clientId && dbReading.DateTime == reading.DateTime) == false)
+                {
+                    database.Readings.Add(reading);
+                }
+
+                database.SaveChanges();
+                
                 logger.LogInformation("Energy Reading {Index}: ClientId: {ClientId} DateTime: {DateTime} EnergyUsage: {EnergyUsage} Tariff: {EnergyTariff}",
                     i, clientId, reading.DateTime, reading.EnergyUsage, reading.Tariff);
             }
