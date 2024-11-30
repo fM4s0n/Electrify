@@ -1,5 +1,4 @@
-﻿using Electrify.Dlms.Client;
-using Electrify.Protos;
+﻿using Electrify.Protos;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
 using FluentAssertions;

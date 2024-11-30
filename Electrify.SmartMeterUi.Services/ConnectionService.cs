@@ -1,27 +1,24 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
-using Electrify.Server.ApiClient;
-using Electrify.SmartMeterUi.Services.Abstractions;
-using Microsoft.Extensions.Logging;
+using Electrify.Server.ApiClient.Abstraction;
+using Electrify.SmartMeterUi.Services.Abstraction;
 using Microsoft.Extensions.Options;
 
 namespace Electrify.SmartMeterUi.Services;
 
-public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsServerOptions> options, IDlmsServer dlmsServer, IErrorMessageService errorMessageService, ILogger<ElectrifyApiClient> logger) 
+public class ConnectionService(
+    IElectrifyApiClient electrifyApiClient,
+    IOptions<DlmsServerOptions> options,
+    IDlmsServer dlmsServer,
+    IErrorMessageService errorMessageService,
+    ICommandLineArgsProvider commandLineArgsProvider)
     : IConnectionService
 {
-    private ElectrifyApiClient _apiClient = default!;
     private CancellationTokenSource? _reconnectCts;
     public bool InitialConnectionMade { get; private set; }
 
     public async Task InitializeConnectionAsync(bool isReconnect)
     {
-        // Initialize API client
-        _apiClient = new ElectrifyApiClient(clientFactory.CreateClient("ElectrifyServer"), logger);
-
         // Check if we are retrying a lost connection, only register the DLMS Server if it's the first run
         if (!isReconnect)
         {
@@ -50,12 +47,12 @@ public class ConnectionService(IHttpClientFactory clientFactory, IOptions<DlmsSe
 
     private async Task RegisterConnectionWithServer()
     {
-        if (!Guid.TryParse(Environment.GetCommandLineArgs()[1], out var clientId))
+        if (!Guid.TryParse(commandLineArgsProvider.GetArgAtIndex(1), out var clientId))
         {
             throw new ArgumentException("Invalid ClientId specified in command line arguments");
         }
         
-        await _apiClient.Register(options.Value.Port, options.Value.Password, clientId);
+        await electrifyApiClient.Register(options.Value.Port, options.Value.Password, clientId);
         InitialConnectionMade = true;
     }
 

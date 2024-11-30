@@ -1,4 +1,4 @@
-using Electrify.SmartMeterUi.Services.Abstractions;
+using Electrify.SmartMeterUi.Services.Abstraction;
 using Microsoft.AspNetCore.Components;
 
 namespace Electrify.SmartMeterUi.Components.Layout;

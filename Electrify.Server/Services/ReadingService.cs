@@ -1,6 +1,5 @@
 ﻿using Electrify.Server.Database;
 using Electrify.Server.Services.Abstraction;
-using Microsoft.EntityFrameworkCore;
 
 namespace Electrify.Server.Services;
 

@@ -1,6 +1,6 @@
 ﻿using Electrify.Dlms.Server.Abstraction;
 using Electrify.Models;
-using Electrify.SmartMeterUi.Services.Abstractions;
+using Electrify.SmartMeterUi.Services.Abstraction;
 
 namespace Electrify.SmartMeterUi.Services;
 

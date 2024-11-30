@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Electrify.AdminUi.Services;
+﻿using Electrify.AdminUi.Services;
 using Electrify.AdminUi.Services.Abstractions;
-using Electrify.Models;
 using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.ApiClient.Contracts;
 using FluentAssertions;
 using NSubstitute;
-using Xunit;
 
 namespace Electrify.AdminUi.UnitTests.Services
 {

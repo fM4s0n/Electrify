@@ -1,4 +1,4 @@
-namespace Electrify.SmartMeterUi.Services.Abstractions;
+namespace Electrify.SmartMeterUi.Services.Abstraction;
 
 public interface IConnectionService
 {

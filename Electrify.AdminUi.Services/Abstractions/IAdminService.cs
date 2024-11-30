@@ -1,5 +1,4 @@
-﻿using Electrify.Models;
-using Electrify.Server.ApiClient.Contracts;
+﻿using Electrify.Server.ApiClient.Contracts;
 
 namespace Electrify.AdminUi.Services.Abstractions;
 

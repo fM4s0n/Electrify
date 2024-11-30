@@ -6,9 +6,7 @@ using Electrify.Dlms.Constants;
 using Electrify.Dlms.Options;
 using Electrify.Dlms.Server;
 using Electrify.Models;
-using Electrify.Protos;
 using FluentAssertions;
-using Grpc.Core;
 using Gurux.DLMS;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
@@ -29,6 +27,19 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
         var secret = Guid.NewGuid().ToString();
         
         Client client = fixture.CreateEClient();
+
+        var admin = new Admin
+        {
+            Id = Guid.NewGuid(),
+            Name = "component-test",
+            Email = "component@test.com",
+            PasswordHash = "",
+            AccessToken = Guid.NewGuid()
+        };
+        
+        await fixture.Database.Admins.AddAsync(admin);
+
+        await fixture.Database.SaveChangesAsync();
         
         var listener = new TcpListener(IPAddress.Loopback, 0);
         listener.Start();
@@ -43,9 +54,14 @@ public class MeterAvailabilityServiceTests(TestFixture fixture) : IClassFixture<
         
         // Act
         var response = await fixture.ApiClient.Register(port, secret, client.Id);
+
+        await Task.Delay(100);
+
+        var connectedClientIds = await fixture.ApiClient.GetConnectedClientIds(admin.AccessToken.ToString()!);
         
         // Assert
         response.Success.Should().BeTrue();
+        connectedClientIds.Should().Contain(client.Id.ToString());
     }
     
     [Fact]
