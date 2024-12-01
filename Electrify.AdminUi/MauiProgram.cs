@@ -40,14 +40,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<IGreetingService, GreetingService>();
         builder.Services.AddSingleton<IConnectedClientsService, ConnectedClientsService>();
         builder.Services.AddSingleton(TimeProvider.System);
-        
+
         builder.Services.AddSingleton<IElectrifyApiClient>(sp => new ElectrifyApiClient(
             new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:8888")
             },
             sp.GetRequiredService<ILogger<ElectrifyApiClient>>()
-            ));
+        ));
         
         return builder.Build();
     }

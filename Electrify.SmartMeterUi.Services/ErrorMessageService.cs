@@ -1,4 +1,4 @@
-﻿using Electrify.SmartMeterUi.Services.Abstractions;
+﻿using Electrify.SmartMeterUi.Services.Abstraction;
 
 namespace Electrify.SmartMeterUi.Services;
 

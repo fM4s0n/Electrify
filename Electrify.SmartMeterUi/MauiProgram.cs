@@ -4,8 +4,10 @@ using System.Net.Sockets;
 using Electrify.Dlms.Constants;
 using Electrify.Dlms.Extensions;
 using Electrify.Dlms.Options;
+using Electrify.Server.ApiClient;
+using Electrify.Server.ApiClient.Abstraction;
 using Electrify.SmartMeterUi.Services;
-using Electrify.SmartMeterUi.Services.Abstractions;
+using Electrify.SmartMeterUi.Services.Abstraction;
 using Gurux.DLMS;
 using Gurux.DLMS.Enums;
 using Gurux.DLMS.Objects;
@@ -54,13 +56,18 @@ public static class MauiProgram
 
 		loggerConfiguration.MinimumLevel.Debug();
 #endif
-		builder.Services.AddHttpClient("ElectrifyServer", options =>
-		{
-			options.BaseAddress = new Uri("http://localhost:8888");
-		});
+		builder.Services.AddSingleton<IElectrifyApiClient>(sp => new ElectrifyApiClient(
+			new HttpClient
+			{
+				BaseAddress = new Uri("http://localhost:8888")
+			},
+			sp.GetRequiredService<ILogger<ElectrifyApiClient>>()
+		));
+		
 		builder.Services.AddSerilog(loggerConfiguration.CreateLogger());
         builder.Services.AddSingleton<IUsageService, UsageService>();
 
+        builder.Services.AddSingleton<ICommandLineArgsProvider, CommandLineArgsProvider>();
 		builder.Services.AddSingleton<IErrorMessageService, ErrorMessageService>();
 		builder.Services.AddScoped<IConnectionService, ConnectionService>();
 		

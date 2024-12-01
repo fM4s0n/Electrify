@@ -1,9 +1,8 @@
 ﻿using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
-using Electrify.Server.ApiClient;
+using Electrify.SmartMeterUi.Services.Abstraction;
 using Microsoft.Extensions.Options;
 using Serilog;
-using Electrify.SmartMeterUi.Services.Abstractions;
 
 namespace Electrify.SmartMeterUi;
 

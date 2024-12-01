@@ -1,5 +1,7 @@
 using Electrify.Models;
+using Electrify.Server;
 using Electrify.Server.ApiClient;
+using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.Database;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +12,7 @@ namespace Electrify.ComponentTests;
 
 public sealed class TestFixture : WebApplicationFactory<Program>
 {
-    public ElectrifyApiClient ApiClient { get; }
+    public IElectrifyApiClient ApiClient { get; }
     public ElectrifyDbContext Database { get; }
     
     public ILogger<ElectrifyApiClient> Logger { get; }

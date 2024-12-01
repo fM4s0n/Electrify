@@ -4,9 +4,9 @@ using Electrify.Server.Database;
 using Electrify.Server.Options;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -87,4 +87,7 @@ app.Run();
 
 // TODO should maybe refactor proto files and to make it so they're excludable from test coverage
 
-public partial class Program;
+namespace Electrify.Server
+{
+    public partial class Program;
+}
