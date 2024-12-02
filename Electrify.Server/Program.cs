@@ -1,6 +1,7 @@
 using Electrify.Dlms.Extensions;
 using Electrify.Dlms.Options;
 using Electrify.Server.Database;
+using Electrify.Server.Interceptors;
 using Electrify.Server.Options;
 using Electrify.Server.Services;
 using Electrify.Server.Services.Abstraction;
@@ -46,8 +47,14 @@ builder.Services.AddScoped<IReadingService, ReadingService>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
+
 builder.Services.AddSingleton<IOctopusService, OctopusService>();
-builder.Services.AddGrpc().AddJsonTranscoding();
+
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<AuthenticationInterceptor>();
+}).AddJsonTranscoding();
+
 builder.Services.AddGrpcSwagger().AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
