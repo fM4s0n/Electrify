@@ -24,7 +24,7 @@ public sealed class DlmsClientService(
             var database = scope.ServiceProvider.GetRequiredService<ElectrifyDbContext>();
 
             var lastReading = database.GetLastReading(clientId) ?? timeProvider.GetLocalNow().AddMinutes(-1).DateTime;
-            var readings = _clients[clientId].ReadEnergyProfile(lastReading).ToList();
+            var readings = client.ReadEnergyProfile(lastReading).ToList();
 
             for (var i = 0; i < readings.Count; i++)
             {

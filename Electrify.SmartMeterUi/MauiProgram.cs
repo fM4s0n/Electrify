@@ -31,10 +31,10 @@ public static class MauiProgram
 
 		builder.Services.AddMauiBlazorWebView();
 
-		LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
+        LoggerConfiguration loggerConfiguration = new LoggerConfiguration()
             .MinimumLevel.Information()
             .WriteTo.Debug()
-            .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "electrify-smartMeter-ui.log"))
+            .WriteTo.File(Path.Combine("electrify-smartMeter-ui.log"))
             .Enrich.FromLogContext().Enrich.WithMachineName().Enrich.WithProperty("ThreadId", Environment.CurrentManagedThreadId);
 		
 		var listener = new TcpListener(IPAddress.Loopback, 0);
