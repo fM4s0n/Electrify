@@ -32,7 +32,7 @@ All test projects `Electrify.AdminUi.UnitTests`, `Electrify.SmartMeterUi.UnitTes
 
 ### Windows
 ```batch
-run.bat
+.\run.bat
 ```
 
 ## ⚙️ Configuration
