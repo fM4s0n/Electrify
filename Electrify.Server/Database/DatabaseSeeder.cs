@@ -89,4 +89,46 @@ public class DatabaseSeeder(IAdminService adminService, ElectrifyDbContext dbCon
 
         await dbContext.SaveChangesAsync();
     }
+    
+    public async Task SeedDefaultReadings()
+    {
+        // Set up a list of readings
+        List<Tuple<double, double>> usageAndPrice = new()
+        {
+            new Tuple<double, double> (0.017061775550246239, 0.10000000000000001),
+            new Tuple<double, double> (0.046246308833360672, 0.10000000000000001),
+            new Tuple<double, double> (0.075753137469291687, 0.10000000000000001),
+            new Tuple<double, double> (0.11240486055612564, 0.10000000000000001),
+            new Tuple<double, double> (0.14398275315761566, 0.10000000000000001),
+        };
+
+        // Get all client Ids
+        List<Guid> allClients = new ()
+        {
+            Guid.Parse("4b34de2e-c340-4aec-84bf-636e7a388410"),
+            Guid.Parse("e774ebc0-ea2c-4882-900d-bca4c37e535b"),
+            Guid.Parse("6842a005-1533-4abf-9abe-9a02b4ab304d"),
+            Guid.Parse("23a487cf-9cb0-48a5-9a36-99db82192799"),
+            Guid.Parse("ac1516a8-1c1d-417e-bcf9-95d308a65c47"),
+            Guid.Parse("e3f6fd12-fe66-4281-8709-1844703249ee")
+        };
+        
+        // Loop clients
+        foreach (Guid client in allClients)
+        {
+            // Loop usages
+            foreach (var item in usageAndPrice)
+            {
+                dbContext.Readings.Add(new Reading()
+                {
+                    ClientId = client,
+                    DateTime = DateTime.Now.AddMinutes(-5),
+                    EnergyUsage = item.Item1,
+                    Tariff = item.Item2
+                });
+                
+                await dbContext.SaveChangesAsync();
+            }
+        }
+    }
 }

@@ -75,6 +75,7 @@ public class MeterAvailabilityService(
         return Task.FromResult(new AvailabilityResponse
         {
             Success = true,
+            HistoricReadings = { (IEnumerable<HistoricReading>)dbContext.Readings.Where(r => r.ClientId == clientId).ToList() }
         });
     }
 }

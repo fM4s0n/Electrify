@@ -79,6 +79,7 @@ using (var scope = app.Services.CreateScope())
     var seeder = scope.ServiceProvider.GetRequiredService<IDatabaseSeeder>();
     await seeder.SeedDefaultAdmin();
     await seeder.SeedDefaultClientId();
+    await seeder.SeedDefaultReadings();
 }
 
 app.MapGrpcService<MeterAvailabilityService>();

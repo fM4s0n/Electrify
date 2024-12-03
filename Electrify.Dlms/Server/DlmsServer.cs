@@ -116,4 +116,9 @@ public sealed class DlmsServer : IDlmsServer
     {
         _server.Close();
     }
+
+    public void InsertOldReadings()
+    {
+        throw new NotImplementedException();
+    }
 }

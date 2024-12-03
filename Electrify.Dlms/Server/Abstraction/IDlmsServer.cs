@@ -22,4 +22,6 @@ public interface IDlmsServer : IDisposable
     string? GetErrorMessage();
 
     void Close();
+
+    void InsertOldReadings();
 }
