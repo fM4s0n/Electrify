@@ -136,12 +136,7 @@ public sealed class DlmsServer : IDlmsServer
     {
         _server.Close();
     }
-
-    public void InsertOldReadings()
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public void InsertHistoricReadings(IList<(DateTime DateTime, double Usage, double Tariff)> readings)
     {
         var orderedReadings = readings.OrderBy(r => r.DateTime).ToList();
