@@ -20,6 +20,10 @@ public sealed class DlmsClientService(
         
         var timer = new RandomTaskTimer(timeProvider, delegate
         {
+            logger.LogInformation("Reading energy profile for {ClientId} at {DateTime}",
+                clientId,
+                timeProvider.GetLocalNow().ToString());
+            
             using var scope = serviceProvider.CreateScope();
             var database = scope.ServiceProvider.GetRequiredService<ElectrifyDbContext>();
 
