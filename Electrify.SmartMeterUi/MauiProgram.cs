@@ -69,7 +69,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<ICommandLineArgsProvider, CommandLineArgsProvider>();
 		builder.Services.AddSingleton<IErrorMessageService, ErrorMessageService>();
-		builder.Services.AddScoped<IConnectionService, ConnectionService>();
+		builder.Services.AddSingleton<IConnectionService, ConnectionService>();
 		
         builder.Services.AddDlmsServer(builder.Configuration, (server, sp) =>
 		{
