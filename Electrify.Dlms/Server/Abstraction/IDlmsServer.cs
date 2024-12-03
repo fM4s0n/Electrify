@@ -22,4 +22,6 @@ public interface IDlmsServer : IDisposable
     string? GetErrorMessage();
 
     void Close();
+
+    void InsertHistoricReadings(IList<(DateTime DateTime, double Usage, double Tariff)> readings);
 }

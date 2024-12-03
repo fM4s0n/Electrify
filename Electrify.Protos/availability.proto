@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "Electrify.Protos";
 
@@ -23,4 +24,11 @@ message AvailabilityRequest {
 
 message AvailabilityResponse {
   bool success = 1;
+  repeated HistoricReading historicReadings = 2;
 }
+
+message HistoricReading {
+  google.protobuf.Timestamp timestamp = 1;
+  double usage = 2;
+  double tariff = 3;
+} 

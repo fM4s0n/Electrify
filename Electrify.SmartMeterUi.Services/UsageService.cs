@@ -11,6 +11,15 @@ public class UsageService : IUsageService, IDisposable
     private readonly Timer? _timer;
     private readonly Random _random = new();
     private readonly IDlmsServer _dlmsServer;
+
+    public void SetLastUsage(DateTime dateTime, double usage)
+    {
+        _lastUsage = new UsageInstance
+        {
+            TimeStamp = dateTime,
+            Usage = (float)usage
+        };
+    }
     
     public UsageService(IDlmsServer dlmsServer)
     {

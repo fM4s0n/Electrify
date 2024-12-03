@@ -78,7 +78,7 @@ public class GXDLMSBase : GXDLMSSecureServer
     DateTime imageActionStartTime;
     //What is expected image size.
     UInt32 ImageSize = 0;
-    static readonly object FileLock = new object();
+    public static readonly object FileLock = new object();
     public static string GetdataFile()
     {
         // Get writeable directory

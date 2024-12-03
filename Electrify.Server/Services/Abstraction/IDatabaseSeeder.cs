@@ -4,4 +4,5 @@ public interface IDatabaseSeeder
 {
     Task SeedDefaultAdmin();
     Task SeedDefaultClientId();
+    Task SeedDefaultReadings();
 }

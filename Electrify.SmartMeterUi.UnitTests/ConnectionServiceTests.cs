@@ -1,6 +1,8 @@
 ﻿using Electrify.Dlms.Options;
 using Electrify.Dlms.Server.Abstraction;
+using Electrify.Protos;
 using Electrify.Server.ApiClient.Abstraction;
+using Electrify.Server.ApiClient.Contracts;
 using Electrify.SmartMeterUi.Services;
 using Electrify.SmartMeterUi.Services.Abstraction;
 using FluentAssertions;
@@ -21,6 +23,13 @@ public class ConnectionServiceTests
     {
         _apiClientMock = Substitute.For<IElectrifyApiClient>();
 
+        _apiClientMock.Register(Arg.Any<int>(), Arg.Any<string>(), Arg.Any<Guid>())
+            .Returns(new HttpAvailabilityResponse
+            {
+                Success = true,
+                HistoricReadings = [],
+            });
+
         _options = Options.Create(new DlmsServerOptions
         {
             Port = 1234,
@@ -37,7 +46,8 @@ public class ConnectionServiceTests
             _options,
             _dlmsServerMock,
             errorMessageServiceMock,
-            _argsProviderMock
+            _argsProviderMock,
+            Substitute.For<IUsageService>()
         );
     }
 

@@ -49,6 +49,17 @@ public sealed class DlmsServer : IDlmsServer
             }
         }
     }
+    
+    private void SetTariff(double tariffValue)
+    {
+        foreach (GXDLMSObject? dlmsObject in _server.Items)
+        {
+            if (dlmsObject is GXDLMSRegister { LogicalName: RegisterNames.EnergyTariff } register)
+            {
+                register.Value = tariffValue;
+            }
+        }
+    }
 
     public void Initialise(
         IOptions<DlmsServerOptions> options,
@@ -68,16 +79,25 @@ public sealed class DlmsServer : IDlmsServer
     public IEnumerable<GenericProfileRow> GetReadings()
     {
         var dataFile = GXDLMSBase.GetdataFile();
-        using var reader = new StreamReader(dataFile);
-        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+
+        List<GenericProfileRow> readings = [];
+        lock (GXDLMSBase.FileLock)
         {
-            MissingFieldFound = null, 
-            HeaderValidated = null, 
-            Delimiter = ";", 
-            Encoding = Encoding.UTF8
-        };
-        using var csv = new CsvReader(reader, config);
-        return csv.GetRecords<GenericProfileRow>().ToList();
+            using var reader = new StreamReader(dataFile);
+        
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                MissingFieldFound = null, 
+                HeaderValidated = null, 
+                Delimiter = ";", 
+                Encoding = Encoding.UTF8
+            };
+        
+            using var csv = new CsvReader(reader, config);
+            readings.AddRange(csv.GetRecords<GenericProfileRow>());
+        }
+
+        return readings;
     }
 
     public string? GetErrorMessage()
@@ -115,5 +135,27 @@ public sealed class DlmsServer : IDlmsServer
     public void Close()
     {
         _server.Close();
+    }
+    
+    public void InsertHistoricReadings(IList<(DateTime DateTime, double Usage, double Tariff)> readings)
+    {
+        var orderedReadings = readings.OrderBy(r => r.DateTime).ToList();
+        
+        var mostRecentReading = orderedReadings.Last();
+        SetEnergy(mostRecentReading.Usage);
+        SetTariff(mostRecentReading.Tariff);
+        
+        var dataFile = GXDLMSBase.GetdataFile();
+        
+        lock (GXDLMSBase.FileLock)
+        {
+            // Overwrite current data.csv
+            using var writer = File.CreateText(dataFile);
+            
+            foreach (var reading in orderedReadings)
+            {
+                writer.WriteLine($"{reading.DateTime.ToString(CultureInfo.InvariantCulture)};{reading.Usage};{reading.Tariff}");
+            }
+        }
     }
 }

@@ -11,7 +11,8 @@ public class ConnectionService(
     IOptions<DlmsServerOptions> options,
     IDlmsServer dlmsServer,
     IErrorMessageService errorMessageService,
-    ICommandLineArgsProvider commandLineArgsProvider)
+    ICommandLineArgsProvider commandLineArgsProvider,
+    IUsageService usageService)
     : IConnectionService
 {
     private CancellationTokenSource? _reconnectCts;
@@ -52,7 +53,20 @@ public class ConnectionService(
             throw new ArgumentException("Invalid ClientId specified in command line arguments");
         }
         
-        await electrifyApiClient.Register(options.Value.Port, options.Value.Password, clientId);
+        var response = await electrifyApiClient.Register(options.Value.Port, options.Value.Password, clientId);
+        
+        var readings = response.HistoricReadings
+            .Select(hr => (DateTime.Parse(hr.Timestamp), hr.Usage, hr.Tariff))
+            .ToList();
+        
+        if (readings.Count != 0)
+        {
+            var mostRecentReading = readings.MaxBy(r => r.Item1);
+            usageService.SetLastUsage(mostRecentReading.Item1, mostRecentReading.Usage);
+            
+            dlmsServer.InsertHistoricReadings(readings);
+        }
+        
         InitialConnectionMade = true;
     }
 

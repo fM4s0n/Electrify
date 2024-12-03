@@ -5,7 +5,7 @@ namespace Electrify.Server.ApiClient.Abstraction;
 
 public interface IElectrifyApiClient : IDisposable
 {
-    Task<AvailabilityResponse> Register(int port, string secret, Guid clientId);
+    Task<HttpAvailabilityResponse> Register(int port, string secret, Guid clientId);
 
     Task<HttpAdminLoginResponse> AdminLogin(string email, string password);
 

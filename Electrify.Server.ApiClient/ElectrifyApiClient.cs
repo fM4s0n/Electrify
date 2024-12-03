@@ -1,42 +1,46 @@
+using System.Diagnostics;
 using System.Net.Http.Json;
-using Electrify.Protos;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Electrify.Server.ApiClient.Abstraction;
 using Electrify.Server.ApiClient.Contracts;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
+using Type = System.Type;
 
 namespace Electrify.Server.ApiClient;
 
 public sealed class ElectrifyApiClient(HttpClient httpClient, ILogger<ElectrifyApiClient> _logger) : IElectrifyApiClient
 {
-    public async Task<AvailabilityResponse> Register(int port, string secret, Guid clientId)
+    public async Task<HttpAvailabilityResponse> Register(int port, string secret, Guid clientId)
     {
         await Task.Delay(1000);
 
         try
         {
-            var response = await httpClient.PostAsJsonAsync("/v1/available", new AvailabilityRequest
+            var response = await httpClient.PostAsJsonAsync("/v1/available", new HttpAvailabilityRequest
             {
                 Port = port,
                 Secret = secret,
-                ClientId = clientId.ToString(),
+                ClientId = clientId,
             });
 
-        if (!response.IsSuccessStatusCode)
-        {
-            _logger
-                .LogError(
-                    "Failed to register the server with the Electrify API. Response: {Response}",
-                    response);
-            
-            throw new Exception(await response.Content.ReadAsStringAsync());
-        }
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger
+                    .LogError(
+                        "Failed to register the server with the Electrify API. Response: {Response}",
+                        response);
 
-            var availabilityResponse = await response.Content.ReadFromJsonAsync<AvailabilityResponse>();
+                throw new Exception(await response.Content.ReadAsStringAsync());
+            }
+            
+            var availabilityResponse = await response.Content.ReadFromJsonAsync<HttpAvailabilityResponse>();
 
             if (availabilityResponse is null)
             {
                 _logger.LogError("Failed to parse the {AvailabilityResponse}", availabilityResponse);
-                throw new Exception($"An error occured parsing the {nameof(AvailabilityResponse)}");
+                throw new Exception($"An error occured parsing the {nameof(HttpAvailabilityResponse)}");
             }
 
             return availabilityResponse;
