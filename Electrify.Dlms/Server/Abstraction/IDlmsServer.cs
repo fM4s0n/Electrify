@@ -23,5 +23,5 @@ public interface IDlmsServer : IDisposable
 
     void Close();
 
-    void InsertOldReadings();
+    void InsertHistoricReadings(IList<(DateTime DateTime, double Usage, double Tariff)> readings);
 }

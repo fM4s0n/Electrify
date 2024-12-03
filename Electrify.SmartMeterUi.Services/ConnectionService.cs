@@ -52,7 +52,14 @@ public class ConnectionService(
             throw new ArgumentException("Invalid ClientId specified in command line arguments");
         }
         
-        await electrifyApiClient.Register(options.Value.Port, options.Value.Password, clientId);
+        var response = await electrifyApiClient.Register(options.Value.Port, options.Value.Password, clientId);
+
+        var readings = response.HistoricReadings
+            .Select(hr => (hr.Timestamp.ToDateTime(), hr.Usage, hr.Tariff))
+            .ToList();
+        
+        dlmsServer.InsertHistoricReadings(readings);
+        
         InitialConnectionMade = true;
     }
 
