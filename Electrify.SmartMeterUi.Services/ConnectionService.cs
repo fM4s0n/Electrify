@@ -11,7 +11,8 @@ public class ConnectionService(
     IOptions<DlmsServerOptions> options,
     IDlmsServer dlmsServer,
     IErrorMessageService errorMessageService,
-    ICommandLineArgsProvider commandLineArgsProvider)
+    ICommandLineArgsProvider commandLineArgsProvider,
+    IUsageService usageService)
     : IConnectionService
 {
     private CancellationTokenSource? _reconnectCts;
@@ -53,13 +54,15 @@ public class ConnectionService(
         }
         
         var response = await electrifyApiClient.Register(options.Value.Port, options.Value.Password, clientId);
-
-
-        if (response.HistoricReadings is not null && response.HistoricReadings.Count != 0)
+        
+        var readings = response.HistoricReadings
+            .Select(hr => (DateTime.Parse(hr.Timestamp), hr.Usage, hr.Tariff))
+            .ToList();
+        
+        if (readings.Count != 0)
         {
-            var readings = response.HistoricReadings
-                        .Select(hr => (hr.Timestamp.ToDateTime().ToLocalTime(), hr.Usage, hr.Tariff))
-                        .ToList();
+            var mostRecentReading = readings.MaxBy(r => r.Item1);
+            usageService.SetLastUsage(mostRecentReading.Item1, mostRecentReading.Usage);
             
             dlmsServer.InsertHistoricReadings(readings);
         }

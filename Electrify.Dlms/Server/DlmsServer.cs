@@ -144,7 +144,9 @@ public sealed class DlmsServer : IDlmsServer
 
     public void InsertHistoricReadings(IList<(DateTime DateTime, double Usage, double Tariff)> readings)
     {
-        var mostRecentReading = readings.Last();
+        var orderedReadings = readings.OrderBy(r => r.DateTime).ToList();
+        
+        var mostRecentReading = orderedReadings.Last();
         SetEnergy(mostRecentReading.Usage);
         SetTariff(mostRecentReading.Tariff);
         
@@ -155,7 +157,7 @@ public sealed class DlmsServer : IDlmsServer
             // Overwrite current data.csv
             using var writer = File.CreateText(dataFile);
             
-            foreach (var reading in readings)
+            foreach (var reading in orderedReadings)
             {
                 writer.WriteLine($"{reading.DateTime.ToString(CultureInfo.InvariantCulture)};{reading.Usage};{reading.Tariff}");
             }

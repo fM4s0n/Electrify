@@ -9,7 +9,7 @@ public class DatabaseSeeder(
     TimeProvider timeProvider)
     : IDatabaseSeeder
 {
-    private static readonly Random Random = new();
+    private readonly static Random Random = new();
 
     /// <summary>
     /// Seeds the default admin account for AdminUI.
@@ -105,19 +105,19 @@ public class DatabaseSeeder(
             Guid.Parse("6842a005-1533-4abf-9abe-9a02b4ab304d"),
             Guid.Parse("23a487cf-9cb0-48a5-9a36-99db82192799"),
             Guid.Parse("ac1516a8-1c1d-417e-bcf9-95d308a65c47"),
-            Guid.Parse("e3f6fd12-fe66-4281-8709-1844703249ee")
+            Guid.Parse("e3f6fd12-fe66-4281-8709-1844703249ee"),
         ];
 
         const int readingsCount = 20;
         var startTime = timeProvider.GetLocalNow().AddSeconds(-5 * (readingsCount + 1));
 
-        var usage = 0.01;
+        var usage = 10.0;
 
         for (var i = 0; i < readingsCount; i++)
         {
             var dateTime = startTime.AddSeconds(5 * i);
             usage += 0.05 + Random.NextDouble() * 0.01;
-            var tariff = Random.NextDouble();
+            var tariff = 1 + Random.NextDouble();
 
             foreach (var client in clients)
             {
