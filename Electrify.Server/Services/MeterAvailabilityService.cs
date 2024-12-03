@@ -4,6 +4,7 @@ using Electrify.Protos;
 using Electrify.Server.Database;
 using Electrify.Server.Options;
 using Electrify.Server.Services.Abstraction;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Gurux.DLMS.Objects;
 using Gurux.DLMS.Secure;
@@ -75,7 +76,15 @@ public class MeterAvailabilityService(
         return Task.FromResult(new AvailabilityResponse
         {
             Success = true,
-            HistoricReadings = { (IEnumerable<HistoricReading>)dbContext.Readings.Where(r => r.ClientId == clientId).ToList() }
+            HistoricReadings =
+            { 
+                dbContext.Readings.Where(r => r.ClientId == clientId).Select(r => new HistoricReading
+                {
+                    Timestamp = Timestamp.FromDateTime(r.DateTime.ToUniversalTime()),
+                    Usage = r.EnergyUsage,
+                    Tariff = r.Tariff
+                })
+            }
         });
     }
 }

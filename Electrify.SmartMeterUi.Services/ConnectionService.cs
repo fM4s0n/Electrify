@@ -54,11 +54,15 @@ public class ConnectionService(
         
         var response = await electrifyApiClient.Register(options.Value.Port, options.Value.Password, clientId);
 
-        var readings = response.HistoricReadings
-            .Select(hr => (hr.Timestamp.ToDateTime(), hr.Usage, hr.Tariff))
-            .ToList();
-        
-        dlmsServer.InsertHistoricReadings(readings);
+
+        if (response.HistoricReadings is not null && response.HistoricReadings.Count != 0)
+        {
+            var readings = response.HistoricReadings
+                        .Select(hr => (hr.Timestamp.ToDateTime().ToLocalTime(), hr.Usage, hr.Tariff))
+                        .ToList();
+            
+            dlmsServer.InsertHistoricReadings(readings);
+        }
         
         InitialConnectionMade = true;
     }
