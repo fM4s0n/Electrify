@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace Electrify.AdminUi.Components.Pages;
 
-public partial class Bill
+public partial class Bill : ComponentBase
 {
     [Inject]
     private IBillService BillService { get; set; } = default!;
